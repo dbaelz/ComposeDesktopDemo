@@ -1,5 +1,6 @@
 package de.dbaelz.compose.desktop.demo
 
+import androidx.compose.desktop.AppManager
 import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.desktop.Window
 import androidx.compose.material.MaterialTheme
@@ -24,17 +25,23 @@ fun main() = Window(
                 MainMenuScreen(
                     MainMenuModel(
                         listOf(
-                            MainMenuModel.Entry("Diff Tool", { screenState = Screen.DIFF_TOOL })
+                            MainMenuModel.Entry("Diff Tool", { screenState = Screen.DIFF_TOOL }),
+                            MainMenuModel.Entry("Alarm Dialog", { screenState = Screen.ALERT_DIALOG }),
+                            MainMenuModel.Entry("Close App", { screenState = Screen.CLOSE_APP })
                         )
                     )
                 )
             }
             Screen.DIFF_TOOL -> DiffToolScreen(localAppWindow)
+            Screen.ALERT_DIALOG -> AlertDialogScreen { screenState = Screen.MAIN }
+            Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
         }
     }
 }
 
 enum class Screen {
     MAIN,
-    DIFF_TOOL
+    DIFF_TOOL,
+    ALERT_DIALOG,
+    CLOSE_APP
 }
