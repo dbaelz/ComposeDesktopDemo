@@ -1,22 +1,29 @@
 package de.dbaelz.compose.desktop.demo
 
 import androidx.compose.desktop.Window
-import androidx.compose.material.Text
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-fun main() = Window {
-    var text by remember { mutableStateOf("Hello, World!") }
+
+fun main() = Window(
+    title = "Compose for Desktop Demo",
+    resizable = true,
+    undecorated = true
+) {
+    var screenState by remember { mutableStateOf(Screen.MAIN) }
 
     MaterialTheme {
-        Button(onClick = {
-            text = "Hello, Desktop!"
-        }) {
-            Text(text)
+        when (screenState) {
+            Screen.MAIN -> {
+                MainMenuScreen()
+            }
         }
     }
+}
+
+enum class Screen {
+    MAIN
 }
