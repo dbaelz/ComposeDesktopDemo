@@ -1,4 +1,4 @@
-package de.dbaelz.compose.desktop.demo.ui
+package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border

@@ -8,14 +8,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import de.dbaelz.compose.desktop.demo.ui.AlertDialogScreen
-import de.dbaelz.compose.desktop.demo.ui.MainMenuModel
-import de.dbaelz.compose.desktop.demo.ui.MainMenuScreen
-import de.dbaelz.compose.desktop.demo.ui.DiffToolScreen
+import androidx.compose.ui.unit.IntSize
+import de.dbaelz.compose.desktop.demo.feature.DiffUtils
+import de.dbaelz.compose.desktop.demo.view.AlertDialogScreen
+import de.dbaelz.compose.desktop.demo.view.DiffToolScreen
+import de.dbaelz.compose.desktop.demo.view.MainMenuModel
+import de.dbaelz.compose.desktop.demo.view.MainMenuScreen
 
 
 fun main() = Window(
     title = "Compose for Desktop Demo",
+    size = IntSize(1024, 786),
     resizable = true,
     undecorated = false
 ) {
@@ -35,7 +38,9 @@ fun main() = Window(
                     )
                 )
             }
-            Screen.DIFF_TOOL -> DiffToolScreen(localAppWindow, onBackNavigation = { screenState = Screen.MAIN})
+            Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow) {
+                screenState = Screen.MAIN
+            }
             Screen.ALERT_DIALOG -> AlertDialogScreen { screenState = Screen.MAIN }
             Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
         }
