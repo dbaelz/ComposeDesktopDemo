@@ -14,7 +14,7 @@ import de.dbaelz.compose.desktop.demo.difftool.DiffToolScreen
 fun main() = Window(
     title = "Compose for Desktop Demo",
     resizable = true,
-    undecorated = true
+    undecorated = false
 ) {
     var screenState by remember { mutableStateOf(Screen.MAIN) }
     val localAppWindow = LocalAppWindow.current
@@ -32,7 +32,7 @@ fun main() = Window(
                     )
                 )
             }
-            Screen.DIFF_TOOL -> DiffToolScreen(localAppWindow)
+            Screen.DIFF_TOOL -> DiffToolScreen(localAppWindow, onBackNavigation = { screenState = Screen.MAIN})
             Screen.ALERT_DIALOG -> AlertDialogScreen { screenState = Screen.MAIN }
             Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
         }

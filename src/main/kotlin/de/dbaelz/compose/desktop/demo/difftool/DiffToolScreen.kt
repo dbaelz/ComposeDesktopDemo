@@ -4,6 +4,8 @@ import androidx.compose.desktop.AppWindow
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,50 +15,51 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun DiffToolScreen(localAppWindow: AppWindow) {
+fun DiffToolScreen(localAppWindow: AppWindow, onBackNavigation: () -> Unit = {}) {
     var fileLeft by remember { mutableStateOf(emptyList<String>()) }
     var fileRight by remember { mutableStateOf(emptyList<String>()) }
 
     Column(Modifier.fillMaxWidth()) {
-        Row(
-            Modifier
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            SelectFileButton("Select left file", Modifier.weight(0.5f)) {
-                selectAndReadFile(localAppWindow)?.let {
-                    fileLeft = it
-                }
-
+        Row(Modifier.padding(8.dp)) {
+            Button(
+                onClick = onBackNavigation,
+            ) {
+                Icon(
+                    Icons.Default.ArrowBack,
+                    contentDescription = "back"
+                )
             }
 
+            /*
             Spacer(Modifier.width(16.dp))
 
-            SelectFileButton("Select right file", Modifier.weight(0.5f)) {
-                selectAndReadFile(localAppWindow)?.let {
-                    fileRight = it
+            Button(
+                onClick = {
+                    differ(fileLeft, fileRight)
                 }
+            ) {
+                Text("Diff files")
             }
-        }
-
-        SelectFileButton(
-            "Compute Delta",
-            Modifier.padding(PaddingValues(horizontal = 8.dp)).fillMaxWidth()
-        ) {
-            differ(fileLeft, fileRight)
+            */
         }
 
         Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
 
-        DiffView(fileLeft, fileRight)
+        DiffView(localAppWindow,
+            fileLeft,
+            fileRight,
+            {
+                fileLeft = it
+            }, {
+                fileRight = it
+            })
     }
 }
 
 @Composable
 fun SelectFileButton(text: String, modifier: Modifier = Modifier, onClickAction: () -> Unit) {
     Button(
-        modifier = modifier
-            .padding(4.dp),
+        modifier = modifier,
         onClick = onClickAction
     ) {
         Text(text)
@@ -64,20 +67,51 @@ fun SelectFileButton(text: String, modifier: Modifier = Modifier, onClickAction:
 }
 
 @Composable
-fun DiffView(contentLeft: List<String> = emptyList(), contentRight: List<String> = emptyList()) {
+fun DiffView(
+    localAppWindow: AppWindow,
+    fileLeft: List<String>,
+    fileRight: List<String>,
+    updateLeftFile: (List<String>) -> Unit,
+    updateRightFile: (List<String>) -> Unit
+) {
+    Row(
+        Modifier
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        SelectFileButton("Select left file", Modifier.weight(0.5f)) {
+            selectAndReadFile(localAppWindow)?.let {
+                updateLeftFile(it)
+            }
+
+        }
+
+        Spacer(Modifier.width(8.dp))
+
+        SelectFileButton("Select right file", Modifier.weight(0.5f)) {
+            selectAndReadFile(localAppWindow)?.let {
+                updateRightFile(it)
+            }
+        }
+    }
+
+    Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+
     // TODO: How to sync both? One state doesn't work on different files
     val scrollStateLeft = rememberScrollState(0)
     val scrollStateRight = rememberScrollState(0)
-
     Row(
         modifier = Modifier
             .fillMaxHeight()
     ) {
-        DiffLines(contentLeft, Modifier.weight(0.5f), scrollStateLeft)
+        DiffLines(fileLeft, Modifier.weight(0.5f), scrollStateLeft)
 
-        Spacer(Modifier.width(16.dp))
+        Divider(
+            modifier = Modifier.fillMaxHeight().width(2.dp),
+            color = MaterialTheme.colors.primary, thickness = 2.dp
+        )
 
-        DiffLines(contentRight, Modifier.weight(0.5f), scrollStateRight)
+        DiffLines(fileRight, Modifier.weight(0.5f), scrollStateRight)
     }
 }
 
@@ -130,3 +164,4 @@ fun LineText(text: String) {
             .padding(4.dp)
     )
 }
+
