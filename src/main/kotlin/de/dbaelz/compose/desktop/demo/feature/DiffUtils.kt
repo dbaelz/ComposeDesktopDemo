@@ -1,4 +1,4 @@
-package de.dbaelz.compose.desktop.demo.difftool
+package de.dbaelz.compose.desktop.demo.feature
 
 import androidx.compose.desktop.AppWindow
 import com.github.difflib.DiffUtils

@@ -1,4 +1,4 @@
-package de.dbaelz.compose.desktop.demo.difftool
+package de.dbaelz.compose.desktop.demo.ui
 
 import androidx.compose.desktop.AppWindow
 import androidx.compose.foundation.*
@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import de.dbaelz.compose.desktop.demo.feature.selectAndReadFile
 
 
 @Composable

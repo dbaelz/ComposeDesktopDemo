@@ -8,7 +8,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import de.dbaelz.compose.desktop.demo.difftool.DiffToolScreen
+import de.dbaelz.compose.desktop.demo.ui.AlertDialogScreen
+import de.dbaelz.compose.desktop.demo.ui.MainMenuModel
+import de.dbaelz.compose.desktop.demo.ui.MainMenuScreen
+import de.dbaelz.compose.desktop.demo.ui.DiffToolScreen
 
 
 fun main() = Window(
