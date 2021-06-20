@@ -10,10 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.IntSize
 import de.dbaelz.compose.desktop.demo.feature.DiffUtils
-import de.dbaelz.compose.desktop.demo.view.AlertDialogScreen
-import de.dbaelz.compose.desktop.demo.view.DiffToolScreen
-import de.dbaelz.compose.desktop.demo.view.MainMenuModel
-import de.dbaelz.compose.desktop.demo.view.MainMenuScreen
+import de.dbaelz.compose.desktop.demo.view.*
 
 
 fun main() = Window(
@@ -33,6 +30,7 @@ fun main() = Window(
                         listOf(
                             MainMenuModel.Entry("Diff Tool", { screenState = Screen.DIFF_TOOL }),
                             MainMenuModel.Entry("Alarm Dialog", { screenState = Screen.ALERT_DIALOG }),
+                            MainMenuModel.Entry("Clickable Text", { screenState = Screen.CLICKABLE_TEXT }),
                             MainMenuModel.Entry("Close App", { screenState = Screen.CLOSE_APP })
                         )
                     )
@@ -42,6 +40,7 @@ fun main() = Window(
                 screenState = Screen.MAIN
             }
             Screen.ALERT_DIALOG -> AlertDialogScreen { screenState = Screen.MAIN }
+            Screen.CLICKABLE_TEXT -> ClickableTextScreen { screenState = Screen.MAIN }
             Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
         }
     }
@@ -51,5 +50,6 @@ enum class Screen {
     MAIN,
     DIFF_TOOL,
     ALERT_DIALOG,
+    CLICKABLE_TEXT,
     CLOSE_APP
 }
