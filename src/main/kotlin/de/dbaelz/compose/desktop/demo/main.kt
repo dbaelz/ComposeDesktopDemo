@@ -1,6 +1,9 @@
 package de.dbaelz.compose.desktop.demo
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.desktop.AppManager
 import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.desktop.Window
@@ -25,27 +28,31 @@ fun main() = Window(
     val localAppWindow = LocalAppWindow.current
 
     MaterialTheme {
-        when (screenState) {
-            Screen.MAIN -> {
-                MainMenuScreen(
-                    MainMenuModel(
-                        listOf(
-                            MainMenuModel.Entry("Diff Tool", { screenState = Screen.DIFF_TOOL }),
-                            MainMenuModel.Entry("Alarm Dialog", { screenState = Screen.ALERT_DIALOG }),
-                            MainMenuModel.Entry("Clickable Text", { screenState = Screen.CLICKABLE_TEXT }),
-                            MainMenuModel.Entry("Animation", { screenState = Screen.ANIMATION }),
-                            MainMenuModel.Entry("Close App", { screenState = Screen.CLOSE_APP })
+        Crossfade(targetState =  screenState,
+        animationSpec = tween(durationMillis = 500,
+        easing = LinearOutSlowInEasing)) { newState ->
+            when (newState) {
+                Screen.MAIN -> {
+                    MainMenuScreen(
+                        MainMenuModel(
+                            listOf(
+                                MainMenuModel.Entry("Diff Tool", { screenState = Screen.DIFF_TOOL }),
+                                MainMenuModel.Entry("Alarm Dialog", { screenState = Screen.ALERT_DIALOG }),
+                                MainMenuModel.Entry("Clickable Text", { screenState = Screen.CLICKABLE_TEXT }),
+                                MainMenuModel.Entry("Animation", { screenState = Screen.ANIMATION }),
+                                MainMenuModel.Entry("Close App", { screenState = Screen.CLOSE_APP })
+                            )
                         )
                     )
-                )
+                }
+                Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow) {
+                    screenState = Screen.MAIN
+                }
+                Screen.ALERT_DIALOG -> AlertDialogScreen { screenState = Screen.MAIN }
+                Screen.CLICKABLE_TEXT -> ClickableTextScreen { screenState = Screen.MAIN }
+                Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
+                Screen.ANIMATION -> AnimationScreen()
             }
-            Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow) {
-                screenState = Screen.MAIN
-            }
-            Screen.ALERT_DIALOG -> AlertDialogScreen { screenState = Screen.MAIN }
-            Screen.CLICKABLE_TEXT -> ClickableTextScreen { screenState = Screen.MAIN }
-            Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
-            Screen.ANIMATION -> AnimationScreen()
         }
     }
 }
