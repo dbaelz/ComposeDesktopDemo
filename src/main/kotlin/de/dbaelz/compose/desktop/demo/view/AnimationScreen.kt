@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 
 @ExperimentalAnimationApi
@@ -69,48 +69,57 @@ fun AnimationScreen(onClick: () -> Unit) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Button(
-            enabled = !backButtonClicked,
-            onClick = {
+        AnimationButton(
+            "Toggle background",
+            !backButtonClicked,
+            Modifier.align(Alignment.CenterHorizontally)
+        ) {
             backgroundColorToggle = !backgroundColorToggle
-        }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text("Toggle background")
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Button(
-            enabled = !backButtonClicked,
-            onClick = {
-                boxState = when (boxState) {
-                    BoxState.NORMAL -> BoxState.LARGE
-                    BoxState.LARGE -> BoxState.NORMAL
-                }
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+        AnimationButton(
+            "Animate Box",
+            !backButtonClicked,
+            Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text("Animate Box")
+            boxState = when (boxState) {
+                BoxState.NORMAL -> BoxState.LARGE
+                BoxState.LARGE -> BoxState.NORMAL
+            }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Button(
-            enabled = !backButtonClicked,
-            onClick = { boxVisible = !boxVisible },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+        AnimationButton(
+            "Box Visibility",
+            !backButtonClicked,
+            Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text("Box Visibility")
+            boxVisible = !boxVisible
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         AnimatedBox(
             Modifier.align(Alignment.CenterHorizontally),
-            boxVisible,
+            boxVisible && !backButtonClicked,
             boxColor,
             boxHeight,
             boxState != BoxState.NORMAL
         )
+    }
+}
+
+@Composable
+fun AnimationButton(text: String, enabled: Boolean, modifier: Modifier, onClick: () -> Unit) {
+    Button(
+        enabled = enabled,
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Text(text)
     }
 }
 
@@ -125,8 +134,8 @@ fun AnimatedBox(
 ) {
     AnimatedVisibility(
         visible = boxVisible,
-        enter = boxSlideInVertical(),
-        exit = boxSlideOutVertical(),
+        enter = fadeIn() + expandIn(animationSpec = boxAnimationSpec),
+        exit = shrinkOut(animationSpec = boxAnimationSpec) + fadeOut(),
         modifier = modifier
     ) {
         Box(
@@ -147,14 +156,7 @@ fun AnimatedBox(
     }
 }
 
-@ExperimentalAnimationApi
-fun boxSlideInVertical() = slideInVertically({ it / 2 }, boxTransition)
-
-@ExperimentalAnimationApi
-fun boxSlideOutVertical() = slideOutVertically({ it / 2 }, boxTransition)
-
-val boxTransition: FiniteAnimationSpec<IntOffset> =
-    spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow)
+val boxAnimationSpec: FiniteAnimationSpec<IntSize> = spring(stiffness = Spring.StiffnessLow)
 
 enum class BoxState {
     NORMAL,
