@@ -51,7 +51,7 @@ fun main() = Window(
                 Screen.ALERT_DIALOG -> AlertDialogScreen { screenState = Screen.MAIN }
                 Screen.CLICKABLE_TEXT -> ClickableTextScreen { screenState = Screen.MAIN }
                 Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
-                Screen.ANIMATION -> AnimationScreen()
+                Screen.ANIMATION -> AnimationScreen { screenState = Screen.MAIN }
             }
         }
     }

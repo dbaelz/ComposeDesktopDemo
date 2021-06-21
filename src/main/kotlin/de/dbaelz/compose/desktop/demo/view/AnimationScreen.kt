@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 
 @ExperimentalAnimationApi
 @Composable
-fun AnimationScreen() {
+fun AnimationScreen(onClick: () -> Unit) {
     var backgroundColorToggle by remember { mutableStateOf(true) }
     val backgroundColor by animateColorAsState(if (backgroundColorToggle) colors.secondary else colors.secondaryVariant)
 
@@ -39,14 +39,39 @@ fun AnimationScreen() {
     }
     var boxVisible by remember { mutableStateOf(true) }
 
+    var backButtonClicked by remember { mutableStateOf(false) }
+    val backButtonOffset by animateDpAsState(
+        targetValue = if (backButtonClicked) (-45).dp else 0.dp,
+        animationSpec = spring(stiffness = Spring.StiffnessLow)
+    ) {
+        onClick()
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(backgroundColor, colors.background), 0.01f))
     ) {
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = {
+                backButtonClicked = true
+            },
+            enabled = !backButtonClicked,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .offset(y = backButtonOffset)
+        ) {
+            Text("Back to menu")
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
 
-        Button(onClick = {
+        Button(
+            enabled = !backButtonClicked,
+            onClick = {
             backgroundColorToggle = !backgroundColorToggle
         }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text("Toggle background")
@@ -55,6 +80,7 @@ fun AnimationScreen() {
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
+            enabled = !backButtonClicked,
             onClick = {
                 boxState = when (boxState) {
                     BoxState.NORMAL -> BoxState.LARGE
@@ -69,6 +95,7 @@ fun AnimationScreen() {
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
+            enabled = !backButtonClicked,
             onClick = { boxVisible = !boxVisible },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
