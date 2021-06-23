@@ -1,14 +1,18 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -32,7 +36,23 @@ fun CanvasScreen(onBackPressed: () -> Unit) {
 
 @Composable
 fun Canvas() {
-    val color = colors.primary
+    val transition = rememberInfiniteTransition()
+    val color by transition.animateColor(
+        colors.secondary,
+        colors.primary,
+        InfiniteRepeatableSpec(
+            animation = tween(ANIMATION_DURATION_MILLIS),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    val radius by transition.animateFloat(
+        0f,
+        200f,
+        InfiniteRepeatableSpec(
+            animation = tween(ANIMATION_DURATION_MILLIS),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         val canvasWidth = size.width
@@ -41,7 +61,10 @@ fun Canvas() {
         drawCircle(
             color = color,
             center = Offset(canvasWidth / 2, canvasHeight / 2),
-            radius = size.minDimension / 4
+            radius = radius,
+            style = Stroke(width = 20f)
         )
     }
 }
+
+const val ANIMATION_DURATION_MILLIS = 1500
