@@ -40,6 +40,7 @@ fun main() = Window(
                                 MainMenuModel.Entry("Alarm Dialog", { screenState = Screen.ALERT_DIALOG }),
                                 MainMenuModel.Entry("Clickable Text", { screenState = Screen.CLICKABLE_TEXT }),
                                 MainMenuModel.Entry("Animation", { screenState = Screen.ANIMATION }),
+                                MainMenuModel.Entry("Canvas", { screenState = Screen.CANVAS }),
                                 MainMenuModel.Entry("Close App", { screenState = Screen.CLOSE_APP })
                             )
                         )
@@ -52,6 +53,7 @@ fun main() = Window(
                 Screen.CLICKABLE_TEXT -> ClickableTextScreen { screenState = Screen.MAIN }
                 Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
                 Screen.ANIMATION -> AnimationScreen { screenState = Screen.MAIN }
+                Screen.CANVAS -> CanvasScreen { screenState = Screen.MAIN }
             }
         }
     }
@@ -63,5 +65,6 @@ enum class Screen {
     ALERT_DIALOG,
     CLICKABLE_TEXT,
     ANIMATION,
+    CANVAS,
     CLOSE_APP
 }
