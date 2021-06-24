@@ -7,7 +7,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.desktop.AppManager
 import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.desktop.Window
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,19 +26,31 @@ fun main() = Window(
     var screenState by remember { mutableStateOf(Screen.MAIN) }
     val localAppWindow = LocalAppWindow.current
 
-    MaterialTheme {
-        Crossfade(targetState =  screenState,
-        animationSpec = tween(durationMillis = 500,
-        easing = LinearOutSlowInEasing)) { newState ->
+    DesktopDemoTheme {
+        Crossfade(
+            targetState = screenState,
+            animationSpec = tween(
+                durationMillis = 500,
+                easing = LinearOutSlowInEasing
+            )
+        ) { newState ->
             when (newState) {
                 Screen.MAIN -> {
                     MainMenuScreen(
                         MainMenuModel(
                             listOf(
-                                MainMenuModel.Entry("Diff Tool", { screenState = Screen.DIFF_TOOL }),
-                                MainMenuModel.Entry("Alarm Dialog", { screenState = Screen.ALERT_DIALOG }),
-                                MainMenuModel.Entry("Clickable Text", { screenState = Screen.CLICKABLE_TEXT }),
-                                MainMenuModel.Entry("Animation", { screenState = Screen.ANIMATION }),
+                                MainMenuModel.Entry(
+                                    "Diff Tool",
+                                    { screenState = Screen.DIFF_TOOL }),
+                                MainMenuModel.Entry(
+                                    "Alarm Dialog",
+                                    { screenState = Screen.ALERT_DIALOG }),
+                                MainMenuModel.Entry(
+                                    "Clickable Text",
+                                    { screenState = Screen.CLICKABLE_TEXT }),
+                                MainMenuModel.Entry(
+                                    "Animation",
+                                    { screenState = Screen.ANIMATION }),
                                 MainMenuModel.Entry("Canvas", { screenState = Screen.CANVAS }),
                                 MainMenuModel.Entry("Close App", { screenState = Screen.CLOSE_APP })
                             )
