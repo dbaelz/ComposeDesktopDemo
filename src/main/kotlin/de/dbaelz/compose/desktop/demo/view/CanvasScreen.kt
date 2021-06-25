@@ -11,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 
@@ -53,6 +55,15 @@ fun Canvas() {
             repeatMode = RepeatMode.Reverse
         )
     )
+    val barIndicator by transition.animateValue(
+        0, BAR_ITEMS + 1, Int.VectorConverter,
+        InfiniteRepeatableSpec(
+            animation = tween(ANIMATION_DURATION_MILLIS),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    val colorBarIndicator = colors.primary
+    val colorBarIndicatorBackground = colors.secondary
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         val canvasWidth = size.width
@@ -64,7 +75,18 @@ fun Canvas() {
             radius = radius,
             style = Stroke(width = 20f)
         )
+
+        (1..BAR_ITEMS).forEach { index ->
+            drawRoundRect(
+                color = if (index <= barIndicator) colorBarIndicator else colorBarIndicatorBackground,
+                topLeft = Offset((BAR_WIDTH * 3) + index * BAR_WIDTH * 1.5f, 20f),
+                size = Size(BAR_WIDTH, 50f),
+                cornerRadius = CornerRadius(5f)
+            )
+        }
     }
 }
 
 const val ANIMATION_DURATION_MILLIS = 1500
+const val BAR_ITEMS = 10
+const val BAR_WIDTH = 20f
