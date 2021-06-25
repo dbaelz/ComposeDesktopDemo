@@ -39,23 +39,15 @@ fun main() = Window(
                     MainMenuScreen(
                         MainMenuModel(
                             listOf(
-                                MainMenuModel.Entry(
-                                    "Diff Tool",
-                                    { screenState = Screen.DIFF_TOOL }),
-                                MainMenuModel.Entry(
-                                    "Alarm Dialog",
-                                    { screenState = Screen.ALERT_DIALOG }),
-                                MainMenuModel.Entry(
-                                    "Clickable Text",
-                                    { screenState = Screen.CLICKABLE_TEXT }),
-                                MainMenuModel.Entry(
-                                    "Animation",
-                                    { screenState = Screen.ANIMATION }),
-                                MainMenuModel.Entry("Canvas", { screenState = Screen.CANVAS }),
-                                MainMenuModel.Entry("Close App", { screenState = Screen.CLOSE_APP })
+                                MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
+                                MainMenuModel.Entry("Alarm Dialog", Screen.ALERT_DIALOG),
+                                MainMenuModel.Entry("Clickable Text", Screen.CLICKABLE_TEXT),
+                                MainMenuModel.Entry("Animation", Screen.ANIMATION),
+                                MainMenuModel.Entry("Canvas", Screen.CANVAS),
+                                MainMenuModel.Entry("Close App", Screen.CLOSE_APP)
                             )
                         )
-                    )
+                    ) { screenState = it }
                 }
                 Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow) {
                     screenState = Screen.MAIN

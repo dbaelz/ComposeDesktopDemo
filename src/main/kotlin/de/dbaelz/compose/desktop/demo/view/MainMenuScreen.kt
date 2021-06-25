@@ -12,9 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.imageFromResource
 import androidx.compose.ui.unit.dp
+import de.dbaelz.compose.desktop.demo.Screen
 
 @Composable
-fun MainMenuScreen(model: MainMenuModel = MainMenuModel()) {
+fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Screen) -> Unit) {
     val scrollState = rememberScrollState(0)
 
     Box {
@@ -38,7 +39,7 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel()) {
                     modifier = Modifier
                         .requiredWidth(150.dp)
                         .align(Alignment.CenterHorizontally),
-                    onClick = it.onSelectedAction
+                    onClick = { onItemSelected(it.targetScreen) }
                 ) {
                     Text(it.name)
                 }
@@ -53,5 +54,5 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel()) {
 }
 
 data class MainMenuModel(val entries: List<Entry> = emptyList()) {
-    data class Entry(val name: String, val onSelectedAction: () -> Unit)
+    data class Entry(val name: String, val targetScreen: Screen)
 }
