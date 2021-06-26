@@ -37,13 +37,13 @@ fun TimerScreen(onBackPressed: () -> Unit) {
 @Composable
 fun Timer(
     modifier: Modifier,
-    initialTimerValue: Int
+    initialTimerPeriod: Int
 ) {
     val colorActive = MaterialTheme.colors.secondary
     val colorInactive = MaterialTheme.colors.onSecondary
 
     var timerActive by remember { mutableStateOf(false) }
-    var periodLeft by remember { mutableStateOf(initialTimerValue) }
+    var periodLeft by remember { mutableStateOf(initialTimerPeriod) }
 
     LaunchedEffect(periodLeft, timerActive) {
         if (timerActive && periodLeft > 0) {
@@ -71,7 +71,7 @@ fun Timer(
             drawArc(
                 color = colorActive,
                 startAngle = 135f,
-                sweepAngle = FULL_TIMER_ANGLE * max(periodLeft / initialTimerValue.toFloat(), 0f),
+                sweepAngle = FULL_TIMER_ANGLE * max(periodLeft / initialTimerPeriod.toFloat(), 0f),
                 size = Size(size.width, size.height),
                 useCenter = false,
                 style = Stroke(width = 10f, cap = StrokeCap.Round)
@@ -87,7 +87,7 @@ fun Timer(
 
             Button(onClick = {
                 if (periodLeft <= 0) {
-                    periodLeft = initialTimerValue
+                    periodLeft = initialTimerPeriod
                     timerActive = true
                 } else {
                     timerActive = !timerActive
@@ -97,6 +97,7 @@ fun Timer(
                     text = when {
                         periodLeft <= 0 -> "Restart"
                         timerActive -> "Pause"
+                        periodLeft != initialTimerPeriod -> "Resume"
                         else -> "Start"
                     }
                 )
