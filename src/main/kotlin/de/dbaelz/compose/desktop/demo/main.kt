@@ -25,6 +25,7 @@ fun main() = Window(
 ) {
     var screenState by remember { mutableStateOf(Screen.MAIN) }
     val localAppWindow = LocalAppWindow.current
+    val navigateToMain = { screenState = Screen.MAIN}
 
     DesktopDemoTheme {
         Crossfade(
@@ -35,31 +36,31 @@ fun main() = Window(
             )
         ) { newState ->
             when (newState) {
-                Screen.MAIN -> {
-                    MainMenuScreen(
-                        MainMenuModel(
-                            listOf(
-                                MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
-                                MainMenuModel.Entry("Alarm Dialog", Screen.ALERT_DIALOG),
-                                MainMenuModel.Entry("Clickable Text", Screen.CLICKABLE_TEXT),
-                                MainMenuModel.Entry("Animation", Screen.ANIMATION),
-                                MainMenuModel.Entry("Canvas", Screen.CANVAS),
-                                MainMenuModel.Entry("Close App", Screen.CLOSE_APP)
-                            )
-                        )
-                    ) { screenState = it }
-                }
-                Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow) {
-                    screenState = Screen.MAIN
-                }
-                Screen.ALERT_DIALOG -> AlertDialogScreen { screenState = Screen.MAIN }
-                Screen.CLICKABLE_TEXT -> ClickableTextScreen { screenState = Screen.MAIN }
+                Screen.MAIN -> MainMenuScreen(createMenu()) { screenState = it }
+                Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow, navigateToMain)
+                Screen.ALERT_DIALOG -> AlertDialogScreen(navigateToMain)
+                Screen.CLICKABLE_TEXT -> ClickableTextScreen(navigateToMain)
                 Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
-                Screen.ANIMATION -> AnimationScreen { screenState = Screen.MAIN }
-                Screen.CANVAS -> CanvasScreen { screenState = Screen.MAIN }
+                Screen.ANIMATION -> AnimationScreen(navigateToMain)
+                Screen.CANVAS -> CanvasScreen(navigateToMain)
+                Screen.TIMER -> TimerScreen(navigateToMain)
             }
         }
     }
+}
+
+fun createMenu(): MainMenuModel {
+    return MainMenuModel(
+        listOf(
+            MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
+            MainMenuModel.Entry("Alarm Dialog", Screen.ALERT_DIALOG),
+            MainMenuModel.Entry("Clickable Text", Screen.CLICKABLE_TEXT),
+            MainMenuModel.Entry("Animation", Screen.ANIMATION),
+            MainMenuModel.Entry("Canvas", Screen.CANVAS),
+            MainMenuModel.Entry("Timer", Screen.TIMER),
+            MainMenuModel.Entry("Close App", Screen.CLOSE_APP)
+        )
+    )
 }
 
 enum class Screen {
@@ -69,5 +70,6 @@ enum class Screen {
     CLICKABLE_TEXT,
     ANIMATION,
     CANVAS,
-    CLOSE_APP
+    CLOSE_APP,
+    TIMER
 }

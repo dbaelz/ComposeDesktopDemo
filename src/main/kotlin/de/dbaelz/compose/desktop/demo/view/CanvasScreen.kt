@@ -32,12 +32,12 @@ fun CanvasScreen(onBackPressed: () -> Unit) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Canvas()
+        PulsingCircle()
     }
 }
 
 @Composable
-fun Canvas() {
+fun PulsingCircle() {
     val transition = rememberInfiniteTransition()
     val color by transition.animateColor(
         colors.secondary,
