@@ -43,19 +43,18 @@ fun CustomText(text: String) {
 }
 
 @Composable
-fun TextInOut(text: String) {
+fun TextInOut(text: String, animationTime: Int = 1500) {
     val transition = rememberInfiniteTransition()
 
     val dropText by transition.animateValue(
         0, text.length, Int.VectorConverter,
         InfiniteRepeatableSpec(
-            animation = tween(1500),
+            animation = tween(animationTime),
             repeatMode = RepeatMode.Reverse
         )
     )
     CustomText(text.dropLast(dropText))
 }
-
 
 @Composable
 fun ReplaceCharactersInText(
