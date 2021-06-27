@@ -11,8 +11,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import kotlin.math.floor
 
-const val DEMO_TEXT = "Yet another text animation demo for Compose"
+const val DEMO_TEXT = "Yet another text animation"
 
 @Composable
 fun PlaygroundScreen(onBackNavigation: () -> Unit) {
@@ -28,6 +29,10 @@ fun PlaygroundScreen(onBackNavigation: () -> Unit) {
         Spacer(modifier = Modifier.height(32.dp))
 
         ReplaceCharactersInText(DEMO_TEXT)
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        SwapCharactersInText(DEMO_TEXT)
     }
 }
 
@@ -73,6 +78,36 @@ fun ReplaceCharactersInText(
 
             val charArray = animatedText.first.toCharArray()
             charArray[animatedText.second] = replacementCharacter
+
+            animatedText = charArray.concatToString() to (animatedText.second + 1)
+        }
+    }
+    CustomText(animatedText.first)
+}
+
+@Composable
+fun SwapCharactersInText(
+    text: String,
+    animationTimePerChar: Int = 500
+) {
+    var animatedText by remember { mutableStateOf(text to 0) }
+    var animationTimeLeft by remember { mutableStateOf(floor(text.length.toDouble() / 2).toInt() * animationTimePerChar) }
+
+    LaunchedEffect(animatedText) {
+        if (animationTimeLeft > 0) {
+            animationTimeLeft -= animationTimePerChar
+            delay(animationTimePerChar.toLong())
+
+            val currentIndex = animatedText.second
+
+            val charArray = animatedText.first.toCharArray()
+
+            val currentCharTemp = charArray[currentIndex]
+            val swapIndex = charArray.size - 1 - currentIndex
+
+            charArray[currentIndex] = charArray[swapIndex]
+            charArray[swapIndex] = currentCharTemp
+
 
             animatedText = charArray.concatToString() to (animatedText.second + 1)
         }
