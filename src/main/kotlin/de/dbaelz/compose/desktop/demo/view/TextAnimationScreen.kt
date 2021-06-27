@@ -1,7 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.MaterialTheme
@@ -9,10 +8,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +38,10 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
         Spacer(modifier = Modifier.height(32.dp))
 
         ReplaceCharactersInText(DEMO_TEXT, replacementCharacter = '_', replaceWhiteSpace = false)
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        HighlightWords(DEMO_TEXT)
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -86,6 +90,25 @@ fun CustomText(
 
         withStyle(textStyle) {
             append(animatedText.text.substring(min(currentIndex + 1, textLength), textLength))
+        }
+    }
+
+    Text(
+        text = annotatedText,
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
+    )
+}
+
+@Composable
+fun CustomText(words: Words) {
+    val annotatedText = buildAnnotatedString {
+        val currentIndex = words.currentIndex
+
+        words.words.forEachIndexed { index, word ->
+            withStyle(specialHighlightStyle(index == currentIndex)) {
+                append(word)
+            }
+            append(' ')
         }
     }
 
@@ -166,11 +189,37 @@ fun SwapCharactersInText(
     CustomText(animatedText.text)
 }
 
+@Composable
+fun HighlightWords(
+    text: String,
+    animationTimePerWord: Int = 500
+) {
+    var highlightWords by remember { mutableStateOf(Words(text.split(" "), 0)) }
+    var animationTimeLeft by remember { mutableStateOf(highlightWords.words.size * animationTimePerWord) }
+
+    LaunchedEffect(highlightWords) {
+        println(animationTimeLeft)
+        println(highlightWords)
+        if (animationTimeLeft > 0) {
+
+            animationTimeLeft -= animationTimePerWord
+            delay(animationTimePerWord.toLong())
+
+
+            highlightWords = highlightWords.copyWithIncreasedIndex()
+        } else {
+            animationTimeLeft = highlightWords.words.size * animationTimePerWord
+            highlightWords = highlightWords.copyWithIncreasedIndex()
+        }
+    }
+    CustomText(highlightWords)
+}
+
 
 @Composable
 fun ClickableText(onBackNavigation: () -> Unit) {
     val annotatedText = buildAnnotatedString {
-        withStyle(defaultStyle()) { append("Another text. Click ") }
+        withStyle(defaultStyle()) { append("Click ") }
 
         pushStringAnnotation(
             tag = CLICKABLE_LABEL, annotation = "Clicked!"
@@ -214,8 +263,26 @@ private fun highlightStyle() = SpanStyle(
     fontFamily = FontFamily.Monospace
 )
 
+@Composable
+private fun specialHighlightStyle(isFocused: Boolean = false): SpanStyle {
+    return SpanStyle(
+        fontSize = 32.sp,
+        color = if (isFocused) MaterialTheme.colors.secondary else MaterialTheme.colors.primary,
+        fontFamily = FontFamily.Monospace,
+        fontWeight = if (isFocused) FontWeight.Bold else null,
+        textDecoration = if (isFocused) TextDecoration.Underline else null,
+    )
+}
+
+
 private const val DEMO_TEXT = "Yet another text animation"
 private const val CLICKABLE_LABEL = "CLICKABLE"
 
 
 data class AnimatedText(val text: String, val currentIndex: Int)
+
+data class Words(val words: List<String>, var currentIndex: Int) {
+    fun copyWithIncreasedIndex(): Words {
+        return Words(words, if (currentIndex + 1 > words.size) 0 else currentIndex + 1)
+    }
+}
