@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 
 @ExperimentalAnimationApi
 @Composable
-fun AnimationScreen(onClick: () -> Unit) {
+fun AnimationScreen(onBackNavigation: () -> Unit) {
     var backgroundColorToggle by remember { mutableStateOf(true) }
     val backgroundColor by animateColorAsState(if (backgroundColorToggle) colors.secondary else colors.secondaryVariant)
 
@@ -44,7 +44,7 @@ fun AnimationScreen(onClick: () -> Unit) {
         targetValue = if (backButtonClicked) (-45).dp else 0.dp,
         animationSpec = spring(stiffness = Spring.StiffnessLow)
     ) {
-        onClick()
+        onBackNavigation()
     }
 
 

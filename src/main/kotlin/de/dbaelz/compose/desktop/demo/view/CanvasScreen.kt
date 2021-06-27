@@ -18,12 +18,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CanvasScreen(onBackPressed: () -> Unit) {
+fun CanvasScreen(onBackNavigation: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = onBackPressed,
+            onClick = onBackNavigation,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         ) {

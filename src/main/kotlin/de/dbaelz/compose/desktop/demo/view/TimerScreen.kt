@@ -16,12 +16,12 @@ import kotlinx.coroutines.delay
 import kotlin.math.max
 
 @Composable
-fun TimerScreen(onBackPressed: () -> Unit) {
+fun TimerScreen(onBackNavigation: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = onBackPressed,
+            onClick = onBackNavigation,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         ) {

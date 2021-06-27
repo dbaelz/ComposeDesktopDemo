@@ -37,6 +37,7 @@ fun main() = Window(
         ) { newState ->
             when (newState) {
                 Screen.MAIN -> MainMenuScreen(createMenu()) { screenState = it }
+                Screen.PLAYGROUND -> PlaygroundScreen(navigateToMain)
                 Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow, navigateToMain)
                 Screen.ALERT_DIALOG -> AlertDialogScreen(navigateToMain)
                 Screen.CLICKABLE_TEXT -> ClickableTextScreen(navigateToMain)
@@ -52,6 +53,7 @@ fun main() = Window(
 fun createMenu(): MainMenuModel {
     return MainMenuModel(
         listOf(
+            MainMenuModel.Entry("Playground", Screen.PLAYGROUND),
             MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
             MainMenuModel.Entry("Alarm Dialog", Screen.ALERT_DIALOG),
             MainMenuModel.Entry("Clickable Text", Screen.CLICKABLE_TEXT),
@@ -65,6 +67,7 @@ fun createMenu(): MainMenuModel {
 
 enum class Screen {
     MAIN,
+    PLAYGROUND,
     DIFF_TOOL,
     ALERT_DIALOG,
     CLICKABLE_TEXT,

@@ -15,7 +15,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ClickableTextScreen(onClick: () -> Unit) {
+fun ClickableTextScreen(onBackNavigation: () -> Unit) {
     val annotatedText = buildAnnotatedString {
         withStyle(defaultStyle()) { append("Another text. Click ") }
 
@@ -52,7 +52,7 @@ fun ClickableTextScreen(onClick: () -> Unit) {
                 )
                     .firstOrNull()?.let { annotation ->
                         println(annotation)
-                        onClick()
+                        onBackNavigation()
                     }
             },
             modifier = Modifier.align(Alignment.Center)
