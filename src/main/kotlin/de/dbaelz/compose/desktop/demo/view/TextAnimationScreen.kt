@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlin.math.floor
+import kotlin.math.max
 import kotlin.math.min
 
 @Composable
@@ -37,7 +38,15 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        ReplaceCharactersInText(DEMO_TEXT, infiniteRepeatMode = true)
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         ReplaceCharactersInText(DEMO_TEXT, replacementCharacter = '_', replaceWhiteSpace = false)
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        ReplaceCharactersInText(DEMO_TEXT, replacementCharacter = '_', replaceWhiteSpace = false, infiniteRepeatMode = true)
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -141,10 +150,13 @@ fun ReplaceCharactersInText(
     text: String,
     replacementCharacter: Char = '*',
     replaceWhiteSpace: Boolean = true,
+    infiniteRepeatMode: Boolean = false,
     animationTimePerChar: Int = 500
 ) {
+    val animationTime = text.length * animationTimePerChar
+
     var animatedText by remember { mutableStateOf(AnimatedText(text, 0)) }
-    var animationTimeLeft by remember { mutableStateOf(text.length * animationTimePerChar) }
+    var animationTimeLeft by remember { mutableStateOf(animationTime) }
 
     LaunchedEffect(animatedText) {
         if (animationTimeLeft > 0) {
@@ -156,10 +168,32 @@ fun ReplaceCharactersInText(
             val currentChar = charArray[animatedText.currentIndex]
 
             if (replaceWhiteSpace || currentChar != ' ') {
-                charArray[animatedText.currentIndex] = replacementCharacter
+                val newChar = if (animatedText.reversed) {
+                    text[animatedText.currentIndex]
+                } else {
+                    replacementCharacter
+                }
+
+                charArray[animatedText.currentIndex] = newChar
             }
 
-            animatedText = AnimatedText(charArray.concatToString(), animatedText.currentIndex + 1)
+            val nextIndex = if (animatedText.reversed) {
+                max(animatedText.currentIndex - 1, 0)
+            } else {
+                min(animatedText.currentIndex + 1, animatedText.text.length - 1)
+            }
+
+            println("index ${animatedText.reversed} ${animatedText.currentIndex} -> $nextIndex")
+            animatedText = AnimatedText(charArray.concatToString(), nextIndex, animatedText.reversed)
+        } else if (infiniteRepeatMode) {
+            delay(animationTimePerChar.toLong() * 2)
+
+            animationTimeLeft = animationTime
+            animatedText = AnimatedText(
+                animatedText.text,
+                animatedText.currentIndex,
+                reversed = !animatedText.reversed
+            )
         }
     }
     CustomText(animatedText)
@@ -210,18 +244,16 @@ fun HighlightWords(
     var animationTimeLeft by remember { mutableStateOf(highlightWords.words.size * animationTimePerWord) }
 
     LaunchedEffect(highlightWords) {
-        println(animationTimeLeft)
-        println(highlightWords)
         if (animationTimeLeft > 0) {
 
             animationTimeLeft -= animationTimePerWord
             delay(animationTimePerWord.toLong())
 
 
-            highlightWords = highlightWords.copyWithIncreasedIndex()
+            highlightWords = highlightWords.withIncreasedIndex()
         } else {
             animationTimeLeft = highlightWords.words.size * animationTimePerWord
-            highlightWords = highlightWords.copyWithIncreasedIndex()
+            highlightWords = highlightWords.withIncreasedIndex()
         }
     }
     CustomText(highlightWords)
@@ -252,7 +284,6 @@ fun ClickableText(onBackNavigation: () -> Unit) {
                 end = offset
             )
                 .firstOrNull()?.let { annotation ->
-                    println(annotation)
                     onBackNavigation()
                 }
         },
@@ -291,10 +322,10 @@ private const val DEMO_TEXT = "Yet another text animation"
 private const val CLICKABLE_LABEL = "CLICKABLE"
 
 
-data class AnimatedText(val text: String, val currentIndex: Int)
+data class AnimatedText(val text: String, val currentIndex: Int, val reversed: Boolean = false)
 
 data class Words(val words: List<String>, var currentIndex: Int) {
-    fun copyWithIncreasedIndex(): Words {
+    fun withIncreasedIndex(): Words {
         return Words(words, if (currentIndex + 1 > words.size) 0 else currentIndex + 1)
     }
 }
