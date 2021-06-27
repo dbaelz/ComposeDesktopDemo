@@ -51,14 +51,14 @@ fun CustomText(text: String) {
 fun TextInOut(text: String, animationTime: Int = 1500) {
     val transition = rememberInfiniteTransition()
 
-    val dropText by transition.animateValue(
+    val textIndex by transition.animateValue(
         0, text.length, Int.VectorConverter,
         InfiniteRepeatableSpec(
             animation = tween(animationTime),
             repeatMode = RepeatMode.Reverse
         )
     )
-    CustomText(text.dropLast(dropText))
+    CustomText(text.dropLast(textIndex))
 }
 
 @Composable
@@ -67,22 +67,21 @@ fun ReplaceCharactersInText(
     replacementCharacter: Char = '*',
     animationTimePerChar: Int = 500
 ) {
-    var animatedText by remember { mutableStateOf(text to 0) }
+    var animatedText by remember { mutableStateOf(AnimatedText(text, 0)) }
     var animationTimeLeft by remember { mutableStateOf(text.length * animationTimePerChar) }
-
 
     LaunchedEffect(animatedText) {
         if (animationTimeLeft > 0) {
             animationTimeLeft -= animationTimePerChar
             delay(animationTimePerChar.toLong())
 
-            val charArray = animatedText.first.toCharArray()
-            charArray[animatedText.second] = replacementCharacter
+            val charArray = animatedText.text.toCharArray()
+            charArray[animatedText.currentIndex] = replacementCharacter
 
-            animatedText = charArray.concatToString() to (animatedText.second + 1)
+            animatedText = AnimatedText(charArray.concatToString(), animatedText.currentIndex + 1)
         }
     }
-    CustomText(animatedText.first)
+    CustomText(animatedText.text)
 }
 
 @Composable
@@ -90,7 +89,7 @@ fun SwapCharactersInText(
     text: String,
     animationTimePerChar: Int = 500
 ) {
-    var animatedText by remember { mutableStateOf(text to 0) }
+    var animatedText by remember { mutableStateOf(AnimatedText(text, 0)) }
     var animationTimeLeft by remember { mutableStateOf(floor(text.length.toDouble() / 2).toInt() * animationTimePerChar) }
 
     LaunchedEffect(animatedText) {
@@ -98,19 +97,19 @@ fun SwapCharactersInText(
             animationTimeLeft -= animationTimePerChar
             delay(animationTimePerChar.toLong())
 
-            val currentIndex = animatedText.second
+            val charArray = animatedText.text.toCharArray()
 
-            val charArray = animatedText.first.toCharArray()
+            val currentCharTemp = charArray[animatedText.currentIndex]
+            val swapIndex = charArray.size - animatedText.currentIndex - 1
 
-            val currentCharTemp = charArray[currentIndex]
-            val swapIndex = charArray.size - 1 - currentIndex
-
-            charArray[currentIndex] = charArray[swapIndex]
+            charArray[animatedText.currentIndex] = charArray[swapIndex]
             charArray[swapIndex] = currentCharTemp
 
 
-            animatedText = charArray.concatToString() to (animatedText.second + 1)
+            animatedText = AnimatedText(charArray.concatToString(), animatedText.currentIndex + 1)
         }
     }
-    CustomText(animatedText.first)
+    CustomText(animatedText.text)
 }
+
+data class AnimatedText(val text: String, val currentIndex: Int)
