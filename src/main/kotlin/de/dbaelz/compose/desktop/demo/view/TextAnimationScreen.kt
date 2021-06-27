@@ -27,42 +27,39 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val animations = listOf<@Composable () -> Unit>(
+            { TextInOut(DEMO_TEXT) },
+            { ReplaceCharactersInText(DEMO_TEXT) },
+            { ReplaceCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
+            {
+                ReplaceCharactersInText(
+                    DEMO_TEXT,
+                    replacementCharacter = '_',
+                    replaceWhiteSpace = false
+                )
+            },
+            {
+                ReplaceCharactersInText(
+                    DEMO_TEXT,
+                    replacementCharacter = '_',
+                    replaceWhiteSpace = false,
+                    infiniteRepeatMode = true
+                )
+            },
+            { HighlightWords(DEMO_TEXT) },
+            { SwapCharactersInText(DEMO_TEXT) },
+            { SwapCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
+            { ClickableText(onBackNavigation) },
+        )
+
 
         BackButton(onBackNavigation)
 
-        TextInOut(DEMO_TEXT)
+        animations.forEach { composable ->
+            composable()
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        ReplaceCharactersInText(DEMO_TEXT)
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        ReplaceCharactersInText(DEMO_TEXT, infiniteRepeatMode = true)
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        ReplaceCharactersInText(DEMO_TEXT, replacementCharacter = '_', replaceWhiteSpace = false)
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        ReplaceCharactersInText(DEMO_TEXT, replacementCharacter = '_', replaceWhiteSpace = false, infiniteRepeatMode = true)
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        HighlightWords(DEMO_TEXT)
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        SwapCharactersInText(DEMO_TEXT)
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        SwapCharactersInText(DEMO_TEXT, infiniteRepeatMode = true)
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        ClickableText(onBackNavigation)
+            Spacer(modifier = Modifier.height(32.dp))
+        }
     }
 }
 
@@ -183,8 +180,8 @@ fun ReplaceCharactersInText(
                 min(animatedText.currentIndex + 1, animatedText.text.length - 1)
             }
 
-            println("index ${animatedText.reversed} ${animatedText.currentIndex} -> $nextIndex")
-            animatedText = AnimatedText(charArray.concatToString(), nextIndex, animatedText.reversed)
+            animatedText =
+                AnimatedText(charArray.concatToString(), nextIndex, animatedText.reversed)
         } else if (infiniteRepeatMode) {
             delay(animationTimePerChar.toLong() * 2)
 
