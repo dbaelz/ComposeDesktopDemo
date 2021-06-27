@@ -37,6 +37,10 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        ReplaceCharactersInText(DEMO_TEXT, replacementCharacter = '_', replaceWhiteSpace = false)
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         SwapCharactersInText(DEMO_TEXT)
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -109,6 +113,7 @@ fun TextInOut(text: String, animationTime: Int = 1500) {
 fun ReplaceCharactersInText(
     text: String,
     replacementCharacter: Char = '*',
+    replaceWhiteSpace: Boolean = true,
     animationTimePerChar: Int = 500
 ) {
     var animatedText by remember { mutableStateOf(AnimatedText(text, 0)) }
@@ -120,7 +125,12 @@ fun ReplaceCharactersInText(
             delay(animationTimePerChar.toLong())
 
             val charArray = animatedText.text.toCharArray()
-            charArray[animatedText.currentIndex] = replacementCharacter
+
+            val currentChar = charArray[animatedText.currentIndex]
+
+            if (replaceWhiteSpace || currentChar != ' ') {
+                charArray[animatedText.currentIndex] = replacementCharacter
+            }
 
             animatedText = AnimatedText(charArray.concatToString(), animatedText.currentIndex + 1)
         }
