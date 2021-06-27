@@ -40,7 +40,6 @@ fun main() = Window(
                 Screen.PLAYGROUND -> PlaygroundScreen(navigateToMain)
                 Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow, navigateToMain)
                 Screen.ALERT_DIALOG -> AlertDialogScreen(navigateToMain)
-                Screen.CLICKABLE_TEXT -> ClickableTextScreen(navigateToMain)
                 Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
                 Screen.ANIMATION -> AnimationScreen(navigateToMain)
                 Screen.CANVAS -> CanvasScreen(navigateToMain)
@@ -57,7 +56,6 @@ fun createMenu(): MainMenuModel {
             MainMenuModel.Entry("Playground", Screen.PLAYGROUND),
             MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
             MainMenuModel.Entry("Alarm Dialog", Screen.ALERT_DIALOG),
-            MainMenuModel.Entry("Clickable Text", Screen.CLICKABLE_TEXT),
             MainMenuModel.Entry("Animation", Screen.ANIMATION),
             MainMenuModel.Entry("Canvas", Screen.CANVAS),
             MainMenuModel.Entry("Timer", Screen.TIMER),
@@ -72,7 +70,6 @@ enum class Screen {
     PLAYGROUND,
     DIFF_TOOL,
     ALERT_DIALOG,
-    CLICKABLE_TEXT,
     ANIMATION,
     CANVAS,
     CLOSE_APP,
