@@ -24,6 +24,8 @@ fun ClickableTextScreen(onBackNavigation: () -> Unit) {
         )
         withStyle(clickStyle()) { append("here") }
 
+        pop()
+
         withStyle(defaultStyle()) { append(" to navigate back.") }
     }
 
