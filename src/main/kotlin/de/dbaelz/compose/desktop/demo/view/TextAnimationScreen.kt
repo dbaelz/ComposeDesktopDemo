@@ -49,6 +49,10 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        SwapCharactersInText(DEMO_TEXT, infiniteRepeatMode = true)
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         ClickableText(onBackNavigation)
     }
 }
@@ -164,10 +168,13 @@ fun ReplaceCharactersInText(
 @Composable
 fun SwapCharactersInText(
     text: String,
+    infiniteRepeatMode: Boolean = false,
     animationTimePerChar: Int = 500
 ) {
+    val animationTime = floor(text.length.toDouble() / 2).toInt() * animationTimePerChar
+
     var animatedText by remember { mutableStateOf(AnimatedText(text, 0)) }
-    var animationTimeLeft by remember { mutableStateOf(floor(text.length.toDouble() / 2).toInt() * animationTimePerChar) }
+    var animationTimeLeft by remember { mutableStateOf(animationTime) }
 
     LaunchedEffect(animatedText) {
         if (animationTimeLeft > 0) {
@@ -184,6 +191,11 @@ fun SwapCharactersInText(
 
 
             animatedText = AnimatedText(charArray.concatToString(), animatedText.currentIndex + 1)
+        } else if (infiniteRepeatMode) {
+            delay(animationTimePerChar.toLong() * 2)
+
+            animationTimeLeft = animationTime
+            animatedText = AnimatedText(animatedText.text, 0)
         }
     }
     CustomText(animatedText.text)
