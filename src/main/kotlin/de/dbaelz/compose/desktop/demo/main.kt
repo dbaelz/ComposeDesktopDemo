@@ -45,6 +45,7 @@ fun main() = Window(
                 Screen.ANIMATION -> AnimationScreen(navigateToMain)
                 Screen.CANVAS -> CanvasScreen(navigateToMain)
                 Screen.TIMER -> TimerScreen(navigateToMain)
+                Screen.TEXT_ANIMATION -> TextAnimationScreen(navigateToMain)
             }
         }
     }
@@ -60,6 +61,7 @@ fun createMenu(): MainMenuModel {
             MainMenuModel.Entry("Animation", Screen.ANIMATION),
             MainMenuModel.Entry("Canvas", Screen.CANVAS),
             MainMenuModel.Entry("Timer", Screen.TIMER),
+            MainMenuModel.Entry("Text Animation", Screen.TEXT_ANIMATION),
             MainMenuModel.Entry("Close App", Screen.CLOSE_APP)
         )
     )
@@ -74,5 +76,6 @@ enum class Screen {
     ANIMATION,
     CANVAS,
     CLOSE_APP,
-    TIMER
+    TIMER,
+    TEXT_ANIMATION
 }

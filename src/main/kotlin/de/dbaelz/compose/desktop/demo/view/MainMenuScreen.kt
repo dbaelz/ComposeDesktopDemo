@@ -37,7 +37,7 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Scre
             model.entries.forEach {
                 Button(
                     modifier = Modifier
-                        .requiredWidth(150.dp)
+                        .requiredWidth(175.dp)
                         .align(Alignment.CenterHorizontally),
                     onClick = { onItemSelected(it.targetScreen) }
                 ) {
