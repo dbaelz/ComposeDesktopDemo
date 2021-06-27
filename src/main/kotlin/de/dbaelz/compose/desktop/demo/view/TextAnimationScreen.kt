@@ -7,11 +7,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlin.math.floor
+import kotlin.math.min
 
 const val DEMO_TEXT = "Yet another text animation"
 
@@ -47,6 +51,55 @@ fun CustomText(text: String) {
     )
 }
 
+
+@Composable
+fun CustomText(
+    animatedText: AnimatedText,
+    textStyle: SpanStyle = defaultStyle(),
+    highlightStyle: SpanStyle = highlightStyle()
+) {
+    val annotatedText = buildAnnotatedString {
+        val currentIndex = animatedText.currentIndex
+        val textLength = animatedText.text.length
+
+        withStyle(textStyle) {
+            append(animatedText.text.substring(0, currentIndex))
+        }
+
+        withStyle(highlightStyle) {
+            append(
+                animatedText.text.substring(
+                    currentIndex,
+                    min(currentIndex + 1, textLength)
+                )
+            )
+        }
+
+        withStyle(textStyle) {
+            append(animatedText.text.substring(min(currentIndex + 1, textLength), textLength))
+        }
+    }
+
+    Text(
+        text = annotatedText,
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
+    )
+}
+
+@Composable
+private fun defaultStyle() = SpanStyle(
+    fontSize = 32.sp,
+    color = MaterialTheme.colors.primary,
+    fontFamily = FontFamily.Monospace
+)
+
+@Composable
+private fun highlightStyle() = SpanStyle(
+    fontSize = 32.sp,
+    color = MaterialTheme.colors.secondary,
+    fontFamily = FontFamily.Monospace
+)
+
 @Composable
 fun TextInOut(text: String, animationTime: Int = 1500) {
     val transition = rememberInfiniteTransition()
@@ -81,7 +134,7 @@ fun ReplaceCharactersInText(
             animatedText = AnimatedText(charArray.concatToString(), animatedText.currentIndex + 1)
         }
     }
-    CustomText(animatedText.text)
+    CustomText(animatedText)
 }
 
 @Composable
