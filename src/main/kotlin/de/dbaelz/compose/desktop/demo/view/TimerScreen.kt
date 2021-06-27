@@ -18,17 +18,7 @@ import kotlin.math.max
 @Composable
 fun TimerScreen(onBackNavigation: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(
-            onClick = onBackNavigation,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Text("Back to menu")
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
+        BackButton(onBackNavigation)
 
         Timer(Modifier.size(200.dp).align(Alignment.CenterHorizontally), 10_000)
     }

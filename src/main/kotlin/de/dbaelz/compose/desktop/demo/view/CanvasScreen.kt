@@ -3,34 +3,22 @@ package de.dbaelz.compose.desktop.demo.view
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun CanvasScreen(onBackNavigation: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(
-            onClick = onBackNavigation,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Text("Back to menu")
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
+        BackButton(onBackNavigation)
 
         PulsingCircle()
     }

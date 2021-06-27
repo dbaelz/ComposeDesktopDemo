@@ -67,7 +67,7 @@ fun ToolBar(onBackNavigation: () -> Unit, onDiffClicked: () -> Unit) {
         Spacer(Modifier.width(4.dp))
 
         Button(
-            onClick = {  },
+            onClick = { },
             modifier = Modifier.height(32.dp)
         ) {
             Text("Patch")

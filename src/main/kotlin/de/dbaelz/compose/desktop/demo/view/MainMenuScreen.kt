@@ -56,3 +56,21 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Scre
 data class MainMenuModel(val entries: List<Entry> = emptyList()) {
     data class Entry(val name: String, val targetScreen: Screen)
 }
+
+@Composable
+fun BackButton(onBackNavigation: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = onBackNavigation
+        ) {
+            Text("Back to menu")
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+    }
+}

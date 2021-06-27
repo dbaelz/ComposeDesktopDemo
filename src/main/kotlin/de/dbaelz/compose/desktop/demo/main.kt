@@ -25,7 +25,7 @@ fun main() = Window(
 ) {
     var screenState by remember { mutableStateOf(Screen.MAIN) }
     val localAppWindow = LocalAppWindow.current
-    val navigateToMain = { screenState = Screen.MAIN}
+    val navigateToMain = { screenState = Screen.MAIN }
 
     DesktopDemoTheme {
         Crossfade(
