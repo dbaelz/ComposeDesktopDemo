@@ -156,9 +156,9 @@ fun AnimatedBox(
     }
 }
 
-val boxAnimationSpec: FiniteAnimationSpec<IntSize> = spring(stiffness = Spring.StiffnessLow)
+private val boxAnimationSpec: FiniteAnimationSpec<IntSize> = spring(stiffness = Spring.StiffnessLow)
 
-enum class BoxState {
+private enum class BoxState {
     NORMAL,
     LARGE
 }

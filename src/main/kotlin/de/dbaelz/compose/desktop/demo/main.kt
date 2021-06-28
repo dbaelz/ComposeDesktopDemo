@@ -50,7 +50,7 @@ fun main() = Window(
     }
 }
 
-fun createMenu(): MainMenuModel {
+private fun createMenu(): MainMenuModel {
     return MainMenuModel(
         listOf(
             MainMenuModel.Entry("Playground", Screen.PLAYGROUND),

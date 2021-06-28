@@ -75,6 +75,6 @@ fun PulsingCircle() {
     }
 }
 
-const val ANIMATION_DURATION_MILLIS = 1500
-const val BAR_ITEMS = 10
-const val BAR_WIDTH = 20f
+private const val ANIMATION_DURATION_MILLIS = 1500
+private const val BAR_ITEMS = 10
+private const val BAR_WIDTH = 20f

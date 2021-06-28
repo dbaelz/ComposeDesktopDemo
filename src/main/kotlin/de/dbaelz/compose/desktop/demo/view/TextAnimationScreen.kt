@@ -67,7 +67,7 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
 fun CustomText(text: String) {
     Text(
         text = text,
-        fontSize = 32.sp,
+        fontSize = defaultFontSize,
         fontFamily = FontFamily.Monospace,
         color = MaterialTheme.colors.primary,
         modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
@@ -291,14 +291,14 @@ fun ClickableText(onBackNavigation: () -> Unit) {
 
 @Composable
 private fun defaultStyle() = SpanStyle(
-    fontSize = 32.sp,
+    fontSize = defaultFontSize,
     color = MaterialTheme.colors.primary,
     fontFamily = FontFamily.Monospace
 )
 
 @Composable
 private fun highlightStyle() = SpanStyle(
-    fontSize = 32.sp,
+    fontSize = defaultFontSize,
     color = MaterialTheme.colors.secondary,
     fontFamily = FontFamily.Monospace
 )
@@ -306,7 +306,7 @@ private fun highlightStyle() = SpanStyle(
 @Composable
 private fun specialHighlightStyle(isFocused: Boolean = false): SpanStyle {
     return SpanStyle(
-        fontSize = 32.sp,
+        fontSize = defaultFontSize,
         color = if (isFocused) MaterialTheme.colors.secondary else MaterialTheme.colors.primary,
         fontFamily = FontFamily.Monospace,
         fontWeight = if (isFocused) FontWeight.Bold else null,
@@ -318,6 +318,7 @@ private fun specialHighlightStyle(isFocused: Boolean = false): SpanStyle {
 private const val DEMO_TEXT = "Yet another text animation"
 private const val CLICKABLE_LABEL = "CLICKABLE"
 
+private val defaultFontSize = 32.sp
 
 data class AnimatedText(val text: String, val currentIndex: Int, val reversed: Boolean = false)
 

@@ -96,4 +96,4 @@ fun Timer(
     }
 }
 
-const val FULL_TIMER_ANGLE = 270f
+private const val FULL_TIMER_ANGLE = 270f
