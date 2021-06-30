@@ -4,12 +4,16 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -51,7 +55,8 @@ fun AnimationScreen(onBackNavigation: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(backgroundColor, colors.background), 0.01f))
+            .background(Brush.verticalGradient(listOf(backgroundColor, colors.background), 0.01f)),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -66,6 +71,14 @@ fun AnimationScreen(onBackNavigation: () -> Unit) {
         ) {
             Text("Back to menu")
         }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        DotsLoadingIndicator(
+            numberDots = 4,
+            colorDot = colors.primary,
+            colorHighlight = colors.secondaryVariant
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -151,6 +164,46 @@ fun AnimatedBox(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = if (expanded) Int.MAX_VALUE else 1,
                 modifier = Modifier.padding(4.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun DotsLoadingIndicator(
+    numberDots: Int = 3,
+    millisPerDot: Int = 300,
+    colorDot: Color = MaterialTheme.colors.primary,
+    colorHighlight: Color = MaterialTheme.colors.secondary,
+) {
+    assert(numberDots > 0)
+    assert(millisPerDot > 0)
+
+    val infiniteTransition = rememberInfiniteTransition()
+    val dotsAnimation by infiniteTransition.animateValue(
+        0,
+        numberDots,
+        Int.VectorConverter,
+        infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = numberDots * millisPerDot
+                (0 until numberDots).forEach {
+                    it at it * millisPerDot
+                }
+            }
+        )
+    )
+
+    Row {
+        (0 until numberDots).forEach {
+            Box(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(if (dotsAnimation == it) 24.dp else 16.dp)
+                    .clip(CircleShape)
+                    .background(if (dotsAnimation == it) colorHighlight else colorDot)
+                    .align(Alignment.CenterVertically)
+                    .animateContentSize()
             )
         }
     }
