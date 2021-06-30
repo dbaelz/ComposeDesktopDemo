@@ -2,6 +2,8 @@ package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
+import androidx.compose.animation.core.Spring.DampingRatioHighBouncy
+import androidx.compose.animation.core.Spring.DampingRatioMediumBouncy
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -76,6 +78,13 @@ fun AnimationScreen(onBackNavigation: () -> Unit) {
 
         DotsLoadingIndicator(
             numberDots = 4,
+            colorDot = colors.primary,
+            colorHighlight = colors.secondaryVariant
+        )
+
+        DotsLoadingIndicator(
+            numberDots = 4,
+            animateSize = true,
             colorDot = colors.primary,
             colorHighlight = colors.secondaryVariant
         )
@@ -172,9 +181,10 @@ fun AnimatedBox(
 @Composable
 fun DotsLoadingIndicator(
     numberDots: Int = 3,
-    millisPerDot: Int = 300,
-    colorDot: Color = MaterialTheme.colors.primary,
-    colorHighlight: Color = MaterialTheme.colors.secondary,
+    millisPerDot: Int = 500,
+    animateSize: Boolean = false,
+    colorDot: Color = colors.primary,
+    colorHighlight: Color = colors.secondary,
 ) {
     assert(numberDots > 0)
     assert(millisPerDot > 0)
@@ -199,11 +209,10 @@ fun DotsLoadingIndicator(
             Box(
                 modifier = Modifier
                     .padding(4.dp)
-                    .size(if (dotsAnimation == it) 24.dp else 16.dp)
+                    .size(if (dotsAnimation == it && animateSize) 24.dp else 16.dp)
                     .clip(CircleShape)
                     .background(if (dotsAnimation == it) colorHighlight else colorDot)
                     .align(Alignment.CenterVertically)
-                    .animateContentSize()
             )
         }
     }
