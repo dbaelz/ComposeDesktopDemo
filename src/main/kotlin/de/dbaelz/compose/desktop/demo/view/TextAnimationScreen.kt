@@ -25,55 +25,41 @@ import kotlin.math.min
 
 @Composable
 fun TextAnimationScreen(onBackNavigation: () -> Unit) {
-    val scrollState = rememberScrollState(0)
+    val animations = listOf<@Composable () -> Unit>(
+        { TextInOut(DEMO_TEXT) },
+        { TextInOut(DEMO_TEXT, withEasing = false) },
+        { ReplaceCharactersInText(DEMO_TEXT) },
+        { ReplaceCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
+        { ReplaceCharactersInTextTransitionVersion(DEMO_TEXT) },
+        {
+            ReplaceCharactersInText(
+                DEMO_TEXT,
+                replacementCharacter = '_',
+                replaceWhiteSpace = false
+            )
+        },
+        {
+            ReplaceCharactersInText(
+                DEMO_TEXT,
+                replacementCharacter = '_',
+                replaceWhiteSpace = false,
+                infiniteRepeatMode = true
+            )
+        },
+        {
+            ReplaceCharactersInTextTransitionVersion(
+                DEMO_TEXT,
+                replacementCharacter = '_',
+                replaceWhiteSpace = false
+            )
+        },
+        { HighlightWords(DEMO_TEXT) },
+        { SwapCharactersInText(DEMO_TEXT) },
+        { SwapCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
+        { ClickableText(onBackNavigation) },
+    )
 
-    Column(
-        modifier = Modifier.fillMaxWidth().verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        val animations = listOf<@Composable () -> Unit>(
-            { TextInOut(DEMO_TEXT) },
-            { TextInOut(DEMO_TEXT, withEasing = false) },
-            { ReplaceCharactersInText(DEMO_TEXT) },
-            { ReplaceCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
-            { ReplaceCharactersInTextTransitionVersion(DEMO_TEXT) },
-            {
-                ReplaceCharactersInText(
-                    DEMO_TEXT,
-                    replacementCharacter = '_',
-                    replaceWhiteSpace = false
-                )
-            },
-            {
-                ReplaceCharactersInText(
-                    DEMO_TEXT,
-                    replacementCharacter = '_',
-                    replaceWhiteSpace = false,
-                    infiniteRepeatMode = true
-                )
-            },
-            {
-                ReplaceCharactersInTextTransitionVersion(
-                    DEMO_TEXT,
-                    replacementCharacter = '_',
-                    replaceWhiteSpace = false
-                )
-            },
-            { HighlightWords(DEMO_TEXT) },
-            { SwapCharactersInText(DEMO_TEXT) },
-            { SwapCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
-            { ClickableText(onBackNavigation) },
-        )
-
-
-        BackButton(onBackNavigation)
-
-        animations.forEach { composable ->
-            composable()
-
-            Spacer(modifier = Modifier.height(32.dp))
-        }
-    }
+    MenuColumn(onBackNavigation, animations)
 }
 
 @Composable
