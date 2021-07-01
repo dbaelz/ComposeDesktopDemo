@@ -24,7 +24,8 @@ import kotlin.math.max
 @Composable
 fun TimerScreen(onBackNavigation: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        BackButton(onBackNavigation)
+        BackButton(onBackNavigation,
+        backgroundColor = MaterialTheme.colors.secondary)
 
         Timer(Modifier.size(280.dp).align(Alignment.CenterHorizontally), 10_000)
     }
@@ -35,7 +36,7 @@ fun Timer(
     modifier: Modifier,
     initialTimerPeriod: Int,
     colorActive: Color = MaterialTheme.colors.secondary,
-    colorInactive: Color = MaterialTheme.colors.onSecondary
+    colorInactive: Color = MaterialTheme.colors.onSecondary,
 ) {
     var timerActive by remember { mutableStateOf(false) }
     var periodLeft by remember { mutableStateOf(initialTimerPeriod) }
@@ -79,19 +80,19 @@ fun Timer(
         ) {
             Text(
                 text = periodLeft.toString(),
-                color = MaterialTheme.colors.secondary,
+                color = colorActive,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(4.dp))
-                    .background(MaterialTheme.colors.onSecondary)
+                    .background(colorInactive)
             )
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.onSecondary,
-                    contentColor = MaterialTheme.colors.secondary
+                    backgroundColor = colorInactive,
+                    contentColor = colorActive
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {

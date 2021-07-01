@@ -4,12 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.imageFromResource
 import androidx.compose.ui.unit.dp
 import de.dbaelz.compose.desktop.demo.Screen
@@ -58,7 +58,11 @@ data class MainMenuModel(val entries: List<Entry> = emptyList()) {
 }
 
 @Composable
-fun BackButton(onBackNavigation: () -> Unit) {
+fun BackButton(
+    onBackNavigation: () -> Unit,
+    backgroundColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = contentColorFor(backgroundColor)
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -66,6 +70,10 @@ fun BackButton(onBackNavigation: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = backgroundColor,
+                contentColor = contentColor
+            ),
             onClick = onBackNavigation
         ) {
             Text("Back to menu")
