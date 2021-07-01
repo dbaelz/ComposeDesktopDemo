@@ -1,8 +1,11 @@
 package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -23,12 +26,15 @@ import kotlin.math.min
 
 @Composable
 fun TextAnimationScreen(onBackNavigation: () -> Unit) {
+    val scrollState = rememberScrollState(0)
+
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth().verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val animations = listOf<@Composable () -> Unit>(
             { TextInOut(DEMO_TEXT) },
+            { TextInOut(DEMO_TEXT, withEasing = false) },
             { ReplaceCharactersInText(DEMO_TEXT) },
             { ReplaceCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
             {
@@ -129,13 +135,16 @@ fun CustomText(words: Words) {
 }
 
 @Composable
-fun TextInOut(text: String, animationTime: Int = 1500) {
+fun TextInOut(text: String, animationTime: Int = 1500, withEasing: Boolean = true) {
     val transition = rememberInfiniteTransition()
 
     val textIndex by transition.animateValue(
         0, text.length, Int.VectorConverter,
         InfiniteRepeatableSpec(
-            animation = tween(animationTime),
+            animation = tween(
+                durationMillis = animationTime,
+                easing = if (withEasing) FastOutSlowInEasing else LinearEasing
+            ),
             repeatMode = RepeatMode.Reverse
         )
     )
