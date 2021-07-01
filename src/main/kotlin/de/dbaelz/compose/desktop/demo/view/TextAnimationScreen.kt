@@ -1,7 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
@@ -37,6 +36,7 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
             { TextInOut(DEMO_TEXT, withEasing = false) },
             { ReplaceCharactersInText(DEMO_TEXT) },
             { ReplaceCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
+            { ReplaceCharactersInTextTransitionVersion(DEMO_TEXT) },
             {
                 ReplaceCharactersInText(
                     DEMO_TEXT,
@@ -50,6 +50,13 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
                     replacementCharacter = '_',
                     replaceWhiteSpace = false,
                     infiniteRepeatMode = true
+                )
+            },
+            {
+                ReplaceCharactersInTextTransitionVersion(
+                    DEMO_TEXT,
+                    replacementCharacter = '_',
+                    replaceWhiteSpace = false
                 )
             },
             { HighlightWords(DEMO_TEXT) },
@@ -192,7 +199,7 @@ fun ReplaceCharactersInText(
             animatedText =
                 AnimatedText(charArray.concatToString(), nextIndex, animatedText.reversed)
         } else if (infiniteRepeatMode) {
-            delay(animationTimePerChar.toLong() * 2)
+            delay(animationTimePerChar.toLong())
 
             animationTimeLeft = animationTime
             animatedText = AnimatedText(
@@ -203,6 +210,75 @@ fun ReplaceCharactersInText(
         }
     }
     CustomText(animatedText)
+}
+
+@Composable
+fun ReplaceCharactersInTextTransitionVersion(
+    text: String,
+    replacementCharacter: Char = '*',
+    replaceWhiteSpace: Boolean = true,
+    animationTimePerChar: Int = 500
+) {
+    val animationTime = text.length * animationTimePerChar
+
+    var animatedText by remember { mutableStateOf(text to false) }
+
+    val transition = rememberInfiniteTransition()
+    val animationCounter by transition.animateValue(
+        0, text.length + 2, Int.VectorConverter,
+        InfiniteRepeatableSpec(
+            animation = tween(
+                durationMillis = animationTime,
+                easing = LinearEasing
+            ),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    LaunchedEffect(animationCounter) {
+        val currentText = animatedText.first
+        val currentReverse = animatedText.second
+        val currentIndex = animationCounter - 1
+
+        if (animationCounter == 0) {
+            animatedText = currentText to false
+        } else if (animationCounter <= currentText.length) {
+            if (!replaceWhiteSpace && currentText[currentIndex] == ' ') {
+                return@LaunchedEffect
+            }
+
+            val newText = if (currentReverse) {
+                currentText.replaceRange(
+                    currentIndex,
+                    currentText.length,
+                    text.substring(currentIndex, text.length)
+                )
+            } else {
+                currentText.replaceRangeWitChar(
+                    currentIndex,
+                    currentIndex + 1,
+                    replacementCharacter
+                )
+            }
+
+            animatedText = newText to currentReverse
+        } else {
+            animatedText = currentText to true
+        }
+    }
+
+    CustomText(animatedText.first)
+}
+
+private fun String.replaceRangeWitChar(
+    startIndex: Int,
+    endIndex: Int,
+    replacementCharacter: Char
+): String {
+    return replaceRange(
+        startIndex, endIndex,
+        String(CharArray(endIndex - startIndex) { replacementCharacter })
+    )
 }
 
 @Composable
