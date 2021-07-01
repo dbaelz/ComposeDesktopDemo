@@ -71,6 +71,9 @@ private fun Timer(
             }
         }
     )
+
+    val timerBar = max(periodLeft / initialTimerPeriod.toFloat(), 0f)
+    BarTimer(modifier,colorActive, colorInactive, timerBar)
 }
 
 @Composable
@@ -109,33 +112,71 @@ private fun CircleTimer(
             )
         }
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.width(100.dp)
+        TimerButton(colorActive, colorInactive, timeLeftText, buttonText, onButtonClicked)
+    }
+}
+
+@Composable
+private fun BarTimer(
+    modifier: Modifier,
+    colorActive: Color = MaterialTheme.colors.secondary,
+    colorInactive: Color = MaterialTheme.colors.onSecondary,
+    fillPercentage: Float
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        Canvas(
+            modifier = modifier
+        ) {
+            drawRoundRect(
+                color = colorInactive,
+                size = Size(280f, 40f)
+            )
+
+            drawRoundRect(
+                color = colorActive,
+                size = Size(fillPercentage * 280f, 40f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun TimerButton(
+    textColor: Color = MaterialTheme.colors.secondary,
+    backgroundColor: Color = MaterialTheme.colors.onSecondary,
+    timeLeftText: String,
+    buttonText: String,
+    onButtonClicked: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.width(100.dp)
+    ) {
+        Text(
+            text = timeLeftText,
+            color = textColor,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(4.dp))
+                .background(backgroundColor)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = backgroundColor,
+                contentColor = textColor
+            ),
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onButtonClicked
         ) {
             Text(
-                text = timeLeftText,
-                color = colorActive,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(colorInactive)
+                text = buttonText
             )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = colorInactive,
-                    contentColor = colorActive
-                ),
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onButtonClicked
-            ) {
-                Text(
-                    text = buttonText
-                )
-            }
         }
     }
 }
