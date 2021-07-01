@@ -45,6 +45,7 @@ fun main() = Window(
                 Screen.CANVAS -> CanvasScreen(navigateToMain)
                 Screen.TIMER -> TimerScreen(navigateToMain)
                 Screen.TEXT_ANIMATION -> TextAnimationScreen(navigateToMain)
+                Screen.SHAPE -> ShapeScreen(navigateToMain)
             }
         }
     }
@@ -54,12 +55,16 @@ private fun createMenu(): MainMenuModel {
     return MainMenuModel(
         listOf(
             MainMenuModel.Entry("Playground", Screen.PLAYGROUND),
-            MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
-            MainMenuModel.Entry("Alarm Dialog", Screen.ALERT_DIALOG),
+
             MainMenuModel.Entry("Animation", Screen.ANIMATION),
+            MainMenuModel.Entry("Text Animation", Screen.TEXT_ANIMATION),
+            MainMenuModel.Entry("Shapes", Screen.SHAPE),
             MainMenuModel.Entry("Canvas", Screen.CANVAS),
             MainMenuModel.Entry("Timer", Screen.TIMER),
-            MainMenuModel.Entry("Text Animation", Screen.TEXT_ANIMATION),
+
+            MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
+            MainMenuModel.Entry("Alarm Dialog", Screen.ALERT_DIALOG),
+
             MainMenuModel.Entry("Close App", Screen.CLOSE_APP)
         )
     )
@@ -74,5 +79,6 @@ enum class Screen {
     CANVAS,
     CLOSE_APP,
     TIMER,
-    TEXT_ANIMATION
+    TEXT_ANIMATION,
+    SHAPE
 }
