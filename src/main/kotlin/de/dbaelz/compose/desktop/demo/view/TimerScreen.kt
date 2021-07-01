@@ -24,15 +24,17 @@ import kotlin.math.max
 @Composable
 fun TimerScreen(onBackNavigation: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        BackButton(onBackNavigation,
-        backgroundColor = MaterialTheme.colors.secondary)
+        BackButton(
+            onBackNavigation,
+            backgroundColor = MaterialTheme.colors.secondary
+        )
 
         Timer(Modifier.size(280.dp).align(Alignment.CenterHorizontally), 10_000)
     }
 }
 
 @Composable
-fun Timer(
+private fun Timer(
     modifier: Modifier,
     initialTimerPeriod: Int,
     colorActive: Color = MaterialTheme.colors.secondary,
@@ -48,6 +50,39 @@ fun Timer(
         }
     }
 
+    CircleTimer(
+        modifier = modifier,
+        colorActive = colorActive,
+        colorInactive = colorInactive,
+        timerAngle = FULL_TIMER_ANGLE * max(periodLeft / initialTimerPeriod.toFloat(), 0f),
+        timeLeftText = periodLeft.toString(),
+        buttonText = when {
+            periodLeft <= 0 -> "Restart"
+            timerActive -> "Pause"
+            periodLeft != initialTimerPeriod -> "Resume"
+            else -> "Start"
+        },
+        onButtonClicked = {
+            if (periodLeft <= 0) {
+                periodLeft = initialTimerPeriod
+                timerActive = true
+            } else {
+                timerActive = !timerActive
+            }
+        }
+    )
+}
+
+@Composable
+private fun CircleTimer(
+    modifier: Modifier,
+    colorActive: Color = MaterialTheme.colors.secondary,
+    colorInactive: Color = MaterialTheme.colors.onSecondary,
+    timerAngle: Float,
+    timeLeftText: String,
+    buttonText: String,
+    onButtonClicked: () -> Unit
+) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -67,7 +102,7 @@ fun Timer(
             drawArc(
                 color = colorActive,
                 startAngle = 135f,
-                sweepAngle = FULL_TIMER_ANGLE * max(periodLeft / initialTimerPeriod.toFloat(), 0f),
+                sweepAngle = timerAngle,
                 size = Size(size.width, size.height),
                 useCenter = false,
                 style = Stroke(width = 10f, cap = StrokeCap.Round)
@@ -79,7 +114,7 @@ fun Timer(
             modifier = Modifier.width(100.dp)
         ) {
             Text(
-                text = periodLeft.toString(),
+                text = timeLeftText,
                 color = colorActive,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -95,21 +130,10 @@ fun Timer(
                     contentColor = colorActive
                 ),
                 modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    if (periodLeft <= 0) {
-                        periodLeft = initialTimerPeriod
-                        timerActive = true
-                    } else {
-                        timerActive = !timerActive
-                    }
-                }) {
+                onClick = onButtonClicked
+            ) {
                 Text(
-                    text = when {
-                        periodLeft <= 0 -> "Restart"
-                        timerActive -> "Pause"
-                        periodLeft != initialTimerPeriod -> "Resume"
-                        else -> "Start"
-                    }
+                    text = buttonText
                 )
             }
         }
