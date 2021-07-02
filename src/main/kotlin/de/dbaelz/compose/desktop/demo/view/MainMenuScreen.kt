@@ -20,7 +20,7 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Scre
 
     Box {
         Image(
-            bitmap = imageFromResource("compose-logo.png"),
+            bitmap = imageFromResource("images/compose-logo.png"),
             contentDescription = "Compose for Desktop logo",
             modifier = Modifier
                 .align(Alignment.Center)
