@@ -35,7 +35,9 @@ fun DesktopDemoTheme(
 ) {
     MaterialTheme(
         // TODO: Add dark theme
-        colors = if (isDarkTheme) LightPalette else LightPalette
+        colors = if (isDarkTheme) LightPalette else LightPalette,
+        // We could add the typography here for the theme. But the current is alright ;)
+        // typography = TourneyTypography
     ) {
         Row(
             Modifier

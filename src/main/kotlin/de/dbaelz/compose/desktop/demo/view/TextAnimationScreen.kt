@@ -1,14 +1,13 @@
 package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.Typography
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -18,6 +17,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.dbaelz.compose.desktop.demo.theme.TourneyTypography
 import kotlinx.coroutines.delay
 import kotlin.math.floor
 import kotlin.math.max
@@ -57,6 +57,7 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
         { SwapCharactersInText(DEMO_TEXT) },
         { SwapCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
         { ClickableText(onBackNavigation) },
+        { CustomTypographyExample("Typography Demo", TourneyTypography) }
     )
 
     MenuColumn(onBackNavigation, animations)
@@ -356,6 +357,16 @@ fun ClickableText(onBackNavigation: () -> Unit) {
                 }
         },
         modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
+    )
+}
+
+@Composable
+fun CustomTypographyExample(text: String, typography: Typography = MaterialTheme.typography) {
+    Text(
+        text,
+        color = MaterialTheme.colors.primary,
+        style = typography.body1,
+        // could use font* parameter instead
     )
 }
 
