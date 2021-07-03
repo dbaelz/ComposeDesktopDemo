@@ -7,16 +7,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlin.random.Random
 
 
 @Composable
 fun CustomLayoutScreen(onBackNavigation: () -> Unit) {
-    MenuColumn(onBackNavigation, listOf({
-        TextWithCustomModifier()
-    }))
+    MenuColumn(onBackNavigation, listOf(
+        { TextWithCustomModifier() },
+        { TextCustomLayoutExample("Hello there!") }
+    ))
 
 }
 
@@ -37,5 +40,54 @@ private fun Modifier.offsetX(offset: Dp) = layout { measurable, constraints ->
 
     layout(placeable.width, placeable.height) {
         placeable.place(offset.roundToPx(), 0)
+    }
+}
+
+@Composable
+private fun TextCustomLayoutExample(text: String) {
+    CustomLayout {
+        (0..9).forEach {
+            Text(
+                text,
+                modifier = Modifier
+                    .width(128.dp)
+                    .height(64.dp)
+                    .background(
+                        Color(
+                            Random.nextInt(256), Random.nextInt(256), Random.nextInt(256)
+                        )
+                    )
+            )
+        }
+    }
+
+
+}
+
+@Composable
+private fun CustomLayout(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+
+    Layout(
+        modifier = modifier,
+        content = content
+    ) { measurables, constraints ->
+        val placeables = measurables.map {
+            it.measure(constraints)
+        }
+
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            var xPos = 0
+            var yPos = 0
+
+            placeables.forEach {
+                it.place(xPos, yPos)
+
+                xPos += it.width / 2
+                yPos += it.height / 2
+            }
+        }
     }
 }
