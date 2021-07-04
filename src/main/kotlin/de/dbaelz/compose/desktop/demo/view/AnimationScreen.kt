@@ -2,15 +2,11 @@ package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.animation.core.Spring.DampingRatioHighBouncy
-import androidx.compose.animation.core.Spring.DampingRatioMediumBouncy
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -53,7 +49,47 @@ fun AnimationScreen(onBackNavigation: () -> Unit) {
         onBackNavigation()
     }
 
+    AnimationContent(
+        backgroundColor = backgroundColor,
+        backButtonOffset = backButtonOffset,
+        animationBoxColor = boxColor,
+        animationBoxHeight = boxHeight,
+        isAnimationBoxVisible = boxVisible,
+        isAnimationBoxExpanded = boxState != BoxState.NORMAL,
+        isEnabled = !backButtonClicked,
+        onBackgroundToggleClicked = {
+            backgroundColorToggle = !backgroundColorToggle
+        },
+        onAnimateBoxClicked = {
+            boxState = when (boxState) {
+                BoxState.NORMAL -> BoxState.LARGE
+                BoxState.LARGE -> BoxState.NORMAL
+            }
+        },
+        onBoxVisibilityClicked = {
+            boxVisible = !boxVisible
+        },
+        onBackButtonClicked = {
+            backButtonClicked = true
+        }
+    )
+}
 
+@ExperimentalAnimationApi
+@Composable
+private fun AnimationContent(
+    backgroundColor: Color,
+    backButtonOffset: Dp,
+    animationBoxColor: Color,
+    animationBoxHeight: Dp,
+    isAnimationBoxVisible: Boolean,
+    isAnimationBoxExpanded: Boolean,
+    isEnabled: Boolean,
+    onBackgroundToggleClicked: () -> Unit,
+    onAnimateBoxClicked: () -> Unit,
+    onBoxVisibilityClicked: () -> Unit,
+    onBackButtonClicked: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,10 +99,8 @@ fun AnimationScreen(onBackNavigation: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = {
-                backButtonClicked = true
-            },
-            enabled = !backButtonClicked,
+            onClick = onBackButtonClicked,
+            enabled = isEnabled,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .offset(y = backButtonOffset)
@@ -93,49 +127,48 @@ fun AnimationScreen(onBackNavigation: () -> Unit) {
 
         AnimationButton(
             "Toggle background",
-            !backButtonClicked,
-            Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            backgroundColorToggle = !backgroundColorToggle
-        }
+            isEnabled,
+            Modifier.align(Alignment.CenterHorizontally),
+            onBackgroundToggleClicked
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         AnimationButton(
             "Animate Box",
-            !backButtonClicked,
-            Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            boxState = when (boxState) {
-                BoxState.NORMAL -> BoxState.LARGE
-                BoxState.LARGE -> BoxState.NORMAL
-            }
-        }
+            isEnabled,
+            Modifier.align(Alignment.CenterHorizontally),
+            onAnimateBoxClicked
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         AnimationButton(
             "Box Visibility",
-            !backButtonClicked,
-            Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            boxVisible = !boxVisible
-        }
+            isEnabled,
+            Modifier.align(Alignment.CenterHorizontally),
+            onBoxVisibilityClicked
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         AnimatedBox(
             Modifier.align(Alignment.CenterHorizontally),
-            boxVisible && !backButtonClicked,
-            boxColor,
-            boxHeight,
-            boxState != BoxState.NORMAL
+            isAnimationBoxVisible && isEnabled,
+            animationBoxColor,
+            animationBoxHeight,
+            isAnimationBoxExpanded
         )
     }
 }
 
 @Composable
-fun AnimationButton(text: String, enabled: Boolean, modifier: Modifier, onClick: () -> Unit) {
+private fun AnimationButton(
+    text: String,
+    enabled: Boolean,
+    modifier: Modifier,
+    onClick: () -> Unit
+) {
     Button(
         enabled = enabled,
         onClick = onClick,
@@ -147,7 +180,7 @@ fun AnimationButton(text: String, enabled: Boolean, modifier: Modifier, onClick:
 
 @ExperimentalAnimationApi
 @Composable
-fun AnimatedBox(
+private fun AnimatedBox(
     modifier: Modifier,
     boxVisible: Boolean,
     boxColor: Color,
@@ -179,7 +212,7 @@ fun AnimatedBox(
 }
 
 @Composable
-fun DotsLoadingIndicator(
+private fun DotsLoadingIndicator(
     numberDots: Int = 3,
     millisPerDot: Int = 500,
     animateSize: Boolean = false,
