@@ -33,19 +33,42 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
             backgroundColor = MaterialTheme.colors.secondary
         )
 
-        Timer(Modifier.size(280.dp).align(Alignment.CenterHorizontally), 10_000)
+        Spacer(Modifier.height(64.dp))
+
+        Timer(
+            modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally),
+            style = TimerStyle(
+                colorActive = MaterialTheme.colors.secondary,
+                colorInactive = MaterialTheme.colors.onSecondary,
+                arcWithKnob = false,
+                withBar = false
+            ),
+            timerDuration = 10_000
+        )
+
+        Spacer(Modifier.height(64.dp))
+
+        Timer(
+            modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally),
+            style = TimerStyle(
+                colorActive = MaterialTheme.colors.primary,
+                colorInactive = MaterialTheme.colors.onPrimary,
+                arcWithKnob = true,
+                arcWithBorder = false
+            ),
+            timerDuration = 7500
+        )
     }
 }
 
 @Composable
 private fun Timer(
     modifier: Modifier,
-    initialTimerPeriod: Int,
-    colorActive: Color = MaterialTheme.colors.secondary,
-    colorInactive: Color = MaterialTheme.colors.onSecondary,
+    style: TimerStyle,
+    timerDuration: Int,
 ) {
     var timerActive by remember { mutableStateOf(false) }
-    var periodLeft by remember { mutableStateOf(initialTimerPeriod) }
+    var periodLeft by remember { mutableStateOf(timerDuration) }
 
     LaunchedEffect(periodLeft, timerActive) {
         if (timerActive && periodLeft > 0) {
@@ -54,39 +77,49 @@ private fun Timer(
         }
     }
 
-    CircleTimer(
-        modifier = modifier,
-        colorActive = colorActive,
-        colorInactive = colorInactive,
-        timerAngle = FULL_TIMER_ANGLE * max(periodLeft / initialTimerPeriod.toFloat(), 0f),
-        timeLeftText = periodLeft.toString(),
-        buttonText = when {
-            periodLeft <= 0 -> "Restart"
-            timerActive -> "Pause"
-            periodLeft != initialTimerPeriod -> "Resume"
-            else -> "Start"
-        },
-        withKnob = true,
-        onButtonClicked = {
-            if (periodLeft <= 0) {
-                periodLeft = initialTimerPeriod
-                timerActive = true
-            } else {
-                timerActive = !timerActive
+    Column(modifier = modifier) {
+        CircleTimer(
+            modifier = modifier.fillMaxSize(0.5f),
+            colorActive = style.colorActive,
+            colorInactive = style.colorInactive,
+            timerAngle = FULL_TIMER_ANGLE * max(periodLeft / timerDuration.toFloat(), 0f),
+            timeLeftText = periodLeft.toString(),
+            buttonText = when {
+                periodLeft <= 0 -> "Restart"
+                timerActive -> "Pause"
+                periodLeft != timerDuration -> "Resume"
+                else -> "Start"
+            },
+            withBorder = style.arcWithBorder,
+            withKnob = style.arcWithKnob,
+            onButtonClicked = {
+                if (periodLeft <= 0) {
+                    periodLeft = timerDuration
+                    timerActive = true
+                } else {
+                    timerActive = !timerActive
+                }
             }
-        }
-    )
+        )
 
-    val timerBar = max(periodLeft / initialTimerPeriod.toFloat(), 0f)
-    BarTimer(modifier, colorActive, colorInactive, timerBar)
+        if (style.withBar) {
+            BarTimer(
+                modifier.fillMaxSize(0.5f),
+                style.colorActive,
+                style.colorInactive,
+                max(periodLeft / timerDuration.toFloat(), 0f)
+            )
+        }
+    }
+
 }
 
 @Composable
 private fun CircleTimer(
-    modifier: Modifier,
-    colorActive: Color = MaterialTheme.colors.secondary,
+    modifier: Modifier = Modifier,
+    colorActive: Color,
     colorInactive: Color = MaterialTheme.colors.onSecondary,
-    arcWithBorder: Boolean = true,
+    withBorder: Boolean = true,
     withKnob: Boolean = false,
     timerAngle: Float,
     timeLeftText: String,
@@ -109,14 +142,13 @@ private fun CircleTimer(
                 style = Stroke(width = 16f, cap = StrokeCap.Round)
             )
 
-            val strokeWidth = if (arcWithBorder) 10f else 17f
             drawArc(
                 color = colorActive,
                 startAngle = START_ANGLE,
                 sweepAngle = timerAngle,
                 size = Size(size.width, size.height),
                 useCenter = false,
-                style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+                style = Stroke(width = if (withBorder) 10f else 17f, cap = StrokeCap.Round)
             )
 
             if (withKnob) {
@@ -138,7 +170,7 @@ private fun CircleTimer(
 
 @Composable
 private fun BarTimer(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     colorActive: Color = MaterialTheme.colors.secondary,
     colorInactive: Color = MaterialTheme.colors.onSecondary,
     fillPercentage: Float
@@ -152,12 +184,12 @@ private fun BarTimer(
         ) {
             drawRoundRect(
                 color = colorInactive,
-                size = Size(280f, 40f)
+                size = Size(size.width, 20f)
             )
 
             drawRoundRect(
                 color = colorActive,
-                size = Size(fillPercentage * 280f, 40f)
+                size = Size(fillPercentage * size.width, 20f)
             )
         }
     }
@@ -200,6 +232,14 @@ private fun TimerButton(
         }
     }
 }
+
+data class TimerStyle(
+    val colorActive: Color,
+    val colorInactive: Color,
+    val arcWithBorder: Boolean = true,
+    val arcWithKnob: Boolean = false,
+    val withBar: Boolean = true
+)
 
 private const val START_ANGLE = 135f
 private const val FULL_TIMER_ANGLE = 270f
