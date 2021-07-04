@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -19,7 +20,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import kotlin.math.PI
+import kotlin.math.cos
 import kotlin.math.max
+import kotlin.math.sin
 
 @Composable
 fun TimerScreen(onBackNavigation: () -> Unit) {
@@ -62,6 +66,7 @@ private fun Timer(
             periodLeft != initialTimerPeriod -> "Resume"
             else -> "Start"
         },
+        withKnob = true,
         onButtonClicked = {
             if (periodLeft <= 0) {
                 periodLeft = initialTimerPeriod
@@ -73,7 +78,7 @@ private fun Timer(
     )
 
     val timerBar = max(periodLeft / initialTimerPeriod.toFloat(), 0f)
-    BarTimer(modifier,colorActive, colorInactive, timerBar)
+    BarTimer(modifier, colorActive, colorInactive, timerBar)
 }
 
 @Composable
@@ -81,6 +86,8 @@ private fun CircleTimer(
     modifier: Modifier,
     colorActive: Color = MaterialTheme.colors.secondary,
     colorInactive: Color = MaterialTheme.colors.onSecondary,
+    arcWithBorder: Boolean = true,
+    withKnob: Boolean = false,
     timerAngle: Float,
     timeLeftText: String,
     buttonText: String,
@@ -95,21 +102,34 @@ private fun CircleTimer(
         ) {
             drawArc(
                 color = colorInactive,
-                startAngle = 135f,
+                startAngle = START_ANGLE,
                 sweepAngle = FULL_TIMER_ANGLE,
                 size = Size(size.width, size.height),
                 useCenter = false,
                 style = Stroke(width = 16f, cap = StrokeCap.Round)
             )
 
+            val strokeWidth = if (arcWithBorder) 10f else 17f
             drawArc(
                 color = colorActive,
-                startAngle = 135f,
+                startAngle = START_ANGLE,
                 sweepAngle = timerAngle,
                 size = Size(size.width, size.height),
                 useCenter = false,
-                style = Stroke(width = 10f, cap = StrokeCap.Round)
+                style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
             )
+
+            if (withKnob) {
+                val radius = size.width / 2
+                val x = center.x + radius * cos((timerAngle + START_ANGLE) * PI / 180)
+                val y = center.y + radius * sin((timerAngle + START_ANGLE) * PI / 180)
+
+                drawCircle(
+                    color = colorActive,
+                    radius = 12f,
+                    center = Offset(x.toFloat(), y.toFloat())
+                )
+            }
         }
 
         TimerButton(colorActive, colorInactive, timeLeftText, buttonText, onButtonClicked)
@@ -181,4 +201,5 @@ private fun TimerButton(
     }
 }
 
+private const val START_ANGLE = 135f
 private const val FULL_TIMER_ANGLE = 270f
