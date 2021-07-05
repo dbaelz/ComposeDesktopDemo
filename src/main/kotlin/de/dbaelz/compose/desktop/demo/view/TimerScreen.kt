@@ -43,7 +43,7 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
                 arcWithKnob = false,
                 withBar = false
             ),
-            timerDuration = 10_000
+            remember { TimerState(10_000) }
         )
 
         Spacer(Modifier.height(64.dp))
@@ -56,7 +56,7 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
                 arcWithKnob = true,
                 arcWithBorder = false
             ),
-            timerDuration = 7500
+            remember { TimerState(7500) }
         )
     }
 }
@@ -65,15 +65,12 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
 private fun Timer(
     modifier: Modifier,
     style: TimerStyle,
-    timerDuration: Int,
+    timerState: TimerState
 ) {
-    var timerActive by remember { mutableStateOf(false) }
-    var periodLeft by remember { mutableStateOf(timerDuration) }
-
-    LaunchedEffect(periodLeft, timerActive) {
-        if (timerActive && periodLeft > 0) {
+    LaunchedEffect(timerState.periodLeft, timerState.timerActive) {
+        if (timerState.timerActive && timerState.periodLeft > 0) {
             delay(100)
-            periodLeft -= 100
+            timerState.periodLeft -= 100
         }
     }
 
@@ -82,22 +79,22 @@ private fun Timer(
             modifier = modifier.fillMaxSize(0.5f),
             colorActive = style.colorActive,
             colorInactive = style.colorInactive,
-            timerAngle = FULL_TIMER_ANGLE * max(periodLeft / timerDuration.toFloat(), 0f),
-            timeLeftText = periodLeft.toString(),
+            timerAngle = FULL_TIMER_ANGLE * max(timerState.periodLeft / timerState.timerDuration.toFloat(), 0f),
+            timeLeftText = timerState.periodLeft.toString(),
             buttonText = when {
-                periodLeft <= 0 -> "Restart"
-                timerActive -> "Pause"
-                periodLeft != timerDuration -> "Resume"
+                timerState.periodLeft <= 0 -> "Restart"
+                timerState.timerActive -> "Pause"
+                timerState.periodLeft != timerState.timerDuration -> "Resume"
                 else -> "Start"
             },
             withBorder = style.arcWithBorder,
             withKnob = style.arcWithKnob,
             onButtonClicked = {
-                if (periodLeft <= 0) {
-                    periodLeft = timerDuration
-                    timerActive = true
+                if (timerState.periodLeft <= 0) {
+                    timerState.periodLeft = timerState.timerDuration
+                    timerState.timerActive = true
                 } else {
-                    timerActive = !timerActive
+                    timerState.timerActive = !timerState.timerActive
                 }
             }
         )
@@ -107,7 +104,7 @@ private fun Timer(
                 modifier.fillMaxSize(0.5f),
                 style.colorActive,
                 style.colorInactive,
-                max(periodLeft / timerDuration.toFloat(), 0f)
+                max(timerState.periodLeft / timerState.timerDuration.toFloat(), 0f)
             )
         }
     }
@@ -231,6 +228,11 @@ private fun TimerButton(
             )
         }
     }
+}
+
+class TimerState(val timerDuration: Int = 10_000) {
+    var timerActive by mutableStateOf(false)
+    var periodLeft by mutableStateOf(timerDuration)
 }
 
 data class TimerStyle(
