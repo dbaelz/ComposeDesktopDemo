@@ -1,5 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
@@ -8,6 +9,8 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,11 +26,12 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
     val tabs = listOf(
         Tab(Tab.Type.HOME, "Home", Icons.Default.Home),
         Tab(Tab.Type.TAB_STYLE, "Tab Style", Icons.Default.Settings),
+        Tab(Tab.Type.CUSTOM_TABS, "Custom Tabs", Icons.Default.Create),
         Tab(Tab.Type.LEADING_ICON_TABS, "Leading Icon Tabs", Icons.Default.List)
     )
 
     Column {
-        CustomTabRow(tabs, selectedTabIndex, tabStyle) { index, type ->
+        MainTabRow(tabs, selectedTabIndex, tabStyle) { index, type ->
             selectedTabIndex = index
             selectedTabType = type
         }
@@ -37,6 +41,11 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
             Tab.Type.TAB_STYLE -> TabStyleTab {
                 tabStyle = it
             }
+            Tab.Type.CUSTOM_TABS -> NestedCustomTabs(
+                listOf(
+                    "First", "Second", "Third"
+                )
+            )
             Tab.Type.LEADING_ICON_TABS -> NestedLeadingIconTab(
                 listOf(
                     "Star" to Icons.Default.Star,
@@ -48,7 +57,7 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
 }
 
 @Composable
-private fun CustomTabRow(
+private fun MainTabRow(
     tabs: List<Tab>,
     selectedTabIndex: Int,
     tabStyle: TabStyle,
@@ -151,6 +160,54 @@ private fun TabStyleTab(
     }
 }
 
+@Composable
+private fun NestedCustomTabs(
+    tabs: List<String>,
+) {
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    var selectedTabText by remember { mutableStateOf(tabs[0]) }
+
+    TabRow(
+        selectedTabIndex,
+        modifier = Modifier.requiredHeight(76.dp)
+    ) {
+        tabs.forEachIndexed { index, tab ->
+            Tab(selected = selectedTabIndex == index,
+                onClick = {
+                    selectedTabIndex = index
+                    selectedTabText = tab
+                },
+                content = {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.size(84.dp)
+                            .border(
+                                width = 8.dp,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        MaterialTheme.colors.secondary,
+                                        MaterialTheme.colors.secondaryVariant
+                                    )
+                                ), shape = RectangleShape
+                            )
+                    ) {
+                        Text(tab)
+                    }
+                }
+
+            )
+        }
+    }
+
+    Text(
+        text = selectedTabText,
+        style = MaterialTheme.typography.h1,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth().padding(8.dp)
+    )
+}
+
 @ExperimentalMaterialApi
 @Composable
 private fun NestedLeadingIconTab(tabs: List<Pair<String, ImageVector>>) {
@@ -203,6 +260,7 @@ data class Tab(
     enum class Type {
         HOME,
         TAB_STYLE,
+        CUSTOM_TABS,
         LEADING_ICON_TABS
     }
 }
