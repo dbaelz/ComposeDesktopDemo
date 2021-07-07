@@ -1,5 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
@@ -167,6 +168,8 @@ private fun NestedCustomTabs(
     var selectedTabIndex by remember { mutableStateOf(0) }
     var selectedTabText by remember { mutableStateOf(tabs[0]) }
 
+    Box(Modifier.height(8.dp).fillMaxWidth().background(MaterialTheme.colors.primaryVariant))
+
     TabRow(
         selectedTabIndex,
         modifier = Modifier.requiredHeight(76.dp)
@@ -181,7 +184,9 @@ private fun NestedCustomTabs(
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.size(84.dp)
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(84.dp)
                             .border(
                                 width = 8.dp,
                                 brush = Brush.linearGradient(
@@ -213,6 +218,8 @@ private fun NestedCustomTabs(
 private fun NestedLeadingIconTab(tabs: List<Pair<String, ImageVector>>) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     var selectedTabText by remember { mutableStateOf(tabs[0].first) }
+
+    Box(Modifier.height(8.dp).fillMaxWidth().background(MaterialTheme.colors.primaryVariant))
 
     TabRow(
         selectedTabIndex,
