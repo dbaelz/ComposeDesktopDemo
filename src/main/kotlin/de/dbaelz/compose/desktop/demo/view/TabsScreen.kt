@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,6 +12,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+@ExperimentalMaterialApi
 @Composable
 fun TabsScreen(onBackNavigation: () -> Unit) {
     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -22,10 +21,9 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
     var tabStyle by remember { mutableStateOf(TabStyle()) }
 
     val tabs = listOf(
-        Tab(Tab.Type.HOME, "Home", Icons.Default.Home) { selectedTabType = Tab.Type.HOME },
-        Tab(Tab.Type.TAB_STYLE, "TabStyle", Icons.Default.Settings) {
-            selectedTabType = Tab.Type.TAB_STYLE
-        },
+        Tab(Tab.Type.HOME, "Home", Icons.Default.Home),
+        Tab(Tab.Type.TAB_STYLE, "Tab Style", Icons.Default.Settings),
+        Tab(Tab.Type.LEADING_ICON_TABS, "Leading Icon Tabs", Icons.Default.List)
     )
 
     Column {
@@ -39,6 +37,12 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
             Tab.Type.TAB_STYLE -> TabStyleTab {
                 tabStyle = it
             }
+            Tab.Type.LEADING_ICON_TABS -> NestedLeadingIconTab(
+                listOf(
+                    "Star" to Icons.Default.Star,
+                    "Info" to Icons.Default.Info,
+                )
+            )
         }
     }
 }
@@ -147,6 +151,36 @@ private fun TabStyleTab(
     }
 }
 
+@ExperimentalMaterialApi
+@Composable
+private fun NestedLeadingIconTab(tabs: List<Pair<String, ImageVector>>) {
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    var selectedTabText by remember { mutableStateOf(tabs[0].first) }
+
+    TabRow(
+        selectedTabIndex,
+        modifier = Modifier.requiredHeight(76.dp)
+    ) {
+        tabs.forEachIndexed { index, tab ->
+            LeadingIconTab(selected = selectedTabIndex == index,
+                onClick = {
+                    selectedTabIndex = index
+                    selectedTabText = tab.first
+                },
+                text = { Text(tab.first) },
+                icon = { Icon(tab.second, null) }
+            )
+        }
+    }
+
+    Text(
+        text = selectedTabText,
+        style = MaterialTheme.typography.h1,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth().padding(8.dp)
+    )
+}
+
 @Composable
 private fun TabStyleButton(text: String, onClick: () -> Unit) {
     Button(
@@ -164,12 +198,12 @@ private fun TabStyleButton(text: String, onClick: () -> Unit) {
 data class Tab(
     val type: Type,
     val text: String,
-    val icon: ImageVector? = null,
-    val onTabSelected: () -> Unit = {}
+    val icon: ImageVector? = null
 ) {
     enum class Type {
         HOME,
-        TAB_STYLE
+        TAB_STYLE,
+        LEADING_ICON_TABS
     }
 }
 
