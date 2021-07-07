@@ -47,6 +47,7 @@ fun main() = Window(
                 Screen.TEXT_ANIMATION -> TextAnimationScreen(navigateToMain)
                 Screen.SHAPE -> ShapeScreen(navigateToMain)
                 Screen.CUSTOM_LAYOUT -> CustomLayoutScreen(navigateToMain)
+                Screen.TABS -> TabsScreen(navigateToMain)
             }
         }
     }
@@ -63,6 +64,7 @@ private fun createMenu(): MainMenuModel {
             MainMenuModel.Entry("Canvas", Screen.CANVAS),
             MainMenuModel.Entry("Custom Layout", Screen.CUSTOM_LAYOUT),
             MainMenuModel.Entry("Timer", Screen.TIMER),
+            MainMenuModel.Entry("Tabs", Screen.TABS),
 
             MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
             MainMenuModel.Entry("Alarm Dialog", Screen.ALERT_DIALOG),
@@ -84,4 +86,5 @@ enum class Screen {
     TEXT_ANIMATION,
     SHAPE,
     CUSTOM_LAYOUT,
+    TABS
 }
