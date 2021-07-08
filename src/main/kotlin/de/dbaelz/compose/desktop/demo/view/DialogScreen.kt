@@ -1,10 +1,8 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -18,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.v1.DialogProperties
 
 @ExperimentalComposeUiApi
@@ -35,19 +34,23 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
             Button("Dialog Window") {
                 dialog = DialogType.WINDOW
             }
-        })
-    
+        },
+        {
+            Button("POPUP") {
+                dialog = DialogType.POPUP
+            }
+        },
+    )
+
     MenuColumn(onBackNavigation, buttons)
 
+    val dismissDialog = { dialog = DialogType.NONE }
     when (dialog) {
         DialogType.NONE -> {
         }
-        DialogType.ALERT -> AlertDialog {
-            dialog = DialogType.NONE
-        }
-        DialogType.WINDOW -> DialogWindow {
-            dialog = DialogType.NONE
-        }
+        DialogType.ALERT -> AlertDialog(dismissDialog)
+        DialogType.WINDOW -> DialogWindow(dismissDialog)
+        DialogType.POPUP -> Popup()
     }
 }
 
@@ -102,15 +105,37 @@ private fun DialogWindow(onClickAndDismiss: () -> Unit) {
             onClickAndDismiss()
         }
     ) {
-        Box(
+        Column(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "This is dialog window",
                 style = MaterialTheme.typography.h1,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth().padding(8.dp)
+            )
+            Button("Close", onClickAndDismiss)
+        }
+    }
+}
+
+@Composable
+private fun Popup() {
+    Popup(alignment = Alignment.BottomCenter) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(96.dp)
+                .background(MaterialTheme.colors.primary),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Text(
+                text = "Popup",
+                style = MaterialTheme.typography.h4,
+                textAlign = TextAlign.Center,
             )
         }
     }
@@ -119,5 +144,6 @@ private fun DialogWindow(onClickAndDismiss: () -> Unit) {
 private enum class DialogType {
     NONE,
     ALERT,
-    WINDOW
+    WINDOW,
+    POPUP,
 }
