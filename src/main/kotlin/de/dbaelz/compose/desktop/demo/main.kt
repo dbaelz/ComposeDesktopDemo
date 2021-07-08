@@ -7,15 +7,19 @@ import androidx.compose.animation.core.tween
 import androidx.compose.desktop.AppManager
 import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.desktop.Window
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.unit.IntSize
 import de.dbaelz.compose.desktop.demo.feature.DiffUtils
 import de.dbaelz.compose.desktop.demo.view.*
 
 
+@ExperimentalComposeUiApi
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 fun main() = Window(
     title = "Compose for Desktop Demo",
@@ -39,7 +43,7 @@ fun main() = Window(
                 Screen.MAIN -> MainMenuScreen(createMenu()) { screenState = it }
                 Screen.PLAYGROUND -> PlaygroundScreen(navigateToMain)
                 Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow, navigateToMain)
-                Screen.ALERT_DIALOG -> AlertDialogScreen(navigateToMain)
+                Screen.DIALOG -> DialogScreen(navigateToMain)
                 Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
                 Screen.ANIMATION -> AnimationScreen(navigateToMain)
                 Screen.CANVAS -> CanvasScreen(navigateToMain)
@@ -58,16 +62,18 @@ private fun createMenu(): MainMenuModel {
         listOf(
             MainMenuModel.Entry("Playground", Screen.PLAYGROUND),
 
+            MainMenuModel.Entry("Dialog", Screen.DIALOG),
+
             MainMenuModel.Entry("Animation", Screen.ANIMATION),
             MainMenuModel.Entry("Text Animation", Screen.TEXT_ANIMATION),
             MainMenuModel.Entry("Shapes", Screen.SHAPE),
+
             MainMenuModel.Entry("Canvas", Screen.CANVAS),
             MainMenuModel.Entry("Custom Layout", Screen.CUSTOM_LAYOUT),
             MainMenuModel.Entry("Timer", Screen.TIMER),
             MainMenuModel.Entry("Tabs", Screen.TABS),
 
             MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
-            MainMenuModel.Entry("Alarm Dialog", Screen.ALERT_DIALOG),
 
             MainMenuModel.Entry("Close App", Screen.CLOSE_APP)
         )
@@ -78,7 +84,7 @@ enum class Screen {
     MAIN,
     PLAYGROUND,
     DIFF_TOOL,
-    ALERT_DIALOG,
+    DIALOG,
     ANIMATION,
     CANVAS,
     CLOSE_APP,
