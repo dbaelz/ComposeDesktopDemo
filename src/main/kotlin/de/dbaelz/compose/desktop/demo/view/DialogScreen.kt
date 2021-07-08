@@ -1,17 +1,16 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.foundation.BoxWithTooltip
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -36,7 +35,7 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
             }
         },
         {
-            Button("POPUP") {
+            Button("Popup") {
                 dialog = DialogType.POPUP
             }
         },
@@ -56,11 +55,25 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
 
 @Composable
 private fun Button(text: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        shape = RoundedCornerShape(16.dp)
+    BoxWithTooltip(
+        tooltip = {
+            Surface(
+                modifier = Modifier.shadow(4.dp),
+                shape = RoundedCornerShape(4.dp)
+            ) {
+                Text(
+                    text = "Tooltip: $text",
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
     ) {
-        Text(text)
+        Button(
+            onClick = onClick,
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Text(text)
+        }
     }
 }
 
