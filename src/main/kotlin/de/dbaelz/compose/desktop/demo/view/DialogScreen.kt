@@ -36,6 +36,7 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
                 dialog = DialogType.WINDOW
             }
         })
+    
     MenuColumn(onBackNavigation, buttons)
 
     when (dialog) {
@@ -54,7 +55,7 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
 private fun Button(text: String, onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(16.dp)
     ) {
         Text(text)
     }
