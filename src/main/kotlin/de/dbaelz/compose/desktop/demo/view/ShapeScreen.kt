@@ -11,88 +11,146 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ShapeScreen(onBackNavigation: () -> Unit) {
-    val items = listOf<@Composable () -> Unit>(
-        { TextComponent(shape = AbsoluteCutCornerShape(8.dp)) },
-        {
-            TextComponent(
-                shape = AbsoluteCutCornerShape(
-                    topLeftPercent = 50,
-                    bottomLeftPercent = 50
-                )
-            )
-        },
-        { TextComponent(shape = AbsoluteCutCornerShape(percent = 50)) },
-        { TextComponent(shape = AbsoluteCutCornerShape(topLeftPercent = 100)) },
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    var selectedTabType by remember { mutableStateOf(ShapeTabType.ABSOLUTE_CUT) }
 
-        { Spacer(modifier = Modifier.height(16.dp)) },
-
-        { TextComponent(shape = CutCornerShape(8.dp)) },
-        { TextComponent(shape = CutCornerShape(topStart = 20.dp, topEnd = 20.dp)) },
-        { TextComponent(shape = CutCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)) },
-
-        { TextComponent(shape = CutCornerShape(topStartPercent = 50, topEndPercent = 50)) },
-        { TextComponent(shape = CutCornerShape(bottomStartPercent = 50, bottomEndPercent = 50)) },
-        { TextComponent(shape = CutCornerShape(topStartPercent = 100)) },
-
-        { Spacer(modifier = Modifier.height(16.dp)) },
-
-        { TextComponent(shape = AbsoluteRoundedCornerShape(8.dp)) },
-        { TextComponent(shape = RoundedCornerShape(8.dp)) },
-        { TextComponent(shape = RoundedCornerShape(percent = 50)) },
-        {
-            TextComponent(
-                width = 64.dp,
-                height = 64.dp,
-                shape = RoundedCornerShape(
-                    topStartPercent = 50,
-                    topEndPercent = 50,
-                    bottomStartPercent = 50,
-                    bottomEndPercent = 10
-                ),
-                text = "42"
-            )
-        },
-
-        { Spacer(modifier = Modifier.height(16.dp)) },
-
-        { TextComponent(shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)) },
-
-        {
-            TextComponent(
-                shape = AbsoluteCutCornerShape(
-                    topLeftPercent = 50,
-                    bottomLeftPercent = 50
-                )
-            )
-        },
-        {
-            TextComponent(
-                shape = AbsoluteCutCornerShape(
-                    topLeftPercent = 50,
-                    bottomLeftPercent = 50
-                )
-            )
-        },
-
-        { Spacer(modifier = Modifier.height(16.dp)) },
-
-        { Diamond(45f) },
-        { Diamond(20f) },
-        { Diamond(-20f) },
+    val tabs = listOf(
+        Tab(ShapeTabType.ABSOLUTE_CUT, "Absolute Cut", null),
+        Tab(ShapeTabType.CUT_CORNER, "Cut Corner", null),
+        Tab(ShapeTabType.ROUNDED, "Rounded", null),
+        Tab(ShapeTabType.COMBINATION, "Combination", null),
+        Tab(ShapeTabType.DIAMOND, "Diamond", null),
+        Tab(ShapeTabType.SPECIAL, "Special", null),
     )
 
-    MenuColumn(onBackNavigation, items)
+    Column {
+        TabRowComponent(
+            tabs = tabs,
+            selectedTabIndex = selectedTabIndex,
+            tabStyle = TabStyle(withText = true, withIcon = false),
+            onTabSelected = { index, type ->
+                selectedTabIndex = index
+                selectedTabType = type
+            }
+        )
+
+        when (selectedTabType) {
+            ShapeTabType.ABSOLUTE_CUT -> AbsoluteCutTab(onBackNavigation)
+            ShapeTabType.CUT_CORNER -> CutCornerTab(onBackNavigation)
+            ShapeTabType.ROUNDED -> RoundedCornerTab(onBackNavigation)
+            ShapeTabType.COMBINATION -> CombinationTab(onBackNavigation)
+            ShapeTabType.DIAMOND -> DiamondTab(onBackNavigation)
+            ShapeTabType.SPECIAL -> SpecialTab(onBackNavigation)
+        }
+    }
+}
+
+@Composable
+private fun AbsoluteCutTab(onBackNavigation: () -> Unit) {
+    MenuColumn(
+        onBackNavigation, listOf(
+            { TextComponent(shape = AbsoluteCutCornerShape(8.dp)) },
+            {
+                TextComponent(
+                    shape = AbsoluteCutCornerShape(
+                        topLeftPercent = 50,
+                        bottomLeftPercent = 50
+                    )
+                )
+            },
+            { TextComponent(shape = AbsoluteCutCornerShape(percent = 50)) },
+            { TextComponent(shape = AbsoluteCutCornerShape(topLeftPercent = 100)) },
+        )
+    )
+}
+
+@Composable
+private fun CutCornerTab(onBackNavigation: () -> Unit) {
+    MenuColumn(
+        onBackNavigation, listOf(
+            { TextComponent(shape = CutCornerShape(8.dp)) },
+            { TextComponent(shape = CutCornerShape(topStart = 20.dp, topEnd = 20.dp)) },
+            { TextComponent(shape = CutCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)) },
+
+            { TextComponent(shape = CutCornerShape(topStartPercent = 50, topEndPercent = 50)) },
+            {
+                TextComponent(
+                    shape = CutCornerShape(
+                        bottomStartPercent = 50,
+                        bottomEndPercent = 50
+                    )
+                )
+            },
+            { TextComponent(shape = CutCornerShape(topStartPercent = 100)) },
+        )
+    )
+}
+
+@Composable
+private fun RoundedCornerTab(onBackNavigation: () -> Unit) {
+    MenuColumn(
+        onBackNavigation, listOf(
+            { TextComponent(shape = AbsoluteRoundedCornerShape(8.dp)) },
+            { TextComponent(shape = RoundedCornerShape(8.dp)) },
+            { TextComponent(shape = RoundedCornerShape(percent = 50)) },
+        )
+    )
+}
+
+@Composable
+private fun CombinationTab(onBackNavigation: () -> Unit) {
+    MenuColumn(
+        onBackNavigation, listOf(
+            { TextComponent(shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)) },
+
+            {
+                TextComponent(
+                    shape = AbsoluteCutCornerShape(
+                        topLeftPercent = 50,
+                        bottomLeftPercent = 50
+                    )
+                )
+            },
+            {
+                TextComponent(
+                    shape = AbsoluteCutCornerShape(
+                        topLeftPercent = 50,
+                        bottomLeftPercent = 50
+                    )
+                )
+            },
+        )
+    )
+}
+
+@Composable
+private fun DiamondTab(onBackNavigation: () -> Unit) {
+    MenuColumn(
+        onBackNavigation, listOf(
+            { Diamond(45f) },
+            { Diamond(20f) },
+            { Diamond(-20f) },
+        )
+    )
+}
+
+@Composable
+private fun SpecialTab(onBackNavigation: () -> Unit) {
+    MenuColumn(
+        onBackNavigation, listOf(
+            { TearDrop("42") },
+        )
+    )
 }
 
 @Composable
@@ -134,4 +192,28 @@ private fun Diamond(rotation: Float) {
             )
         }
     }
+}
+
+@Composable
+private fun TearDrop(text: String, size: Dp = 64.dp) {
+    TextComponent(
+        width = size,
+        height = size,
+        shape = RoundedCornerShape(
+            topStartPercent = 50,
+            topEndPercent = 50,
+            bottomStartPercent = 50,
+            bottomEndPercent = 10
+        ),
+        text = text
+    )
+}
+
+private enum class ShapeTabType {
+    ABSOLUTE_CUT,
+    CUT_CORNER,
+    ROUNDED,
+    COMBINATION,
+    DIAMOND,
+    SPECIAL
 }
