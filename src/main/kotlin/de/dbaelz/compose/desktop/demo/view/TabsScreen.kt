@@ -20,15 +20,15 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TabsScreen(onBackNavigation: () -> Unit) {
     var selectedTabIndex by remember { mutableStateOf(0) }
-    var selectedTabType by remember { mutableStateOf(Tab.Type.HOME) }
+    var selectedTabType by remember { mutableStateOf(Type.HOME) }
 
     var tabStyle by remember { mutableStateOf(TabStyle()) }
 
     val tabs = listOf(
-        Tab(Tab.Type.HOME, "Home", Icons.Default.Home),
-        Tab(Tab.Type.TAB_STYLE, "Tab Style", Icons.Default.Settings),
-        Tab(Tab.Type.CUSTOM_TABS, "Custom Tabs", Icons.Default.Create),
-        Tab(Tab.Type.LEADING_ICON_TABS, "Leading Icon Tabs", Icons.Default.List)
+        Tab(Type.HOME, "Home", Icons.Default.Home),
+        Tab(Type.TAB_STYLE, "Tab Style", Icons.Default.Settings),
+        Tab(Type.CUSTOM_TABS, "Custom Tabs", Icons.Default.Create),
+        Tab(Type.LEADING_ICON_TABS, "Leading Icon Tabs", Icons.Default.List)
     )
 
     Column {
@@ -38,16 +38,16 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
         }
 
         when (selectedTabType) {
-            Tab.Type.HOME -> HomeTab(onBackNavigation)
-            Tab.Type.TAB_STYLE -> TabStyleTab {
+            Type.HOME -> HomeTab(onBackNavigation)
+            Type.TAB_STYLE -> TabStyleTab {
                 tabStyle = it
             }
-            Tab.Type.CUSTOM_TABS -> NestedCustomTabs(
+            Type.CUSTOM_TABS -> NestedCustomTabs(
                 listOf(
                     "First", "Second", "Third"
                 )
             )
-            Tab.Type.LEADING_ICON_TABS -> NestedLeadingIconTab(
+            Type.LEADING_ICON_TABS -> NestedLeadingIconTab(
                 listOf(
                     "Star" to Icons.Default.Star,
                     "Info" to Icons.Default.Info,
@@ -232,4 +232,11 @@ private fun TabStyleButton(text: String, onClick: () -> Unit) {
             style = MaterialTheme.typography.h4
         )
     }
+}
+
+private enum class Type {
+    HOME,
+    TAB_STYLE,
+    CUSTOM_TABS,
+    LEADING_ICON_TABS
 }

@@ -13,11 +13,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TabRowComponent(
-    tabs: List<Tab>,
+fun <T> TabRowComponent(
+    tabs: List<Tab<T>>,
     selectedTabIndex: Int,
     tabStyle: TabStyle,
-    onTabSelected: (Int, Tab.Type) -> Unit
+    onTabSelected: (Int, T) -> Unit
 ) {
     TabRow(
         selectedTabIndex,
@@ -36,18 +36,10 @@ fun TabRowComponent(
         }
     }
 }
-
-data class Tab(
-    val type: Type,
+data class Tab<T>(
+    val type: T,
     val text: String,
     val icon: ImageVector? = null
-) {
-    enum class Type {
-        HOME,
-        TAB_STYLE,
-        CUSTOM_TABS,
-        LEADING_ICON_TABS
-    }
-}
+)
 
 data class TabStyle(val withText: Boolean = true, val withIcon: Boolean = true)
