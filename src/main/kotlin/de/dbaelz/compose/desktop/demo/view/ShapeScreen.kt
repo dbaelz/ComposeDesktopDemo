@@ -4,17 +4,16 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.AbsoluteCutCornerShape
-import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -149,6 +148,8 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
     MenuColumn(
         onBackNavigation, listOf(
             { TearDrop("42") },
+            { Heart() },
+            { Heart(color = MaterialTheme.colors.primary, text = "Text") },
         )
     )
 }
@@ -207,6 +208,69 @@ private fun TearDrop(text: String, size: Dp = 64.dp) {
         ),
         text = text
     )
+}
+
+@Composable
+private fun Heart(color: Color = Color.Red, textColor: Color = Color.White, text: String = "") {
+    Box(
+        modifier = Modifier.size(96.dp).clip(HeartShape).background(color),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text, color = textColor)
+    }
+}
+
+private val HeartShape = GenericShape { size, _ ->
+    lineTo(0.5f * size.width, 0.25f * size.height)
+    cubicTo(
+        0.5f * size.width,
+        0.225f * size.height,
+        0.458f * size.width,
+        0.125f * size.height,
+        0.2916f * size.width,
+        0.125f * size.height
+    )
+    cubicTo(
+        0.0416f * size.width,
+        0.125f * size.height,
+        0.0416f * size.width,
+        0.4f * size.height,
+        0.0416f * size.width,
+        0.4f * size.height
+    )
+    cubicTo(
+        0.0416f * size.width,
+        0.583f * size.height,
+        0.208f * size.width,
+        0.77f * size.height,
+        0.5f * size.width,
+        0.917f * size.height
+    )
+    cubicTo(
+        0.791f * size.width,
+        0.77f * size.height,
+        0.958f * size.width,
+        0.583f * size.height,
+        0.958f * size.width,
+        0.4f * size.height
+    )
+    cubicTo(
+        0.958f * size.width,
+        0.4f * size.height,
+        0.958f * size.width,
+        0.125f * size.height,
+        0.708f * size.width,
+        0.125f * size.height
+    )
+    cubicTo(
+        0.583f * size.width,
+        0.125f * size.height,
+        0.5f * size.width,
+        0.225f * size.height,
+        0.5f * size.width,
+        0.25f * size.height
+    )
+    close()
 }
 
 private enum class ShapeTabType {
