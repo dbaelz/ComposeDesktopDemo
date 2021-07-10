@@ -32,7 +32,7 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
     )
 
     Column {
-        MainTabRow(tabs, selectedTabIndex, tabStyle) { index, type ->
+        TabRowComponent(tabs, selectedTabIndex, tabStyle) { index, type ->
             selectedTabIndex = index
             selectedTabType = type
         }
@@ -57,30 +57,6 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
     }
 }
 
-@Composable
-private fun MainTabRow(
-    tabs: List<Tab>,
-    selectedTabIndex: Int,
-    tabStyle: TabStyle,
-    onTabSelected: (Int, Tab.Type) -> Unit
-) {
-    TabRow(
-        selectedTabIndex,
-        modifier = Modifier.requiredHeight(76.dp)
-    ) {
-        tabs.forEachIndexed { index, tab ->
-            Tab(selected = selectedTabIndex == index,
-                onClick = { onTabSelected(index, tab.type) },
-                text = if (tabStyle.withText) {
-                    { Text(tab.text) }
-                } else null,
-                icon = if (tabStyle.withIcon) {
-                    { Icon(tab.icon ?: Icons.Default.Home, null) }
-                } else null
-            )
-        }
-    }
-}
 
 @Composable
 private fun HomeTab(onBackNavigation: () -> Unit) {
@@ -257,19 +233,3 @@ private fun TabStyleButton(text: String, onClick: () -> Unit) {
         )
     }
 }
-
-
-data class Tab(
-    val type: Type,
-    val text: String,
-    val icon: ImageVector? = null
-) {
-    enum class Type {
-        HOME,
-        TAB_STYLE,
-        CUSTOM_TABS,
-        LEADING_ICON_TABS
-    }
-}
-
-data class TabStyle(val withText: Boolean = true, val withIcon: Boolean = true)
