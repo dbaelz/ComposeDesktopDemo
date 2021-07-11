@@ -18,7 +18,6 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("io.github.java-diff-utils:java-diff-utils:4.9")
 }
 
 tasks.withType<KotlinCompile>() {

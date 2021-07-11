@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.unit.IntSize
-import de.dbaelz.compose.desktop.demo.feature.DiffUtils
 import de.dbaelz.compose.desktop.demo.view.*
 
 
@@ -42,7 +41,6 @@ fun main() = Window(
             when (newState) {
                 Screen.MAIN -> MainMenuScreen(createMenu()) { screenState = it }
                 Screen.PLAYGROUND -> PlaygroundScreen(navigateToMain)
-                Screen.DIFF_TOOL -> DiffToolScreen(DiffUtils(), localAppWindow, navigateToMain)
                 Screen.DIALOG -> DialogScreen(navigateToMain)
                 Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
                 Screen.ANIMATION -> AnimationScreen(navigateToMain)
@@ -73,8 +71,6 @@ private fun createMenu(): MainMenuModel {
             MainMenuModel.Entry("Timer", Screen.TIMER),
             MainMenuModel.Entry("Tabs", Screen.TABS),
 
-            MainMenuModel.Entry("Diff Tool", Screen.DIFF_TOOL),
-
             MainMenuModel.Entry("Close App", Screen.CLOSE_APP)
         )
     )
@@ -83,7 +79,6 @@ private fun createMenu(): MainMenuModel {
 enum class Screen {
     MAIN,
     PLAYGROUND,
-    DIFF_TOOL,
     DIALOG,
     ANIMATION,
     CANVAS,
