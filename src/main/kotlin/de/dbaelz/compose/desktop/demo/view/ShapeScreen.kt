@@ -136,7 +136,7 @@ private fun CombinationTab(onBackNavigation: () -> Unit) {
 private fun DiamondTab(onBackNavigation: () -> Unit) {
     MenuColumn(
         onBackNavigation, listOf(
-            { Diamond(45f) },
+            { Diamond() },
             { Diamond(20f) },
             { Diamond(-20f) },
         )
@@ -180,7 +180,7 @@ private fun TextComponent(
 }
 
 @Composable
-private fun Diamond(rotation: Float) {
+private fun Diamond(rotation: Float = 45f) {
     Box(Modifier.rotate(rotation)) {
         Surface(
             shape = AbsoluteCutCornerShape(topLeftPercent = 50),
@@ -197,7 +197,7 @@ private fun Diamond(rotation: Float) {
 }
 
 @Composable
-private fun TearDrop(text: String, size: Dp = 64.dp) {
+private fun TearDrop(text: String = "", size: Dp = 64.dp) {
     TextComponent(
         width = size,
         height = size,
@@ -212,9 +212,18 @@ private fun TearDrop(text: String, size: Dp = 64.dp) {
 }
 
 @Composable
-private fun Heart(color: Color = Color.Red, textColor: Color = Color.White, text: String = "") {
+private fun Heart(
+    color: Color = Color.Red,
+    textColor: Color = Color.White,
+    text: String = "",
+    rotation: Float = 0f
+) {
     Box(
-        modifier = Modifier.size(96.dp).clip(HeartShape).background(color),
+        modifier = Modifier
+            .size(96.dp)
+            .rotate(rotation)
+            .clip(HeartShape)
+            .background(color),
         contentAlignment = Alignment.Center
     ) {
         Text(text, color = textColor)
@@ -278,10 +287,15 @@ private val HeartShape = GenericShape { size, _ ->
 private fun Arrowhead(
     color: Color = MaterialTheme.colors.primary,
     textColor: Color = Color.White,
-    text: String = ""
+    text: String = "",
+    rotation: Float = 0f
 ) {
     Box(
-        modifier = Modifier.size(96.dp).clip(ArrowheadShape).background(color),
+        modifier = Modifier
+            .size(96.dp)
+            .rotate(rotation)
+            .clip(ArrowheadShape)
+            .background(color),
         contentAlignment = Alignment.Center
     ) {
         Text(text, color = textColor)
