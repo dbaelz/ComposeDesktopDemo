@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -66,22 +67,39 @@ private fun HomeTab(onBackNavigation: () -> Unit) {
     ) {
         Spacer(Modifier.height(16.dp))
 
-        Text(
-            text = "Home Tab",
-            style = MaterialTheme.typography.h1
-        )
+        Card(
+            modifier = Modifier.fillMaxWidth(0.4f).padding(16.dp),
+            elevation = 10.dp
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Home Tab",
+                    style = MaterialTheme.typography.h5,
+                    fontWeight = FontWeight.Bold
+                )
 
-        Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(4.dp))
 
-        Button(onBackNavigation) {
-            Icon(
-                Icons.Default.ArrowBack,
-                contentDescription = "back"
-            )
-            Text("Back to menu")
+                Text(
+                    text = "With a card component",
+                    style = MaterialTheme.typography.body1
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onBackNavigation
+                ) {
+                    Icon(
+                        Icons.Default.ArrowBack,
+                        contentDescription = "back"
+                    )
+                    Text("Back to main")
+                }
+            }
         }
     }
-
 }
 
 @Composable
