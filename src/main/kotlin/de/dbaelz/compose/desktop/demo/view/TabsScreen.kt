@@ -29,7 +29,8 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
         Tab(Type.HOME, "Home", Icons.Default.Home),
         Tab(Type.TAB_STYLE, "Tab Style", Icons.Default.Settings),
         Tab(Type.CUSTOM_TABS, "Custom Tabs", Icons.Default.Create),
-        Tab(Type.LEADING_ICON_TABS, "Leading Icon Tabs", Icons.Default.List)
+        Tab(Type.LEADING_ICON_TABS, "Leading Icon Tabs", Icons.Default.List),
+        Tab(Type.SCROLLABLE_TABS, "Scrollable Tabs", Icons.Default.KeyboardArrowRight)
     )
 
     Column {
@@ -54,6 +55,14 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
                     "Info" to Icons.Default.Info,
                 )
             )
+            Type.SCROLLABLE_TABS -> {
+                val scrollableTabs = mutableListOf<String>()
+                (0..10).forEach {
+                    scrollableTabs.add("Tab $it")
+                }
+
+                ScrollableTabs(scrollableTabs)
+            }
         }
     }
 }
@@ -156,9 +165,7 @@ private fun TabStyleTab(
 }
 
 @Composable
-private fun NestedCustomTabs(
-    tabs: List<String>,
-) {
+private fun NestedCustomTabs(tabs: List<String>) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     var selectedTabText by remember { mutableStateOf(tabs[0]) }
 
@@ -252,9 +259,43 @@ private fun TabStyleButton(text: String, onClick: () -> Unit) {
     }
 }
 
+@Composable
+private fun ScrollableTabs(tabs: List<String>) {
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    var selectedTabText by remember { mutableStateOf(tabs[0]) }
+
+    Box(Modifier.height(8.dp).fillMaxWidth().background(MaterialTheme.colors.primaryVariant))
+
+    ScrollableTabRow(
+        selectedTabIndex
+    ) {
+        tabs.forEachIndexed { index, tab ->
+            Tab(selected = selectedTabIndex == index,
+                modifier = Modifier.padding(8.dp),
+                onClick = {
+                    selectedTabIndex = index
+                    selectedTabText = tab
+                },
+                content = {
+                    Text(tab)
+                }
+
+            )
+        }
+    }
+
+    Text(
+        text = selectedTabText,
+        style = MaterialTheme.typography.h1,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth().padding(8.dp)
+    )
+}
+
 private enum class Type {
     HOME,
     TAB_STYLE,
     CUSTOM_TABS,
-    LEADING_ICON_TABS
+    LEADING_ICON_TABS,
+    SCROLLABLE_TABS,
 }
