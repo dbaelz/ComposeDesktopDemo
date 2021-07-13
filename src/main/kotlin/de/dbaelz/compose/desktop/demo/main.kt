@@ -5,7 +5,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.desktop.AppManager
-import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.desktop.Window
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.getValue
@@ -22,12 +21,11 @@ import de.dbaelz.compose.desktop.demo.view.*
 @ExperimentalAnimationApi
 fun main() = Window(
     title = "Compose for Desktop Demo",
-    size = IntSize(1024, 786),
+    size = IntSize(1024, 768),
     resizable = true,
     undecorated = false
 ) {
     var screenState by remember { mutableStateOf(Screen.MAIN) }
-    val localAppWindow = LocalAppWindow.current
     val navigateToMain = { screenState = Screen.MAIN }
 
     DesktopDemoTheme {
@@ -50,6 +48,7 @@ fun main() = Window(
                 Screen.SHAPE -> ShapeScreen(navigateToMain)
                 Screen.CUSTOM_LAYOUT -> CustomLayoutScreen(navigateToMain)
                 Screen.TABS -> TabsScreen(navigateToMain)
+                Screen.SCAFFOLD -> ScaffoldScreen(navigateToMain)
             }
         }
     }
@@ -61,6 +60,7 @@ private fun createMenu(): MainMenuModel {
             MainMenuModel.Item.Entry("Playground", Screen.PLAYGROUND),
             MainMenuModel.Item.Entry("Dialog", Screen.DIALOG),
             MainMenuModel.Item.Entry("Tabs", Screen.TABS),
+            MainMenuModel.Item.Entry("Scaffold", Screen.SCAFFOLD),
             MainMenuModel.Item.Separator,
 
             MainMenuModel.Item.Entry("Animation", Screen.ANIMATION),
@@ -89,5 +89,6 @@ enum class Screen {
     TEXT_ANIMATION,
     SHAPE,
     CUSTOM_LAYOUT,
-    TABS
+    TABS,
+    SCAFFOLD,
 }
