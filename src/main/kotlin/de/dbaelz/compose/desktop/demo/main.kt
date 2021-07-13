@@ -58,20 +58,22 @@ fun main() = Window(
 private fun createMenu(): MainMenuModel {
     return MainMenuModel(
         listOf(
-            MainMenuModel.Entry("Playground", Screen.PLAYGROUND),
+            MainMenuModel.Item.Entry("Playground", Screen.PLAYGROUND),
+            MainMenuModel.Item.Entry("Dialog", Screen.DIALOG),
+            MainMenuModel.Item.Entry("Tabs", Screen.TABS),
+            MainMenuModel.Item.Separator,
 
-            MainMenuModel.Entry("Dialog", Screen.DIALOG),
+            MainMenuModel.Item.Entry("Animation", Screen.ANIMATION),
+            MainMenuModel.Item.Entry("Text Animation", Screen.TEXT_ANIMATION),
+            MainMenuModel.Item.Entry("Shapes", Screen.SHAPE),
+            MainMenuModel.Item.Separator,
 
-            MainMenuModel.Entry("Animation", Screen.ANIMATION),
-            MainMenuModel.Entry("Text Animation", Screen.TEXT_ANIMATION),
-            MainMenuModel.Entry("Shapes", Screen.SHAPE),
+            MainMenuModel.Item.Entry("Canvas", Screen.CANVAS),
+            MainMenuModel.Item.Entry("Custom Layout", Screen.CUSTOM_LAYOUT),
+            MainMenuModel.Item.Entry("Timer", Screen.TIMER),
+            MainMenuModel.Item.Separator,
 
-            MainMenuModel.Entry("Canvas", Screen.CANVAS),
-            MainMenuModel.Entry("Custom Layout", Screen.CUSTOM_LAYOUT),
-            MainMenuModel.Entry("Timer", Screen.TIMER),
-            MainMenuModel.Entry("Tabs", Screen.TABS),
-
-            MainMenuModel.Entry("Close App", Screen.CLOSE_APP)
+            MainMenuModel.Item.Entry("Close App", Screen.CLOSE_APP)
         )
     )
 }

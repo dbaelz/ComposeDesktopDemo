@@ -34,27 +34,37 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Scre
         ) {
             Spacer(Modifier.height(32.dp))
 
-            model.entries.forEach {
-                Button(
-                    modifier = Modifier
-                        .requiredWidth(175.dp)
-                        .align(Alignment.CenterHorizontally),
-                    onClick = { onItemSelected(it.targetScreen) }
-                ) {
-                    Text(it.name)
+            model.items.forEach {
+                when (it) {
+                    is MainMenuModel.Item.Separator -> {
+                        Spacer(Modifier.height(20.dp))
+                    }
+                    is MainMenuModel.Item.Entry -> {
+                        Button(
+                            modifier = Modifier
+                                .requiredWidth(175.dp)
+                                .align(Alignment.CenterHorizontally),
+                            onClick = { onItemSelected(it.targetScreen) }
+                        ) {
+                            Text(it.name)
+                        }
+
+                        Spacer(Modifier.height(8.dp))
+                    }
                 }
-
-                Spacer(Modifier.height(8.dp))
             }
-
-            Spacer(Modifier.height(32.dp))
         }
 
     }
 }
 
-data class MainMenuModel(val entries: List<Entry> = emptyList()) {
-    data class Entry(val name: String, val targetScreen: Screen)
+data class MainMenuModel(val items: List<Item> = emptyList()) {
+    sealed class Item {
+        object Separator : Item()
+        data class Entry(val name: String, val targetScreen: Screen) : Item()
+    }
+
+
 }
 
 @Composable
