@@ -9,6 +9,7 @@ import androidx.compose.desktop.Window
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -77,7 +78,11 @@ private fun createMenu(): MainMenuModel {
 
             MainMenuModel.Item.Entry(name = "Canvas", targetScreen = Screen.CANVAS),
             MainMenuModel.Item.Entry(name = "Custom Layout", targetScreen = Screen.CUSTOM_LAYOUT),
-            MainMenuModel.Item.Entry(name = "Timer", targetScreen = Screen.TIMER),
+            MainMenuModel.Item.Entry(
+                name = "Timer",
+                icon = Icons.Default.Refresh,
+                targetScreen = Screen.TIMER
+            ),
             MainMenuModel.Item.Separator,
 
             MainMenuModel.Item.Entry(
