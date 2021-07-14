@@ -30,9 +30,10 @@ fun main() = Window(
     undecorated = false
 ) {
     var screenState by remember { mutableStateOf(Screen.MAIN) }
+    var useDarkTheme by remember { mutableStateOf(false) }
     val navigateToMain = { screenState = Screen.MAIN }
 
-    DesktopDemoTheme {
+    DesktopDemoTheme(withDarkTheme = useDarkTheme) {
         Crossfade(
             targetState = screenState,
             animationSpec = tween(
@@ -52,7 +53,9 @@ fun main() = Window(
                 Screen.SHAPE -> ShapeScreen(navigateToMain)
                 Screen.CUSTOM_LAYOUT -> CustomLayoutScreen(navigateToMain)
                 Screen.TABS -> TabsScreen(navigateToMain)
-                Screen.SCAFFOLD -> ScaffoldScreen(navigateToMain)
+                Screen.SCAFFOLD -> ScaffoldScreen(navigateToMain) {
+                    useDarkTheme = !useDarkTheme
+                }
             }
         }
     }

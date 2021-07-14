@@ -21,7 +21,7 @@ private data class DrawerItem(val icon: ImageVector, val name: String)
 private const val INITIAL_CONTENT_TEXT = "Scaffold Example"
 
 @Composable
-fun ScaffoldScreen(onBackNavigation: () -> Unit) {
+fun ScaffoldScreen(onBackNavigation: () -> Unit, toggleTheme: () -> Unit) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     var contentText by remember { mutableStateOf(INITIAL_CONTENT_TEXT) }
@@ -29,11 +29,11 @@ fun ScaffoldScreen(onBackNavigation: () -> Unit) {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopBar {
+            TopBar({
                 coroutineScope.launch {
                     scaffoldState.drawerState.open()
                 }
-            }
+            }, toggleTheme)
         },
         bottomBar = { BottomBar() },
         floatingActionButton = { Fab { contentText = INITIAL_CONTENT_TEXT } },
@@ -61,7 +61,7 @@ private val drawerItems = listOf(
 )
 
 @Composable
-private fun TopBar(onMenuIconClicked: () -> Unit) {
+private fun TopBar(onMenuIconClicked: () -> Unit, onThemeSwitched: () -> Unit) {
     // Example for the "Slot API": There's another TopBar Composable that provides a
     // content parameter for fully customizable content (see git history)
     TopAppBar(
@@ -72,6 +72,11 @@ private fun TopBar(onMenuIconClicked: () -> Unit) {
                 modifier = Modifier.clickable {
                     onMenuIconClicked()
                 })
+        },
+        actions = {
+            IconButton(onClick = onThemeSwitched) {
+                Icon(Icons.Default.Build, null)
+            }
         }
     )
 }
