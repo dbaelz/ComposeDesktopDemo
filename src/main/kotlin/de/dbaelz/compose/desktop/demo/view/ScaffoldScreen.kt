@@ -113,6 +113,7 @@ private fun Drawer(drawerItems: List<DrawerItem>, onItemSelected: (DrawerItem) -
                 text = "Scaffold Drawer",
                 style = MaterialTheme.typography.h4,
                 fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onBackground,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -157,6 +158,7 @@ private fun DrawerEntry(item: DrawerItem, onItemSelected: (DrawerItem) -> Unit =
         Text(
             text = item.name,
             style = MaterialTheme.typography.h6,
+            color = MaterialTheme.colors.onBackground,
         )
     }
 }
@@ -170,6 +172,7 @@ private fun Content(contentText: String, onBackNavigation: () -> Unit) {
     ) {
         Text(
             text = contentText,
+            color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.h1,
             textAlign = TextAlign.Center
         )

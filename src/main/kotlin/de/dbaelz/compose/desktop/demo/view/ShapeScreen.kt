@@ -149,8 +149,14 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
         onBackNavigation, listOf(
             { TearDrop("42") },
             { Heart() },
-            { Heart(color = MaterialTheme.colors.primary, text = "Text") },
-            { Arrowhead() },
+            {
+                Heart(
+                    color = MaterialTheme.colors.primary,
+                    textColor = MaterialTheme.colors.onPrimary,
+                    text = "Text"
+                )
+            },
+            { Arrowhead() }
         )
     )
 }
@@ -286,7 +292,7 @@ private val HeartShape = GenericShape { size, _ ->
 @Composable
 private fun Arrowhead(
     color: Color = MaterialTheme.colors.primary,
-    textColor: Color = Color.White,
+    textColor: Color = MaterialTheme.colors.onPrimary,
     text: String = "",
     rotation: Float = 0f
 ) {

@@ -121,6 +121,7 @@ private fun TabStyleTab(
         "Select Tab Style",
         style = MaterialTheme.typography.h1,
         textAlign = TextAlign.Center,
+        color = MaterialTheme.colors.onBackground,
         modifier = Modifier.fillMaxWidth()
     )
 
@@ -206,12 +207,7 @@ private fun NestedCustomTabs(tabs: List<String>) {
         }
     }
 
-    Text(
-        text = selectedTabText,
-        style = MaterialTheme.typography.h1,
-        textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth().padding(8.dp)
-    )
+    StyledContentText(selectedTabText)
 }
 
 @ExperimentalMaterialApi
@@ -238,12 +234,7 @@ private fun NestedLeadingIconTab(tabs: List<Pair<String, ImageVector>>) {
         }
     }
 
-    Text(
-        text = selectedTabText,
-        style = MaterialTheme.typography.h1,
-        textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth().padding(8.dp)
-    )
+    StyledContentText(selectedTabText)
 }
 
 @Composable
@@ -284,10 +275,16 @@ private fun ScrollableTabs(tabs: List<String>) {
         }
     }
 
+    StyledContentText(selectedTabText)
+}
+
+@Composable
+private fun StyledContentText(text: String) {
     Text(
-        text = selectedTabText,
+        text = text,
         style = MaterialTheme.typography.h1,
         textAlign = TextAlign.Center,
+        color = MaterialTheme.colors.onBackground,
         modifier = Modifier.fillMaxWidth().padding(8.dp)
     )
 }

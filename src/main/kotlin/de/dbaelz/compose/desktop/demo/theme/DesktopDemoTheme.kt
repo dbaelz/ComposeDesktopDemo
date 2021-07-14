@@ -1,5 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,8 +24,8 @@ private val LightPalette = lightColors(
     secondaryVariant = Color(0xff087f23),
     onSecondary = Color(0xff000000),
     onSurface = Color(0xff000000),
+    background = Color(0xfffafafa),
     onBackground = Color(0xff000000),
-    background = Color(0xffffffff),
     error = Color(0xffff3d00),
     onError = Color(0xff000000)
 )
@@ -37,8 +38,8 @@ private val DarkPalette = darkColors(
     secondaryVariant = Color(0xff087f23),
     onSecondary = Color(0xff000000),
     onSurface = Color(0xffffffff),
+    background = Color(0xff2c2c2c),
     onBackground = Color(0xffffffff),
-    background = Color(0xff000000),
     error = Color(0xffff3d00),
     onError = Color(0xff000000)
 )
@@ -50,7 +51,6 @@ fun DesktopDemoTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        // TODO: Add dark theme
         colors = if (withDarkTheme) DarkPalette else LightPalette,
         // We could add the typography here for the theme. But the current is alright ;)
         // typography = TourneyTypography
@@ -67,6 +67,7 @@ fun DesktopDemoTheme(
                     ),
                     shape = RectangleShape
                 )
+                .background(MaterialTheme.colors.background)
                 .padding(16.dp)
                 .fillMaxSize()
         ) {

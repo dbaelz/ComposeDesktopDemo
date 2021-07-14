@@ -119,7 +119,7 @@ private fun DialogWindow(onClickAndDismiss: () -> Unit) {
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -127,6 +127,7 @@ private fun DialogWindow(onClickAndDismiss: () -> Unit) {
                 text = "This is dialog window",
                 style = MaterialTheme.typography.h1,
                 textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.onBackground,
                 modifier = Modifier.fillMaxWidth().padding(8.dp)
             )
             Button("Close", onClickAndDismiss)
@@ -149,6 +150,7 @@ private fun Popup() {
                 text = "Popup",
                 style = MaterialTheme.typography.h4,
                 textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.onPrimary
             )
         }
     }
