@@ -62,18 +62,18 @@ private val drawerItems = listOf(
 
 @Composable
 private fun TopBar(onMenuIconClicked: () -> Unit) {
-    TopAppBar {
-        Spacer(Modifier.width(8.dp))
-
-        Icon(Icons.Default.Menu, null,
-            modifier = Modifier.clickable {
-                onMenuIconClicked()
-            })
-
-        Spacer(Modifier.width(8.dp))
-
-        Text("Scaffold TopBar")
-    }
+    // Example for the "Slot API": There's another TopBar Composable that provides a
+    // content parameter for fully customizable content (see git history)
+    TopAppBar(
+        title = { Text("Scaffold Example Screen") },
+        navigationIcon = {
+            Spacer(Modifier.width(8.dp))
+            Icon(Icons.Default.Menu, null,
+                modifier = Modifier.clickable {
+                    onMenuIconClicked()
+                })
+        }
+    )
 }
 
 @Composable
