@@ -24,8 +24,6 @@ data class MainMenuModel(val items: List<Item> = emptyList()) {
             val targetScreen: Screen,
         ) : Item()
     }
-
-
 }
 
 @Composable

@@ -1,16 +1,12 @@
 package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.imageFromResource
@@ -20,10 +16,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
+private data class DrawerItem(val icon: ImageVector, val name: String)
+
 @Composable
 fun ScaffoldScreen(onBackNavigation: () -> Unit) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
+    var contentText by remember { mutableStateOf("Scaffold Example Content") }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -34,11 +33,26 @@ fun ScaffoldScreen(onBackNavigation: () -> Unit) {
                 }
             }
         },
-        drawerContent = { Drawer() },
+        drawerContent = {
+            Drawer(drawerItems) {
+                contentText = it.name
+                coroutineScope.launch {
+                    scaffoldState.drawerState.close()
+                }
+            }
+        },
         drawerBackgroundColor = MaterialTheme.colors.background.copy(alpha = 0.90f),
-        content = { Content(onBackNavigation) }
+        content = { Content(contentText, onBackNavigation) }
     )
 }
+
+// Usually handed over as model to the screen
+private val drawerItems = listOf<DrawerItem>(
+    DrawerItem(Icons.Default.Home, "Home"),
+    DrawerItem(Icons.Default.Favorite, "Favorites"),
+    DrawerItem(Icons.Default.AddCircle, "Add..."),
+    DrawerItem(Icons.Default.Info, "Info"),
+)
 
 @Composable
 private fun TopBar(onMenuIconClicked: () -> Unit) {
@@ -57,7 +71,7 @@ private fun TopBar(onMenuIconClicked: () -> Unit) {
 }
 
 @Composable
-private fun Drawer() {
+private fun Drawer(drawerItems: List<DrawerItem>, onItemSelected: (DrawerItem) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -83,27 +97,32 @@ private fun Drawer() {
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
         )
 
-        val maxItems = 5
-        (1..maxItems).forEach {
-            DrawerEntry(Icons.Default.Home, "Entry $it")
+        drawerItems.forEachIndexed { index, drawerItem ->
+            DrawerEntry(drawerItem) {
+                onItemSelected(it)
+            }
 
-            if (it != maxItems) Divider(color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f))
+            if (index != drawerItems.lastIndex) {
+                Divider(color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f))
+            }
         }
     }
 }
 
 @Composable
-private fun DrawerEntry(icon: ImageVector, text: String) {
+private fun DrawerEntry(item: DrawerItem, onItemSelected: (DrawerItem) -> Unit = {}) {
     Row(
-        modifier = Modifier.height(64.dp).padding(4.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier.height(64.dp).fillMaxWidth()
+            .clickable { onItemSelected(item) }
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = Modifier.width(16.dp))
 
         Icon(
-            modifier = Modifier.size(42.dp),
-            imageVector = icon,
+            modifier = Modifier.size(36.dp),
+            imageVector = item.icon,
             contentDescription = null,
             tint = MaterialTheme.colors.primaryVariant
         )
@@ -111,21 +130,21 @@ private fun DrawerEntry(icon: ImageVector, text: String) {
         Spacer(modifier = Modifier.width(16.dp))
 
         Text(
-            text = text,
+            text = item.name,
             style = MaterialTheme.typography.h6,
         )
     }
 }
 
 @Composable
-private fun Content(onBackNavigation: () -> Unit) {
+private fun Content(contentText: String, onBackNavigation: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Text(
-            text = "Scaffold Example Content",
+            text = contentText,
             style = MaterialTheme.typography.h1,
             textAlign = TextAlign.Center
         )
