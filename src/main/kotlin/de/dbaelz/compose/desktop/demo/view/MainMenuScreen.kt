@@ -11,8 +11,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.imageFromResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import de.dbaelz.compose.desktop.demo.Screen
+
+data class MainMenuModel(val items: List<Item> = emptyList()) {
+    sealed class Item {
+        object Separator : Item()
+        data class Entry(
+            val name: String,
+            val icon: ImageVector? = null,
+            val targetScreen: Screen,
+        ) : Item()
+    }
+
+
+}
 
 @Composable
 fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Screen) -> Unit) {
@@ -40,14 +54,7 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Scre
                         Spacer(Modifier.height(20.dp))
                     }
                     is MainMenuModel.Item.Entry -> {
-                        Button(
-                            modifier = Modifier
-                                .requiredWidth(175.dp)
-                                .align(Alignment.CenterHorizontally),
-                            onClick = { onItemSelected(it.targetScreen) }
-                        ) {
-                            Text(it.name)
-                        }
+                        MenuButton(Modifier.align(Alignment.CenterHorizontally), it, onItemSelected)
 
                         Spacer(Modifier.height(8.dp))
                     }
@@ -58,13 +65,24 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Scre
     }
 }
 
-data class MainMenuModel(val items: List<Item> = emptyList()) {
-    sealed class Item {
-        object Separator : Item()
-        data class Entry(val name: String, val targetScreen: Screen) : Item()
+@Composable
+private fun MenuButton(
+    modifier: Modifier,
+    entry: MainMenuModel.Item.Entry,
+    onItemSelected: (Screen) -> Unit
+) {
+    Button(
+        modifier = modifier.requiredWidth(175.dp).height(36.dp),
+        onClick = { onItemSelected(entry.targetScreen) }
+    ) {
+        entry.icon?.let {
+            Icon(
+                it, null,
+                modifier = Modifier.size(28.dp).padding(end = 8.dp)
+            )
+        }
+        Text(entry.name)
     }
-
-
 }
 
 @Composable

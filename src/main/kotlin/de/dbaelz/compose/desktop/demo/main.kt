@@ -7,6 +7,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.desktop.AppManager
 import androidx.compose.desktop.Window
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,23 +60,31 @@ fun main() = Window(
 private fun createMenu(): MainMenuModel {
     return MainMenuModel(
         listOf(
-            MainMenuModel.Item.Entry("Playground", Screen.PLAYGROUND),
-            MainMenuModel.Item.Entry("Dialog", Screen.DIALOG),
-            MainMenuModel.Item.Entry("Tabs", Screen.TABS),
-            MainMenuModel.Item.Entry("Scaffold", Screen.SCAFFOLD),
+            MainMenuModel.Item.Entry(name = "Playground", targetScreen = Screen.PLAYGROUND),
+            MainMenuModel.Item.Entry(name = "Dialog", targetScreen = Screen.DIALOG),
+            MainMenuModel.Item.Entry(name = "Tabs", targetScreen = Screen.TABS),
+            MainMenuModel.Item.Entry(name = "Scaffold", targetScreen = Screen.SCAFFOLD),
             MainMenuModel.Item.Separator,
 
-            MainMenuModel.Item.Entry("Animation", Screen.ANIMATION),
-            MainMenuModel.Item.Entry("Text Animation", Screen.TEXT_ANIMATION),
-            MainMenuModel.Item.Entry("Shapes", Screen.SHAPE),
+            MainMenuModel.Item.Entry(name = "Animation", targetScreen = Screen.ANIMATION),
+            MainMenuModel.Item.Entry(name = "Text Animation", targetScreen = Screen.TEXT_ANIMATION),
+            MainMenuModel.Item.Entry(
+                name = "Shapes",
+                icon = Icons.Default.Star,
+                targetScreen = Screen.SHAPE
+            ),
             MainMenuModel.Item.Separator,
 
-            MainMenuModel.Item.Entry("Canvas", Screen.CANVAS),
-            MainMenuModel.Item.Entry("Custom Layout", Screen.CUSTOM_LAYOUT),
-            MainMenuModel.Item.Entry("Timer", Screen.TIMER),
+            MainMenuModel.Item.Entry(name = "Canvas", targetScreen = Screen.CANVAS),
+            MainMenuModel.Item.Entry(name = "Custom Layout", targetScreen = Screen.CUSTOM_LAYOUT),
+            MainMenuModel.Item.Entry(name = "Timer", targetScreen = Screen.TIMER),
             MainMenuModel.Item.Separator,
 
-            MainMenuModel.Item.Entry("Close App", Screen.CLOSE_APP)
+            MainMenuModel.Item.Entry(
+                name = "Close App",
+                icon = Icons.Default.ExitToApp,
+                targetScreen = Screen.CLOSE_APP
+            )
         )
     )
 }
