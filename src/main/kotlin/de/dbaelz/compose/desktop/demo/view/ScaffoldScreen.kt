@@ -18,11 +18,13 @@ import kotlinx.coroutines.launch
 
 private data class DrawerItem(val icon: ImageVector, val name: String)
 
+private const val INITIAL_CONTENT_TEXT = "Scaffold Example"
+
 @Composable
 fun ScaffoldScreen(onBackNavigation: () -> Unit) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
-    var contentText by remember { mutableStateOf("Scaffold Example Content") }
+    var contentText by remember { mutableStateOf(INITIAL_CONTENT_TEXT) }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -33,6 +35,10 @@ fun ScaffoldScreen(onBackNavigation: () -> Unit) {
                 }
             }
         },
+        bottomBar = { BottomBar() },
+        floatingActionButton = { Fab { contentText = INITIAL_CONTENT_TEXT } },
+        floatingActionButtonPosition = FabPosition.Center,
+        isFloatingActionButtonDocked = true,
         drawerContent = {
             Drawer(drawerItems) {
                 contentText = it.name
@@ -47,10 +53,10 @@ fun ScaffoldScreen(onBackNavigation: () -> Unit) {
 }
 
 // Usually handed over as model to the screen
-private val drawerItems = listOf<DrawerItem>(
+private val drawerItems = listOf(
     DrawerItem(Icons.Default.Home, "Home"),
     DrawerItem(Icons.Default.Favorite, "Favorites"),
-    DrawerItem(Icons.Default.AddCircle, "Add..."),
+    DrawerItem(Icons.Default.AddCircle, "Add"),
     DrawerItem(Icons.Default.Info, "Info"),
 )
 
@@ -67,6 +73,20 @@ private fun TopBar(onMenuIconClicked: () -> Unit) {
         Spacer(Modifier.width(8.dp))
 
         Text("Scaffold TopBar")
+    }
+}
+
+@Composable
+private fun BottomBar() {
+    BottomAppBar {
+        Box(modifier = Modifier.height(64.dp))
+    }
+}
+
+@Composable
+private fun Fab(onFabClicked: () -> Unit) {
+    FloatingActionButton(onClick = onFabClicked) {
+        Icon(Icons.Default.Clear, null)
     }
 }
 
