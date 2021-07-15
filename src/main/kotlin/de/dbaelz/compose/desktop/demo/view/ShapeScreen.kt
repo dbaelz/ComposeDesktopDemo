@@ -197,13 +197,16 @@ private fun TextComponent(
         shape = shape,
         color = MaterialTheme.colors.secondary,
         elevation = 8.dp,
-        modifier = modifier
+        modifier = Modifier
             .width(width)
             .height(height)
     ) {
-        Box(contentAlignment = Alignment.Center) {
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center) {
             Text(
                 text = text,
+                color = MaterialTheme.colors.onSecondary,
                 modifier = Modifier.padding(8.dp)
             )
         }
