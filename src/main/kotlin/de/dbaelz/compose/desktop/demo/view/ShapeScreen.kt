@@ -150,11 +150,14 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
         ShapeState("", MaterialTheme.colors.primary, MaterialTheme.colors.onPrimary)
     val heartSelectedState = ShapeState("+1", Color.Red, Color.White)
 
+    var tearDropText by remember { mutableStateOf(1) }
     var plusOneHeartState by remember { mutableStateOf(heartUnselectedState) }
 
     MenuColumn(
         onBackNavigation, listOf(
-            { TearDrop("42") },
+            {
+                TearDrop(text = tearDropText.toString(), onClicked = { tearDropText++ })
+            },
             { Heart() },
             {
                 Heart(
@@ -184,6 +187,7 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
 
 @Composable
 private fun TextComponent(
+    modifier: Modifier = Modifier,
     width: Dp = 200.dp,
     height: Dp = 40.dp,
     shape: Shape,
@@ -193,7 +197,7 @@ private fun TextComponent(
         shape = shape,
         color = MaterialTheme.colors.secondary,
         elevation = 8.dp,
-        modifier = Modifier
+        modifier = modifier
             .width(width)
             .height(height)
     ) {
@@ -224,8 +228,13 @@ private fun Diamond(rotation: Float = 45f) {
 }
 
 @Composable
-private fun TearDrop(text: String = "", size: Dp = 64.dp) {
+private fun TearDrop(text: String = "", size: Dp = 64.dp, onClicked: (() -> Unit)? = null) {
+    val click = if (onClicked != null) {
+        Modifier.clickable { onClicked() }
+    } else Modifier
+
     TextComponent(
+        modifier = click,
         width = size,
         height = size,
         shape = RoundedCornerShape(
