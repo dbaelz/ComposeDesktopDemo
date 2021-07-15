@@ -3,6 +3,7 @@ package de.dbaelz.compose.desktop.demo.view
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.MaterialTheme
@@ -145,6 +146,12 @@ private fun DiamondTab(onBackNavigation: () -> Unit) {
 
 @Composable
 private fun SpecialTab(onBackNavigation: () -> Unit) {
+    val heartUnselectedState =
+        ShapeState("", MaterialTheme.colors.primary, MaterialTheme.colors.onPrimary)
+    val heartSelectedState = ShapeState("+1", Color.Red, Color.White)
+
+    var plusOneHeartState by remember { mutableStateOf(heartUnselectedState) }
+
     MenuColumn(
         onBackNavigation, listOf(
             { TearDrop("42") },
@@ -154,6 +161,20 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
                     color = MaterialTheme.colors.primary,
                     textColor = MaterialTheme.colors.onPrimary,
                     text = "Text"
+                )
+            },
+            {
+                Heart(
+                    color = plusOneHeartState.itemColor,
+                    textColor = plusOneHeartState.textColor,
+                    text = plusOneHeartState.text,
+                    onClicked = {
+                        plusOneHeartState = if (plusOneHeartState == heartUnselectedState) {
+                            heartSelectedState
+                        } else {
+                            heartUnselectedState
+                        }
+                    }
                 )
             },
             { Arrowhead() }
@@ -222,17 +243,23 @@ private fun Heart(
     color: Color = Color.Red,
     textColor: Color = Color.White,
     text: String = "",
-    rotation: Float = 0f
+    rotation: Float = 0f,
+    onClicked: (() -> Unit)? = null
 ) {
+    val click = if (onClicked != null) {
+        Modifier.clickable { onClicked() }
+    } else Modifier
+
     Box(
         modifier = Modifier
             .size(96.dp)
             .rotate(rotation)
             .clip(HeartShape)
-            .background(color),
+            .background(color)
+            .then(click),
         contentAlignment = Alignment.Center
     ) {
-        Text(text, color = textColor)
+        Text(text = text, color = textColor)
     }
 }
 
@@ -319,6 +346,8 @@ private val ArrowheadShape = GenericShape { size, _ ->
     )
     close()
 }
+
+private data class ShapeState(val text: String, val itemColor: Color, val textColor: Color)
 
 private enum class ShapeTabType {
     ABSOLUTE_CUT,
