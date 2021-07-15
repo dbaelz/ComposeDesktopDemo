@@ -1,4 +1,4 @@
-package de.dbaelz.compose.desktop.demo.view
+package de.dbaelz.compose.desktop.demo.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
