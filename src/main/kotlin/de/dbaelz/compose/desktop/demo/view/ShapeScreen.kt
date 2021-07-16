@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -140,6 +141,7 @@ private fun DiamondTab(onBackNavigation: () -> Unit) {
             { Diamond() },
             { Diamond(20f) },
             { Diamond(-20f) },
+            { DiamondWithLinearSlider() },
         )
     )
 }
@@ -203,7 +205,8 @@ private fun TextComponent(
     ) {
         Box(
             modifier = modifier,
-            contentAlignment = Alignment.Center) {
+            contentAlignment = Alignment.Center
+        ) {
             Text(
                 text = text,
                 color = MaterialTheme.colors.onSecondary,
@@ -211,6 +214,22 @@ private fun TextComponent(
             )
         }
     }
+}
+
+@Composable
+private fun DiamondWithLinearSlider(initialRotation: Float = 45f) {
+    var sliderPosition by remember { mutableStateOf(0f) }
+
+    Diamond(sliderPosition + initialRotation)
+
+    Spacer(Modifier.height(8.dp))
+
+    Slider(
+        value = sliderPosition,
+        valueRange = 0f..360f,
+        onValueChange = { sliderPosition = it },
+        modifier = Modifier.width(128.dp)
+    )
 }
 
 @Composable
