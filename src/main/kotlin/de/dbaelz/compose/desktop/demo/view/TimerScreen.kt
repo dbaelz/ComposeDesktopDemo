@@ -35,6 +35,7 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
 
         Spacer(Modifier.height(64.dp))
 
+        val timerState = remember { TimerState(10_000) }
         Timer(
             modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally),
             style = TimerStyle(
@@ -42,12 +43,31 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
                 colorInactive = MaterialTheme.colors.onSecondary,
                 arcWithKnob = false
             ),
-            remember { TimerState(10_000) }
+            state = timerState,
+            button = {
+                TimerButton(
+                    timeLeftText = timerState.periodLeft.toString(),
+                    buttonText = when {
+                        timerState.periodLeft <= 0 -> "Restart"
+                        timerState.timerActive -> "Pause"
+                        timerState.periodLeft != timerState.timerDuration -> "Resume"
+                        else -> "Start"
+                    },
+                    onButtonClicked = {
+                        if (timerState.periodLeft <= 0) {
+                            timerState.periodLeft = timerState.timerDuration
+                            timerState.timerActive = true
+                        } else {
+                            timerState.timerActive = !timerState.timerActive
+                        }
+                    }
+                )
+            }
         )
 
         Spacer(Modifier.height(64.dp))
 
-        val timerState = remember { TimerState(7500) }
+        val timer2State = remember { TimerState(7500) }
         val timerModifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally)
         Timer(
             modifier = timerModifier,
@@ -57,13 +77,34 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
                 arcWithKnob = true,
                 arcWithBorder = false
             ),
-            timerState = timerState,
+            state = timer2State,
+            button = {
+                TimerButton(
+                    textColor = MaterialTheme.colors.primary,
+                    backgroundColor = MaterialTheme.colors.onPrimary,
+                    timeLeftText = timer2State.periodLeft.toString(),
+                    buttonText = when {
+                        timer2State.periodLeft <= 0 -> "Reset"
+                        timer2State.timerActive -> "Pause"
+                        timer2State.periodLeft != timer2State.timerDuration -> "Resume"
+                        else -> "Go..."
+                    },
+                    onButtonClicked = {
+                        if (timer2State.periodLeft <= 0) {
+                            timer2State.periodLeft = timer2State.timerDuration
+                            timer2State.timerActive = true
+                        } else {
+                            timer2State.timerActive = !timer2State.timerActive
+                        }
+                    }
+                )
+            },
             bar = {
                 BarTimer(
                     timerModifier.fillMaxSize(0.5f),
                     MaterialTheme.colors.primary,
                     MaterialTheme.colors.onPrimary,
-                    max(timerState.periodLeft / timerState.timerDuration.toFloat(), 0f)
+                    max(timer2State.periodLeft / timer2State.timerDuration.toFloat(), 0f)
                 )
             },
         )
@@ -74,13 +115,14 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
 private fun Timer(
     modifier: Modifier,
     style: TimerStyle,
-    timerState: TimerState,
+    state: TimerState,
+    button: @Composable () -> Unit,
     bar: @Composable (ColumnScope.() -> Unit)? = null
 ) {
-    LaunchedEffect(timerState.periodLeft, timerState.timerActive) {
-        if (timerState.timerActive && timerState.periodLeft > 0) {
+    LaunchedEffect(state.periodLeft, state.timerActive) {
+        if (state.timerActive && state.periodLeft > 0) {
             delay(100)
-            timerState.periodLeft -= 100
+            state.periodLeft -= 100
         }
     }
 
@@ -89,24 +131,10 @@ private fun Timer(
             modifier = modifier.fillMaxSize(0.5f),
             style = style,
             timerAngle = FULL_TIMER_ANGLE * max(
-                timerState.periodLeft / timerState.timerDuration.toFloat(),
+                state.periodLeft / state.timerDuration.toFloat(),
                 0f
             ),
-            timeLeftText = timerState.periodLeft.toString(),
-            buttonText = when {
-                timerState.periodLeft <= 0 -> "Restart"
-                timerState.timerActive -> "Pause"
-                timerState.periodLeft != timerState.timerDuration -> "Resume"
-                else -> "Start"
-            },
-            onButtonClicked = {
-                if (timerState.periodLeft <= 0) {
-                    timerState.periodLeft = timerState.timerDuration
-                    timerState.timerActive = true
-                } else {
-                    timerState.timerActive = !timerState.timerActive
-                }
-            }
+            button
         )
 
         if (bar != null) {
@@ -121,9 +149,7 @@ private fun CircleTimer(
     modifier: Modifier = Modifier,
     style: TimerStyle,
     timerAngle: Float,
-    timeLeftText: String,
-    buttonText: String,
-    onButtonClicked: () -> Unit,
+    button: @Composable () -> Unit
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -163,13 +189,7 @@ private fun CircleTimer(
             }
         }
 
-        TimerButton(
-            style.colorActive,
-            style.colorInactive,
-            timeLeftText,
-            buttonText,
-            onButtonClicked
-        )
+        button()
     }
 }
 
