@@ -101,10 +101,10 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
             },
             bar = {
                 BarTimer(
-                    timerModifier.fillMaxSize(0.5f),
-                    MaterialTheme.colors.primary,
-                    MaterialTheme.colors.onPrimary,
-                    max(timer2State.periodLeft / timer2State.timerDuration.toFloat(), 0f)
+                    modifier = Modifier,
+                    colorActive = MaterialTheme.colors.primary,
+                    colorInactive = MaterialTheme.colors.onPrimary,
+                    fillPercentage = max(timer2State.periodLeft / timer2State.timerDuration.toFloat(), 0f)
                 )
             },
         )
@@ -117,7 +117,7 @@ private fun Timer(
     style: TimerStyle,
     state: TimerState,
     button: @Composable () -> Unit,
-    bar: @Composable (ColumnScope.() -> Unit)? = null
+    bar: @Composable ColumnScope.() -> Unit? = {}
 ) {
     LaunchedEffect(state.periodLeft, state.timerActive) {
         if (state.timerActive && state.periodLeft > 0) {
@@ -137,9 +137,7 @@ private fun Timer(
             button
         )
 
-        if (bar != null) {
-            bar()
-        }
+        bar()
     }
 
 }
@@ -205,7 +203,7 @@ private fun BarTimer(
         modifier = modifier
     ) {
         Canvas(
-            modifier = modifier
+            modifier = modifier.fillMaxWidth()
         ) {
             drawRoundRect(
                 color = colorInactive,
