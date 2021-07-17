@@ -40,23 +40,32 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
             style = TimerStyle(
                 colorActive = MaterialTheme.colors.secondary,
                 colorInactive = MaterialTheme.colors.onSecondary,
-                arcWithKnob = false,
-                withBar = false
+                arcWithKnob = false
             ),
             remember { TimerState(10_000) }
         )
 
         Spacer(Modifier.height(64.dp))
 
+        val timerState = remember { TimerState(7500) }
+        val timerModifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally)
         Timer(
-            modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally),
+            modifier = timerModifier,
             style = TimerStyle(
                 colorActive = MaterialTheme.colors.primary,
                 colorInactive = MaterialTheme.colors.onPrimary,
                 arcWithKnob = true,
                 arcWithBorder = false
             ),
-            remember { TimerState(7500) }
+            timerState = timerState,
+            bar = {
+                BarTimer(
+                    timerModifier.fillMaxSize(0.5f),
+                    MaterialTheme.colors.primary,
+                    MaterialTheme.colors.onPrimary,
+                    max(timerState.periodLeft / timerState.timerDuration.toFloat(), 0f)
+                )
+            },
         )
     }
 }
@@ -65,7 +74,8 @@ fun TimerScreen(onBackNavigation: () -> Unit) {
 private fun Timer(
     modifier: Modifier,
     style: TimerStyle,
-    timerState: TimerState
+    timerState: TimerState,
+    bar: @Composable (ColumnScope.() -> Unit)? = null
 ) {
     LaunchedEffect(timerState.periodLeft, timerState.timerActive) {
         if (timerState.timerActive && timerState.periodLeft > 0) {
@@ -99,13 +109,8 @@ private fun Timer(
             }
         )
 
-        if (style.withBar) {
-            BarTimer(
-                modifier.fillMaxSize(0.5f),
-                style.colorActive,
-                style.colorInactive,
-                max(timerState.periodLeft / timerState.timerDuration.toFloat(), 0f)
-            )
+        if (bar != null) {
+            bar()
         }
     }
 
@@ -242,8 +247,7 @@ data class TimerStyle(
     val colorActive: Color,
     val colorInactive: Color,
     val arcWithBorder: Boolean = true,
-    val arcWithKnob: Boolean = false,
-    val withBar: Boolean = true
+    val arcWithKnob: Boolean = false
 )
 
 private const val START_ANGLE = 135f
