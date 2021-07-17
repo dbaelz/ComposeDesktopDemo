@@ -77,9 +77,11 @@ private fun Timer(
     Column(modifier = modifier) {
         CircleTimer(
             modifier = modifier.fillMaxSize(0.5f),
-            colorActive = style.colorActive,
-            colorInactive = style.colorInactive,
-            timerAngle = FULL_TIMER_ANGLE * max(timerState.periodLeft / timerState.timerDuration.toFloat(), 0f),
+            style = style,
+            timerAngle = FULL_TIMER_ANGLE * max(
+                timerState.periodLeft / timerState.timerDuration.toFloat(),
+                0f
+            ),
             timeLeftText = timerState.periodLeft.toString(),
             buttonText = when {
                 timerState.periodLeft <= 0 -> "Restart"
@@ -87,8 +89,6 @@ private fun Timer(
                 timerState.periodLeft != timerState.timerDuration -> "Resume"
                 else -> "Start"
             },
-            withBorder = style.arcWithBorder,
-            withKnob = style.arcWithKnob,
             onButtonClicked = {
                 if (timerState.periodLeft <= 0) {
                     timerState.periodLeft = timerState.timerDuration
@@ -114,14 +114,11 @@ private fun Timer(
 @Composable
 private fun CircleTimer(
     modifier: Modifier = Modifier,
-    colorActive: Color,
-    colorInactive: Color = MaterialTheme.colors.onSecondary,
-    withBorder: Boolean = true,
-    withKnob: Boolean = false,
+    style: TimerStyle,
     timerAngle: Float,
     timeLeftText: String,
     buttonText: String,
-    onButtonClicked: () -> Unit
+    onButtonClicked: () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -131,7 +128,7 @@ private fun CircleTimer(
             modifier = modifier
         ) {
             drawArc(
-                color = colorInactive,
+                color = style.colorInactive,
                 startAngle = START_ANGLE,
                 sweepAngle = FULL_TIMER_ANGLE,
                 size = Size(size.width, size.height),
@@ -140,28 +137,34 @@ private fun CircleTimer(
             )
 
             drawArc(
-                color = colorActive,
+                color = style.colorActive,
                 startAngle = START_ANGLE,
                 sweepAngle = timerAngle,
                 size = Size(size.width, size.height),
                 useCenter = false,
-                style = Stroke(width = if (withBorder) 10f else 17f, cap = StrokeCap.Round)
+                style = Stroke(width = if (style.arcWithBorder) 10f else 17f, cap = StrokeCap.Round)
             )
 
-            if (withKnob) {
+            if (style.arcWithKnob) {
                 val radius = size.width / 2
                 val x = center.x + radius * cos((timerAngle + START_ANGLE) * PI / 180)
                 val y = center.y + radius * sin((timerAngle + START_ANGLE) * PI / 180)
 
                 drawCircle(
-                    color = colorActive,
+                    color = style.colorActive,
                     radius = 12f,
                     center = Offset(x.toFloat(), y.toFloat())
                 )
             }
         }
 
-        TimerButton(colorActive, colorInactive, timeLeftText, buttonText, onButtonClicked)
+        TimerButton(
+            style.colorActive,
+            style.colorInactive,
+            timeLeftText,
+            buttonText,
+            onButtonClicked
+        )
     }
 }
 
