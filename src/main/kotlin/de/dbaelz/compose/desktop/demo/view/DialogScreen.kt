@@ -147,7 +147,7 @@ private fun Popup() {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
-                text = "Popup",
+                text = "Hello Popup",
                 style = MaterialTheme.typography.h4,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colors.onPrimary
