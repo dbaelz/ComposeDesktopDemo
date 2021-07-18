@@ -70,7 +70,7 @@ private fun MenuButton(
     onItemSelected: (Screen) -> Unit
 ) {
     Button(
-        modifier = modifier.requiredWidth(175.dp).height(36.dp),
+        modifier = modifier.requiredWidth(200.dp).height(36.dp),
         onClick = { onItemSelected(entry.targetScreen) }
     ) {
         entry.icon?.let {

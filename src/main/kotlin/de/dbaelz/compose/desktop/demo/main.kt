@@ -57,6 +57,7 @@ fun main() = Window(
                 Screen.SCAFFOLD -> ScaffoldScreen(navigateToMain) {
                     useDarkTheme = !useDarkTheme
                 }
+                Screen.EXPERIMENTS -> ExperimentScreen(navigateToMain)
             }
         }
     }
@@ -66,6 +67,9 @@ private fun createMenu(): MainMenuModel {
     return MainMenuModel(
         listOf(
             MainMenuModel.Item.Entry(name = "Playground", targetScreen = Screen.PLAYGROUND),
+            MainMenuModel.Item.Entry(name = "Experiments", targetScreen = Screen.EXPERIMENTS),
+            MainMenuModel.Item.Separator,
+
             MainMenuModel.Item.Entry(name = "Dialog", targetScreen = Screen.DIALOG),
             MainMenuModel.Item.Entry(name = "Tabs", targetScreen = Screen.TABS),
             MainMenuModel.Item.Entry(name = "Scaffold", targetScreen = Screen.SCAFFOLD),
@@ -111,4 +115,5 @@ enum class Screen {
     CUSTOM_LAYOUT,
     TABS,
     SCAFFOLD,
+    EXPERIMENTS
 }
