@@ -11,6 +11,7 @@ group = "de.dbaelz.compose.desktop.demo"
 version = "1.0"
 
 repositories {
+    google()
     jcenter()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
@@ -18,6 +19,8 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+
+    testImplementation(compose("org.jetbrains.compose.ui:ui-test-junit4"))
 }
 
 tasks.withType<KotlinCompile>() {
