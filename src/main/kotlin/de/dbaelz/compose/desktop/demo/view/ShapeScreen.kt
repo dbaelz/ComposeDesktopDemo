@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -398,8 +399,9 @@ private val ArrowheadShape = GenericShape { size, _ ->
 
 @Composable
 private fun KotlinShape(
-    colorGradientStart: Color = Color(0xFF5e2495),
-    colorGradientEnd: Color = Color(0xFFffb5502),
+    colorGradientStart: Color = Color(0xFF7F52FF),
+    colorGradientMiddle: Color = Color(0xFFFC711E1),
+    colorGradientEnd: Color = Color(0xFFE44857),
     textColor: Color = contentColorFor(colorGradientStart),
     text: String = "",
     rotation: Float = 0f,
@@ -415,13 +417,15 @@ private fun KotlinShape(
             .rotate(rotation)
             .clip(KotlinShape)
             .background(
-                Brush.horizontalGradient(
-                    colors = listOf(
-                        colorGradientStart,
-                        colorGradientEnd,
-                    )
-                )
-            ).then(click),
+                // Values based on the SVG provided on the website
+                Brush.radialGradient(
+                    3.435144e-03f to colorGradientEnd,
+                    0.4689f to colorGradientMiddle,
+                    1f to colorGradientStart,
+                    radius = 86.7174f,
+                    center = Offset(67.8027f, 3.9181f)
+
+            )).then(click),
         contentAlignment = Alignment.Center
     ) {
         Text(text, color = textColor)
