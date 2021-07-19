@@ -9,7 +9,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -399,10 +402,16 @@ private val ArrowheadShape = GenericShape { size, _ ->
 
 @Composable
 private fun KotlinShape(
-    colorGradientStart: Color = Color(0xFF7F52FF),
-    colorGradientMiddle: Color = Color(0xFFFC711E1),
-    colorGradientEnd: Color = Color(0xFFE44857),
-    textColor: Color = contentColorFor(colorGradientStart),
+    radialGradient: RadialGradient = RadialGradient(
+        colorStops = listOf(
+            3.435144e-03f to Color(0xFFE44857),
+            0.4689f to Color(0xFFFC711E1),
+            1f to Color(0xFF7F52FF)
+        ),
+        radius = 86.7174f,
+        center = Offset(67.8027f, 3.9181f)
+    ),
+    textColor: Color = Color.White,
     text: String = "",
     rotation: Float = 0f,
     onClicked: (() -> Unit)? = null
@@ -419,13 +428,11 @@ private fun KotlinShape(
             .background(
                 // Values based on the SVG provided on the website
                 Brush.radialGradient(
-                    3.435144e-03f to colorGradientEnd,
-                    0.4689f to colorGradientMiddle,
-                    1f to colorGradientStart,
-                    radius = 86.7174f,
-                    center = Offset(67.8027f, 3.9181f)
-
-            )).then(click),
+                    colorStops = radialGradient.colorStops.toTypedArray(),
+                    center = radialGradient.center,
+                    radius = radialGradient.radius
+                )
+            ).then(click),
         contentAlignment = Alignment.Center
     ) {
         Text(text, color = textColor)
@@ -441,6 +448,12 @@ private val KotlinShape = GenericShape { size, _ ->
 }
 
 private data class ShapeState(val text: String, val itemColor: Color, val textColor: Color)
+
+private data class RadialGradient(
+    val colorStops: List<Pair<Float, Color>>,
+    val center: Offset,
+    val radius: Float
+)
 
 private enum class ShapeTabType {
     ABSOLUTE_CUT,
