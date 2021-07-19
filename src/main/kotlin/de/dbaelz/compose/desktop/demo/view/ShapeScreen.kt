@@ -1,20 +1,21 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
@@ -155,6 +156,15 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
     var tearDropText by remember { mutableStateOf(1) }
     var plusOneHeartState by remember { mutableStateOf(heartUnselectedState) }
 
+
+    var kotlinShapeClickable by remember { mutableStateOf(true) }
+    var kotlinShapeIsRotated by remember { mutableStateOf(false) }
+    val kotlinShapeRotation: Float by animateFloatAsState(
+        targetValue = if (kotlinShapeIsRotated) 360F else 0F,
+        animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+        finishedListener = { kotlinShapeClickable = true }
+    )
+
     MenuColumn(
         onBackNavigation, listOf(
             {
@@ -182,7 +192,15 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
                     }
                 )
             },
-            { Arrowhead() }
+            { Arrowhead() },
+            {
+                KotlinShape(rotation = kotlinShapeRotation, onClicked = {
+                    if (kotlinShapeClickable) {
+                        kotlinShapeClickable = false
+                        kotlinShapeIsRotated = !kotlinShapeIsRotated
+                    }
+                })
+            },
         )
     )
 }
@@ -375,6 +393,46 @@ private val ArrowheadShape = GenericShape { size, _ ->
         0f,
         size.height
     )
+    close()
+}
+
+@Composable
+private fun KotlinShape(
+    colorGradientStart: Color = Color(0xFF5e2495),
+    colorGradientEnd: Color = Color(0xFFffb5502),
+    textColor: Color = contentColorFor(colorGradientStart),
+    text: String = "",
+    rotation: Float = 0f,
+    onClicked: (() -> Unit)? = null
+) {
+    val click = if (onClicked != null) {
+        Modifier.clickable { onClicked() }
+    } else Modifier
+
+    Box(
+        modifier = Modifier
+            .size(96.dp)
+            .rotate(rotation)
+            .clip(KotlinShape)
+            .background(
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        colorGradientStart,
+                        colorGradientEnd,
+                    )
+                )
+            ).then(click),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text, color = textColor)
+    }
+}
+
+private val KotlinShape = GenericShape { size, _ ->
+    lineTo(size.width, 0f)
+    lineTo(size.width / 2, size.height / 2)
+    lineTo(size.width, size.height)
+    lineTo(0f, size.height)
     close()
 }
 
