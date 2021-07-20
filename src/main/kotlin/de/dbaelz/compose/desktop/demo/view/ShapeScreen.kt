@@ -1,27 +1,28 @@
 package de.dbaelz.compose.desktop.demo.view
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -204,6 +205,9 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
                         kotlinShapeIsRotated = !kotlinShapeIsRotated
                     }
                 })
+            },
+            {
+                ShapeShiftingButton()
             },
         )
     )
@@ -445,6 +449,68 @@ private val KotlinShape = GenericShape { size, _ ->
     lineTo(size.width, size.height)
     lineTo(0f, size.height)
     close()
+}
+
+
+@Composable
+private fun ShapeShiftingButton(
+    width: Dp = 60.dp,
+    widthExpanded: Dp = 200.dp,
+    height: Dp = 60.dp,
+    heightExpanded: Dp = 60.dp,
+    text: String = "Click!",
+    icon: ImageVector = Icons.Default.Menu
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+
+    val animationDuration = 500
+    val transition = updateTransition(isExpanded)
+    val animatedWidth by transition.animateDp(
+        transitionSpec = { tween(durationMillis = animationDuration, easing = LinearEasing) },
+        targetValueByState = { if (it) widthExpanded else width }
+    )
+    val animatedHeight by transition.animateDp(
+        transitionSpec = { tween(durationMillis = animationDuration, easing = LinearEasing) },
+        targetValueByState = { if (it) heightExpanded else height }
+    )
+    val textAnimation by transition.animateFloat(
+        transitionSpec = { tween(durationMillis = animationDuration) },
+        targetValueByState = { if (it) 1f else 0f }
+    )
+    val cornerPercentage = if (isExpanded) 20 else 50
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .animateContentSize()
+            .width(animatedWidth)
+            .height(animatedHeight)
+            .clip(
+                RoundedCornerShape(
+                    topStartPercent = cornerPercentage,
+                    topEndPercent = cornerPercentage,
+                    bottomStartPercent = cornerPercentage,
+                    bottomEndPercent = cornerPercentage
+                )
+            )
+            .background(Color.Green)
+            .clickable { isExpanded = !isExpanded }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (textAnimation >= 0.5f) {
+                Text(
+                    text = text,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.alpha(textAnimation)
+                )
+            } else {
+                Icon(icon, null, modifier = Modifier.alpha(1 - textAnimation))
+            }
+        }
+    }
 }
 
 private data class ShapeState(val text: String, val itemColor: Color, val textColor: Color)
