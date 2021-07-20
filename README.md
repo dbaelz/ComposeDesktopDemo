@@ -1,8 +1,6 @@
 # About
 Demo repository to test Compose for Desktop use cases.
 
-# Content
-- Initial demo with button
 
 # License
 Copyright (c) Daniel Bälz

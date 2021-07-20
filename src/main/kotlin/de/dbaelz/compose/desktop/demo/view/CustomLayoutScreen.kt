@@ -26,7 +26,8 @@ fun CustomLayoutScreen(onBackNavigation: () -> Unit) {
 @Composable
 fun TextWithCustomModifier() {
     Text(
-        "Layout Modifier", Modifier
+        "Think outside the box",
+        modifier = Modifier
             .background(Color.Red)
             .width(140.dp)
             .height(40.dp)

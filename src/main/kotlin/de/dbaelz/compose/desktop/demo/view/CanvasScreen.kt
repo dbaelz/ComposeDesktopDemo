@@ -67,13 +67,6 @@ fun PulsingCircle(
     val colorBarIndicatorBackground = colors.secondary
 
     Canvas(modifier = modifier.fillMaxSize()) {
-        drawCircle(
-            color = color,
-            center = center,
-            radius = radius,
-            style = Stroke(width = 20f)
-        )
-
         (1..BAR_ITEMS).forEach { index ->
             drawRoundRect(
                 color = if (index <= barProgress) colorBarIndicator else colorBarIndicatorBackground,
@@ -82,9 +75,18 @@ fun PulsingCircle(
                 cornerRadius = CornerRadius(5f)
             )
         }
+
+        drawCircle(
+            color = color,
+            center = center.copy(y = center.y + 50f),
+            radius = radius,
+            style = Stroke(width = 20f)
+        )
+
+
     }
 }
 
 private const val ANIMATION_DURATION_MILLIS = 1500
-private const val BAR_ITEMS = 10
-private const val BAR_WIDTH = 20f
+private const val BAR_ITEMS = 20
+private const val BAR_WIDTH = 15f

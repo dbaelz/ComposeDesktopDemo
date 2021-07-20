@@ -112,12 +112,6 @@ private fun AnimationContent(
 
         DotsLoadingIndicator(
             numberDots = 4,
-            colorDot = colors.primary,
-            colorHighlight = colors.secondaryVariant
-        )
-
-        DotsLoadingIndicator(
-            numberDots = 4,
             animateSize = true,
             colorDot = colors.primary,
             colorHighlight = colors.secondaryVariant
@@ -195,9 +189,9 @@ private fun AnimatedBox(
     ) {
         Box(
             modifier = modifier.background(boxColor)
+                .animateContentSize()
                 .height(boxHeight)
                 .width(132.dp)
-                .animateContentSize()
         ) {
             Text(
                 "Hello there! This is a wonderful text example.",
