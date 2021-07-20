@@ -25,17 +25,17 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
 
     val buttons = listOf<@Composable () -> Unit>(
         {
-            Button("Alert Dialog") {
+            DialogButton("Alert Dialog") {
                 dialog = DialogType.ALERT
             }
         },
         {
-            Button("Dialog Window") {
+            DialogButton("Dialog Window") {
                 dialog = DialogType.WINDOW
             }
         },
         {
-            Button("Popup") {
+            DialogButton("Popup") {
                 dialog = DialogType.POPUP
             }
         },
@@ -54,7 +54,7 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
 }
 
 @Composable
-private fun Button(text: String, onClick: () -> Unit) {
+private fun DialogButton(text: String, onClick: () -> Unit) {
     BoxWithTooltip(
         tooltip = {
             Surface(
@@ -130,7 +130,7 @@ private fun DialogWindow(onClickAndDismiss: () -> Unit) {
                 color = MaterialTheme.colors.onBackground,
                 modifier = Modifier.fillMaxWidth().padding(8.dp)
             )
-            Button("Close", onClickAndDismiss)
+            DialogButton("Close", onClickAndDismiss)
         }
     }
 }
