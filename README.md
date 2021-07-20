@@ -1,5 +1,11 @@
 # About
-Demo repository to test Compose for Desktop use cases.
+Demo repository to test and experiment with Compose for Desktop.
+It contains topics I played around, implementations I did to answer questions
+from people and all in all a lot of basic Compose stuff. 
+
+Feel free to be inspired, informed or even confused by the code.
+Also be aware that the implementation might not be optimal or state of the
+art. Occasionally I'll update it to the latest Compose version.
 
 
 # License
