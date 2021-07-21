@@ -85,7 +85,7 @@ private fun createMenu(): MainMenuModel {
             MainMenuModel.Item.Separator,
 
             MainMenuModel.Item.Entry(name = "Canvas", targetScreen = Screen.CANVAS),
-            MainMenuModel.Item.Entry(name = "Custom Layout", targetScreen = Screen.CUSTOM_LAYOUT),
+            MainMenuModel.Item.Entry(name = "(Custom) Layout", targetScreen = Screen.CUSTOM_LAYOUT),
             MainMenuModel.Item.Entry(
                 name = "Timer",
                 icon = Icons.Default.Refresh,

@@ -1,10 +1,11 @@
 package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
@@ -17,6 +18,7 @@ import kotlin.random.Random
 @Composable
 fun CustomLayoutScreen(onBackNavigation: () -> Unit) {
     MenuColumn(onBackNavigation, listOf(
+        { RowWithChildsWidthIsWidestTextWidth() },
         { TextWithCustomModifier() },
         { TextCustomLayoutExample("Hello there!") }
     ))
@@ -90,5 +92,62 @@ private fun CustomLayout(
                 yPos += it.height / 2
             }
         }
+    }
+}
+
+/*
+ * In this layout all Box/Text inside the row are as long as the widest text.
+ * Not a custom layout, but shows how the provided modifier + IntrinsicSize can be used
+ * to get an "unusual" layout requirement done.
+ */
+@Composable
+private fun RowWithChildsWidthIsWidestTextWidth() {
+    Box(
+        modifier = Modifier.fillMaxSize().background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            modifier = Modifier.width(IntrinsicSize.Max).fillMaxHeight(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            BoxWithText(
+                modifier = Modifier.weight(1f),
+                "Short text",
+                MaterialTheme.colors.primary
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            BoxWithText(
+                modifier = Modifier.weight(1f),
+                "text",
+                MaterialTheme.colors.secondaryVariant
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            BoxWithText(
+                modifier = Modifier.weight(1f),
+                "Very very very long text",
+                MaterialTheme.colors.secondary
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            BoxWithText(
+                modifier = Modifier.weight(1f),
+                "Another text",
+                MaterialTheme.colors.primaryVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun BoxWithText(modifier: Modifier, text: String, backgroundColor: Color) {
+    Box(
+        modifier = modifier.fillMaxHeight().background(backgroundColor)
+    ) {
+        Text(text)
     }
 }
