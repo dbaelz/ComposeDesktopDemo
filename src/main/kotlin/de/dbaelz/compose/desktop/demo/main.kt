@@ -6,6 +6,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.desktop.AppManager
 import androidx.compose.desktop.Window
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
@@ -21,6 +22,7 @@ import de.dbaelz.compose.desktop.demo.theme.DesktopDemoTheme
 import de.dbaelz.compose.desktop.demo.view.*
 
 
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
@@ -58,6 +60,7 @@ fun main() = Window(
                     useDarkTheme = !useDarkTheme
                 }
                 Screen.EXPERIMENTS -> ExperimentScreen(navigateToMain)
+                Screen.PUZZLER -> PuzzlerScreen(navigateToMain)
             }
         }
     }
@@ -67,6 +70,7 @@ private fun createMenu(): MainMenuModel {
     return MainMenuModel(
         listOf(
             MainMenuModel.Item.Entry(name = "Playground", targetScreen = Screen.PLAYGROUND),
+            MainMenuModel.Item.Entry(name = "Puzzler", targetScreen = Screen.PUZZLER),
             MainMenuModel.Item.Entry(name = "Experiments", targetScreen = Screen.EXPERIMENTS),
             MainMenuModel.Item.Separator,
 
@@ -115,5 +119,6 @@ enum class Screen {
     CUSTOM_LAYOUT,
     TABS,
     SCAFFOLD,
-    EXPERIMENTS
+    EXPERIMENTS,
+    PUZZLER,
 }
