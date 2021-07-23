@@ -25,6 +25,11 @@ fun PuzzlerScreen(onBackNavigation: () -> Unit) {
                 ModifierBorderPuzzler()
             },
             {
+                Text("ModifierBorderSimplified", style = MaterialTheme.typography.h3)
+                Spacer(Modifier.height(8.dp))
+                ModifierBorderSimplified()
+            },
+            {
                 Text("ModifierClickPuzzler", style = MaterialTheme.typography.h3)
                 Spacer(Modifier.height(8.dp))
                 ModifierClickPuzzler()
@@ -33,6 +38,16 @@ fun PuzzlerScreen(onBackNavigation: () -> Unit) {
     )
 }
 
+@Composable
+private fun ModifierBorderSimplified(borderWidth: Dp = 12.dp) {
+    Box(
+        modifier = Modifier
+            .size(200.dp)
+            .border(borderWidth, Color.Gray)
+            .offset(4.dp, 4.dp)
+            .border(borderWidth, Color.Cyan)
+    )
+}
 
 @ExperimentalFoundationApi
 @Composable
