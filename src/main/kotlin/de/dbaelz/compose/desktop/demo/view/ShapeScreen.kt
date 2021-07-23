@@ -32,12 +32,12 @@ fun ShapeScreen(onBackNavigation: () -> Unit) {
     var selectedTabType by remember { mutableStateOf(ShapeTabType.ABSOLUTE_CUT) }
 
     val tabs = listOf(
-        Tab(ShapeTabType.ABSOLUTE_CUT, "Absolute Cut", null),
-        Tab(ShapeTabType.CUT_CORNER, "Cut Corner", null),
-        Tab(ShapeTabType.ROUNDED, "Rounded", null),
-        Tab(ShapeTabType.COMBINATION, "Combination", null),
-        Tab(ShapeTabType.DIAMOND, "Diamond", null),
-        Tab(ShapeTabType.SPECIAL, "Special", null),
+        Tab(ShapeTabType.ABSOLUTE_CUT, "Absolute Cut"),
+        Tab(ShapeTabType.CUT_CORNER, "Cut Corner"),
+        Tab(ShapeTabType.ROUNDED, "Rounded"),
+        Tab(ShapeTabType.COMBINATION, "Combination"),
+        Tab(ShapeTabType.DIAMOND, "Diamond"),
+        Tab(ShapeTabType.SPECIAL, "Special"),
     )
 
     Column {

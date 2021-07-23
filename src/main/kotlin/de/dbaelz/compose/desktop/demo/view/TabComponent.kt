@@ -30,7 +30,7 @@ fun <T> TabRowComponent(
                     { Text(tab.text) }
                 } else null,
                 icon = if (tabStyle.withIcon) {
-                    { Icon(tab.icon ?: Icons.Default.Home, null) }
+                    { Icon(tab.icon, null) }
                 } else null
             )
         }
@@ -39,7 +39,7 @@ fun <T> TabRowComponent(
 data class Tab<T>(
     val type: T,
     val text: String,
-    val icon: ImageVector? = null
+    val icon: ImageVector = Icons.Default.Home
 )
 
 data class TabStyle(val withText: Boolean = true, val withIcon: Boolean = true)
