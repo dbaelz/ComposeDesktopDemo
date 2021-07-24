@@ -14,8 +14,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.*
 import androidx.compose.ui.window.v1.DialogProperties
 
 @ExperimentalComposeUiApi
@@ -44,11 +43,12 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
     MenuColumn(onBackNavigation, buttons)
 
     val dismissDialog = { dialog = DialogType.NONE }
+    val windowDialogState = rememberDialogState(size = WindowSize(640.dp, 480.dp))
     when (dialog) {
         DialogType.NONE -> {
         }
         DialogType.ALERT -> AlertDialog(dismissDialog)
-        DialogType.WINDOW -> DialogWindow(dismissDialog)
+        DialogType.WINDOW -> DialogWindow(windowDialogState, dismissDialog)
         DialogType.POPUP -> Popup()
     }
 }
@@ -79,6 +79,8 @@ private fun DialogButton(text: String, onClick: () -> Unit) {
 
 @Composable
 private fun AlertDialog(onClickAndDismiss: () -> Unit) {
+    // Will flicker when the dialog is shown and hidden due a known issue on Linux
+    // https://github.com/JetBrains/compose-jb/issues/513
     AlertDialog(
         modifier = Modifier.border(width = 2.dp, MaterialTheme.colors.primary),
         properties = DialogProperties(
@@ -111,9 +113,10 @@ private fun AlertDialog(onClickAndDismiss: () -> Unit) {
 
 @ExperimentalComposeUiApi
 @Composable
-private fun DialogWindow(onClickAndDismiss: () -> Unit) {
+private fun DialogWindow(dialogState: DialogState, onClickAndDismiss: () -> Unit) {
     Dialog(
         title = "Dialog Window",
+        state = dialogState,
         onCloseRequest = {
             onClickAndDismiss()
         }
