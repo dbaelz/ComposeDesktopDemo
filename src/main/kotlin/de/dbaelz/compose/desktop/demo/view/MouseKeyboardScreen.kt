@@ -14,23 +14,32 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 
 @ExperimentalFoundationApi
 @Composable
 fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
     var lastClickLabel by remember { mutableStateOf("") }
+    var pointerOffset by remember { mutableStateOf("") }
 
     MenuColumn(
         onBackNavigation, listOf {
-            MouseClick(modifier = Modifier.align(Alignment.CenterHorizontally),
+            MouseClick(
                 onClick = { lastClickLabel = "Click" },
                 onLongClick = { lastClickLabel = "LongClick" },
-                onDoubleClick = { lastClickLabel = "DoubleClick" })
+                onDoubleClick = { lastClickLabel = "DoubleClick" },
+                onPointerChanged = { pointerOffset = it.toString() }
+            )
 
             Spacer(Modifier.height(8.dp))
 
-            Text(text = lastClickLabel, style = MaterialTheme.typography.h3)
+            Text(text = lastClickLabel, style = MaterialTheme.typography.h4)
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(text = pointerOffset, style = MaterialTheme.typography.h5)
         }
     )
 }
@@ -41,7 +50,8 @@ private fun MouseClick(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
-    onDoubleClick: () -> Unit = {}
+    onDoubleClick: () -> Unit = {},
+    onPointerChanged: (Offset) -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -52,7 +62,11 @@ private fun MouseClick(
                 onClick = onClick,
                 onLongClick = onLongClick,
                 onDoubleClick = onDoubleClick
-            ),
+            )
+            .pointerMoveFilter({
+                onPointerChanged(it)
+                false
+            }),
         contentAlignment = Alignment.Center
     ) {
         Text(text = "Click me")
