@@ -2,6 +2,7 @@ package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -23,14 +24,17 @@ import androidx.compose.ui.unit.dp
 fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
     var lastClickLabel by remember { mutableStateOf("") }
     var pointerOffset by remember { mutableStateOf("") }
+    var hasAreaEntered by remember { mutableStateOf(false) }
 
     MenuColumn(
         onBackNavigation, listOf {
-            MouseClick(
+            MouseClickArea(
+                withBorder = hasAreaEntered,
                 onClick = { lastClickLabel = "Click" },
                 onLongClick = { lastClickLabel = "LongClick" },
                 onDoubleClick = { lastClickLabel = "DoubleClick" },
-                onPointerChanged = { pointerOffset = it.toString() }
+                onPointerChanged = { pointerOffset = it.toString() },
+                onPointerEnterExit = { hasAreaEntered = it }
             )
 
             Spacer(Modifier.height(8.dp))
@@ -46,27 +50,46 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
 
 @ExperimentalFoundationApi
 @Composable
-private fun MouseClick(
+private fun MouseClickArea(
     modifier: Modifier = Modifier,
+    withBorder: Boolean = false,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
     onDoubleClick: () -> Unit = {},
-    onPointerChanged: (Offset) -> Unit = {}
+    onPointerChanged: (Offset) -> Unit = {},
+    onPointerEnterExit: (Boolean) -> Unit = {}
 ) {
     Box(
         modifier = modifier
             .size(200.dp)
             .clip(CircleShape)
             .background(MaterialTheme.colors.primary)
+            .then(
+                if (withBorder) Modifier.border(
+                    4.dp,
+                    MaterialTheme.colors.primaryVariant,
+                    CircleShape
+                ) else Modifier
+            )
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,
                 onDoubleClick = onDoubleClick
             )
-            .pointerMoveFilter({
-                onPointerChanged(it)
-                false
-            }),
+            .pointerMoveFilter(
+                onMove = {
+                    onPointerChanged(it)
+                    false
+                },
+                onEnter = {
+                    onPointerEnterExit(true)
+                    false
+                },
+                onExit = {
+                    onPointerEnterExit(false)
+                    false
+                }
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(text = "Click me")
