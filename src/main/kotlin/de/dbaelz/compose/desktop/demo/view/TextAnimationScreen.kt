@@ -1,6 +1,7 @@
 package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
@@ -25,7 +26,7 @@ import kotlin.math.min
 
 @Composable
 fun TextAnimationScreen(onBackNavigation: () -> Unit) {
-    val animations = listOf<@Composable () -> Unit>(
+    val animations = listOf<@Composable ColumnScope.() -> Unit>(
         { TextInOut(DEMO_TEXT) },
         { TextInOut(DEMO_TEXT, withEasing = false) },
         { ReplaceCharactersInText(DEMO_TEXT) },

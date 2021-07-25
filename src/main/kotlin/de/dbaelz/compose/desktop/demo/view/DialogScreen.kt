@@ -22,7 +22,7 @@ import androidx.compose.ui.window.v1.DialogProperties
 fun DialogScreen(onBackNavigation: () -> Unit) {
     var dialog by remember { mutableStateOf(DialogType.NONE) }
 
-    val buttons = listOf<@Composable () -> Unit>(
+    val buttons = listOf<@Composable ColumnScope.() -> Unit>(
         {
             DialogButton("Alert Dialog") {
                 dialog = DialogType.ALERT
