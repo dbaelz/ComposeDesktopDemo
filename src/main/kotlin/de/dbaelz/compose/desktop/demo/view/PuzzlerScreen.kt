@@ -1,9 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -13,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @ExperimentalFoundationApi
 @Composable
@@ -76,21 +74,27 @@ private fun ModifierBorderPuzzler(borderWidth: Dp = 12.dp) {
 @Composable
 private fun ModifierClickPuzzler() {
     ClickableText(Modifier
-        .clickable { println("ModifierClickPuzzler: clickable") }
-        .combinedClickable(onClick = { println("ModifierClickPuzzler: combinedClickable onClick") })
+        .clickable { println("One") }
+        .combinedClickable(onClick = { println("Two") })
     )
 }
 
 @ExperimentalFoundationApi
 @Composable
 private fun ClickableText(modifier: Modifier = Modifier) {
-    Text(text = "Click me!",
-        textAlign = TextAlign.Center,
-        modifier = modifier
-            .width(200.dp)
-            .height(32.dp)
-            .border(4.dp, Color.LightGray)
-            .clickable { println("ClickableText: clickable") }
-            .combinedClickable(onClick = { println("ClickableText: combinedClickable onClick") })
-    )
+    Box(modifier = modifier
+        .size(100.dp)
+        .background(Color.Cyan)
+        .clickable { println("Three") }
+        .combinedClickable(onClick = { println("Four") })
+    ) {
+        Text(text = "Click me!",
+            textAlign = TextAlign.Center,
+            fontSize = 24.sp,
+            modifier = modifier
+                .fillMaxSize()
+                .clickable { println("Five") }
+                .combinedClickable(onClick = { println("Six") })
+        )
+    }
 }
