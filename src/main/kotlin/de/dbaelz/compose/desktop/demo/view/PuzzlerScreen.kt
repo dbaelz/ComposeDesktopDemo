@@ -17,23 +17,18 @@ import androidx.compose.ui.unit.sp
 fun PuzzlerScreen(onBackNavigation: () -> Unit) {
     MenuColumn(
         onBackNavigation, listOf(
-            {
-                Text("ModifierBorderPuzzler", style = MaterialTheme.typography.h3)
-                Spacer(Modifier.height(8.dp))
-                ModifierBorderPuzzler()
-            },
-            {
-                Text("ModifierBorderSimplified", style = MaterialTheme.typography.h3)
-                Spacer(Modifier.height(8.dp))
-                ModifierBorderSimplified()
-            },
-            {
-                Text("ModifierClickPuzzler", style = MaterialTheme.typography.h3)
-                Spacer(Modifier.height(8.dp))
-                ModifierClickPuzzler()
-            },
+            { Puzzler("ModifierBorderPuzzler") { ModifierBorderPuzzler() } },
+            { Puzzler("ModifierBorderSimplified") { ModifierBorderSimplified() } },
+            { Puzzler("ModifierClickPuzzler") { ModifierClickPuzzler() } },
         )
     )
+}
+
+@Composable
+private fun Puzzler(text: String, puzzler: @Composable () -> Unit) {
+    Text(text, style = MaterialTheme.typography.h3)
+    Spacer(Modifier.height(8.dp))
+    puzzler()
 }
 
 @Composable
