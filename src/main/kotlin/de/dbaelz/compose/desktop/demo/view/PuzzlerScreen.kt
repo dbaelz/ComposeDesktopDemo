@@ -2,6 +2,7 @@ package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ fun PuzzlerScreen(onBackNavigation: () -> Unit) {
             { Puzzler("ModifierBorderPuzzler") { ModifierBorderPuzzler() } },
             { Puzzler("ModifierBorderSimplified") { ModifierBorderSimplified() } },
             { Puzzler("ModifierClickPuzzler") { ModifierClickPuzzler() } },
+            { Puzzler("ModifierButtonClickPuzzler") { ModifierButtonClickPuzzler() } },
         )
     )
 }
@@ -91,5 +93,16 @@ private fun ClickableText(modifier: Modifier = Modifier) {
                 .clickable { println("Five") }
                 .combinedClickable(onClick = { println("Six") })
         )
+    }
+}
+
+@Composable
+private fun ModifierButtonClickPuzzler() {
+    Button(onClick = { println("One") },
+        modifier = Modifier
+            .size(100.dp)
+            .background(Color.Cyan)
+            .clickable { println("Two") }) {
+        Text("Click me!")
     }
 }
