@@ -12,11 +12,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import androidx.compose.ui.window.v1.DialogProperties
 
+@ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 @Composable
 fun DialogScreen(onBackNavigation: () -> Unit) {
@@ -77,19 +76,15 @@ private fun DialogButton(text: String, onClick: () -> Unit) {
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun AlertDialog(onClickAndDismiss: () -> Unit) {
-    // TODO: Crashes on new window API. Isn't longer supported?!
-
-    // Will flicker when the dialog is shown and hidden due a known issue on Linux
-    // https://github.com/JetBrains/compose-jb/issues/513
     AlertDialog(
-        modifier = Modifier.border(width = 2.dp, MaterialTheme.colors.primary),
-        properties = DialogProperties(
-            title = "Info",
-            size = IntSize(300, 100),
-            undecorated = true
-        ),
+        modifier = Modifier
+            .width(300.dp)
+            .height(100.dp)
+            .border(width = 2.dp, MaterialTheme.colors.primary),
+        dialogProvider = UndecoratedWindowAlertDialogProvider,
         text = {
             Box(modifier = Modifier.fillMaxSize()) {
                 Text(
