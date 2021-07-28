@@ -4,8 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.desktop.AppManager
-import androidx.compose.desktop.Window
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -17,7 +15,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowSize
+import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 import de.dbaelz.compose.desktop.demo.theme.DesktopDemoTheme
 import de.dbaelz.compose.desktop.demo.view.*
 
@@ -26,42 +28,46 @@ import de.dbaelz.compose.desktop.demo.view.*
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
-fun main() = Window(
-    title = "Compose for Desktop Demo",
-    size = IntSize(1024, 768),
-    resizable = true,
-    undecorated = false
-) {
-    var screenState by remember { mutableStateOf(Screen.MAIN) }
-    var useDarkTheme by remember { mutableStateOf(false) }
-    val navigateToMain = { screenState = Screen.MAIN }
+fun main() = application {
+    Window(
+        onCloseRequest = ::exitApplication,
+        state = rememberWindowState(
+            size = WindowSize(1024.dp, 768.dp)
+        ),
+        title = "Compose for Desktop Demo",
+        resizable = true
+    ) {
+        var screenState by remember { mutableStateOf(Screen.MAIN) }
+        var useDarkTheme by remember { mutableStateOf(false) }
+        val navigateToMain = { screenState = Screen.MAIN }
 
-    DesktopDemoTheme(withDarkTheme = useDarkTheme) {
-        Crossfade(
-            targetState = screenState,
-            animationSpec = tween(
-                durationMillis = 500,
-                easing = LinearOutSlowInEasing
-            )
-        ) { newState ->
-            when (newState) {
-                Screen.MAIN -> MainMenuScreen(createMenu()) { screenState = it }
-                Screen.PLAYGROUND -> PlaygroundScreen(navigateToMain)
-                Screen.DIALOG -> DialogScreen(navigateToMain)
-                Screen.CLOSE_APP -> AppManager.focusedWindow?.close()
-                Screen.ANIMATION -> AnimationScreen(navigateToMain)
-                Screen.CANVAS -> CanvasScreen(navigateToMain)
-                Screen.TIMER -> TimerScreen(navigateToMain)
-                Screen.TEXT_ANIMATION -> TextAnimationScreen(navigateToMain)
-                Screen.SHAPE -> ShapeScreen(navigateToMain)
-                Screen.CUSTOM_LAYOUT -> CustomLayoutScreen(navigateToMain)
-                Screen.TABS -> TabsScreen(navigateToMain)
-                Screen.SCAFFOLD -> ScaffoldScreen(navigateToMain) {
-                    useDarkTheme = !useDarkTheme
+        DesktopDemoTheme(withDarkTheme = useDarkTheme) {
+            Crossfade(
+                targetState = screenState,
+                animationSpec = tween(
+                    durationMillis = 500,
+                    easing = LinearOutSlowInEasing
+                )
+            ) { newState ->
+                when (newState) {
+                    Screen.MAIN -> MainMenuScreen(createMenu()) { screenState = it }
+                    Screen.PLAYGROUND -> PlaygroundScreen(navigateToMain)
+                    Screen.DIALOG -> DialogScreen(navigateToMain)
+                    Screen.CLOSE_APP -> this@application.exitApplication()
+                    Screen.ANIMATION -> AnimationScreen(navigateToMain)
+                    Screen.CANVAS -> CanvasScreen(navigateToMain)
+                    Screen.TIMER -> TimerScreen(navigateToMain)
+                    Screen.TEXT_ANIMATION -> TextAnimationScreen(navigateToMain)
+                    Screen.SHAPE -> ShapeScreen(navigateToMain)
+                    Screen.CUSTOM_LAYOUT -> CustomLayoutScreen(navigateToMain)
+                    Screen.TABS -> TabsScreen(navigateToMain)
+                    Screen.SCAFFOLD -> ScaffoldScreen(navigateToMain) {
+                        useDarkTheme = !useDarkTheme
+                    }
+                    Screen.EXPERIMENTS -> ExperimentScreen(navigateToMain)
+                    Screen.PUZZLER -> PuzzlerScreen(navigateToMain)
+                    Screen.MOUSE_KEYBOARD -> MouseKeyboardScreen(navigateToMain)
                 }
-                Screen.EXPERIMENTS -> ExperimentScreen(navigateToMain)
-                Screen.PUZZLER -> PuzzlerScreen(navigateToMain)
-                Screen.MOUSE_KEYBOARD -> MouseKeyboardScreen(navigateToMain)
             }
         }
     }
@@ -78,7 +84,10 @@ private fun createMenu(): MainMenuModel {
             MainMenuModel.Item.Entry(name = "Dialog", targetScreen = Screen.DIALOG),
             MainMenuModel.Item.Entry(name = "Tabs", targetScreen = Screen.TABS),
             MainMenuModel.Item.Entry(name = "Scaffold", targetScreen = Screen.SCAFFOLD),
-            MainMenuModel.Item.Entry(name = "Mouse & Keyboard", targetScreen = Screen.MOUSE_KEYBOARD),
+            MainMenuModel.Item.Entry(
+                name = "Mouse & Keyboard",
+                targetScreen = Screen.MOUSE_KEYBOARD
+            ),
             MainMenuModel.Item.Separator,
 
             MainMenuModel.Item.Entry(name = "Animation", targetScreen = Screen.ANIMATION),
