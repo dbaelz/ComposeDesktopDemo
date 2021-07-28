@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -16,8 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
+import java.awt.event.MouseEvent
 
 @ExperimentalFoundationApi
 @Composable
@@ -25,6 +28,7 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
     var lastClickLabel by remember { mutableStateOf("") }
     var pointerOffset by remember { mutableStateOf("") }
     var hasAreaEntered by remember { mutableStateOf(false) }
+    var mouseEventLabel by remember { mutableStateOf("") }
 
     MenuColumn(
         onBackNavigation, listOf {
@@ -34,7 +38,8 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
                 onLongClick = { lastClickLabel = "LongClick" },
                 onDoubleClick = { lastClickLabel = "DoubleClick" },
                 onPointerChanged = { pointerOffset = it.toString() },
-                onPointerEnterExit = { hasAreaEntered = it }
+                onPointerEnterExit = { hasAreaEntered = it },
+                onMouseEvent = { mouseEventLabel = it.button.toString() }
             )
 
             Spacer(Modifier.height(8.dp))
@@ -44,6 +49,13 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
             Spacer(Modifier.height(8.dp))
 
             Text(text = pointerOffset, style = MaterialTheme.typography.h5)
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = if (mouseEventLabel.isEmpty()) "" else "Button $mouseEventLabel",
+                style = MaterialTheme.typography.h5
+            )
         }
     )
 }
@@ -57,7 +69,8 @@ private fun MouseClickArea(
     onLongClick: () -> Unit = {},
     onDoubleClick: () -> Unit = {},
     onPointerChanged: (Offset) -> Unit = {},
-    onPointerEnterExit: (Boolean) -> Unit = {}
+    onPointerEnterExit: (Boolean) -> Unit = {},
+    onMouseEvent: (MouseEvent) -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -89,7 +102,15 @@ private fun MouseClickArea(
                     onPointerEnterExit(false)
                     false
                 }
-            ),
+            ).pointerInput(Unit) {
+                forEachGesture {
+                    awaitPointerEventScope {
+                        awaitPointerEvent().mouseEvent?.let {
+                            onMouseEvent(it)
+                        }
+                    }
+                }
+            },
         contentAlignment = Alignment.Center
     ) {
         Text(text = "Click me")

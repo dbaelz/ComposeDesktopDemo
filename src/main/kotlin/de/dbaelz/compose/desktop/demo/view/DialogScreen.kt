@@ -79,6 +79,8 @@ private fun DialogButton(text: String, onClick: () -> Unit) {
 
 @Composable
 private fun AlertDialog(onClickAndDismiss: () -> Unit) {
+    // TODO: Crashes on new window API. Isn't longer supported?!
+
     // Will flicker when the dialog is shown and hidden due a known issue on Linux
     // https://github.com/JetBrains/compose-jb/issues/513
     AlertDialog(
@@ -101,7 +103,7 @@ private fun AlertDialog(onClickAndDismiss: () -> Unit) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Button(
                     modifier = Modifier.align(Alignment.Center),
-                    onClick = onClickAndDismiss
+                    onClick = onClickAndDismiss,
                 ) {
                     Text("OK")
                 }
