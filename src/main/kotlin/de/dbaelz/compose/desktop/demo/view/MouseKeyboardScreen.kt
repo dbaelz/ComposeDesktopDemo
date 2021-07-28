@@ -5,10 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.forEachGesture
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,9 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.mouse.MouseScrollUnit
+import androidx.compose.ui.input.mouse.mouseScrollFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
+import de.dbaelz.compose.desktop.demo.view.ScrollDirection.DOWN
+import de.dbaelz.compose.desktop.demo.view.ScrollDirection.UP
 import java.awt.event.MouseEvent
 
 @ExperimentalFoundationApi
@@ -29,22 +30,20 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
     var pointerOffset by remember { mutableStateOf("") }
     var hasAreaEntered by remember { mutableStateOf(false) }
     var mouseEventLabel by remember { mutableStateOf("") }
+    var mouseScrollLabel by remember { mutableStateOf("") }
 
     MenuColumn(
         onBackNavigation, listOf {
             MouseClickArea(
                 withBorder = hasAreaEntered,
                 onClick = { lastClickLabel = "Click" },
-                onLongClick = { lastClickLabel = "LongClick" },
-                onDoubleClick = { lastClickLabel = "DoubleClick" },
+                onLongClick = { lastClickLabel = "Long Click" },
+                onDoubleClick = { lastClickLabel = "Double Click" },
                 onPointerChanged = { pointerOffset = it.toString() },
                 onPointerEnterExit = { hasAreaEntered = it },
-                onMouseEvent = { mouseEventLabel = it.button.toString() }
+                onMouseEvent = { mouseEventLabel = it.button.toString() },
+                onMouseScrollEvent = { mouseScrollLabel = it.name }
             )
-
-            Spacer(Modifier.height(8.dp))
-
-            Text(text = lastClickLabel, style = MaterialTheme.typography.h4)
 
             Spacer(Modifier.height(8.dp))
 
@@ -52,8 +51,24 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
 
             Spacer(Modifier.height(8.dp))
 
+            Row {
+                Text(
+                    text = lastClickLabel,
+                    style = MaterialTheme.typography.h5
+                )
+
+                Spacer(Modifier.width(8.dp))
+
+                Text(
+                    text = if (mouseEventLabel.isEmpty()) "" else "with button $mouseEventLabel",
+                    style = MaterialTheme.typography.h5
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
             Text(
-                text = if (mouseEventLabel.isEmpty()) "" else "Button $mouseEventLabel",
+                text = if (mouseScrollLabel.isEmpty()) "" else "MouseScroll: $mouseScrollLabel",
                 style = MaterialTheme.typography.h5
             )
         }
@@ -70,9 +85,11 @@ private fun MouseClickArea(
     onDoubleClick: () -> Unit = {},
     onPointerChanged: (Offset) -> Unit = {},
     onPointerEnterExit: (Boolean) -> Unit = {},
-    onMouseEvent: (MouseEvent) -> Unit = {}
+    onMouseEvent: (MouseEvent) -> Unit = {},
+    onMouseScrollEvent: (ScrollDirection) -> Unit = {}
 ) {
     Box(
+        contentAlignment = Alignment.Center,
         modifier = modifier
             .size(200.dp)
             .clip(CircleShape)
@@ -110,9 +127,21 @@ private fun MouseClickArea(
                         }
                     }
                 }
-            },
-        contentAlignment = Alignment.Center
+            }
+            .mouseScrollFilter(
+                onMouseScroll = { event, _ ->
+                    onMouseScrollEvent(
+                        when (val delta = event.delta) {
+                            is MouseScrollUnit.Line -> if (delta.value < 0) UP else DOWN
+                            is MouseScrollUnit.Page -> if (delta.value < 0) UP else DOWN
+                        }
+                    )
+                    false
+                }
+            )
     ) {
         Text(text = "Click me")
     }
 }
+
+private enum class ScrollDirection { UP, DOWN }
