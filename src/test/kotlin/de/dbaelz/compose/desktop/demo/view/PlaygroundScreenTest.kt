@@ -23,7 +23,7 @@ class PlaygroundScreenTest {
             rule.onNodeWithText("Back to menu").assertExists()
             rule.onNodeWithText("Back to menu").assertHasClickAction()
 
-            rule.onNodeWithText("Dummy Text").assertExists()
+            rule.onNodeWithText("Playground").assertExists()
         }
     }
 }
