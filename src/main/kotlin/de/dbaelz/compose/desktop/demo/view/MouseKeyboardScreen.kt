@@ -4,7 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.forEachGesture
+import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
@@ -18,6 +18,8 @@ import androidx.compose.ui.input.mouse.MouseScrollUnit
 import androidx.compose.ui.input.mouse.mouseScrollFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import de.dbaelz.compose.desktop.demo.view.ScrollDirection.DOWN
 import de.dbaelz.compose.desktop.demo.view.ScrollDirection.UP
@@ -31,6 +33,8 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
     var hasAreaEntered by remember { mutableStateOf(false) }
     var mouseEventLabel by remember { mutableStateOf("") }
     var mouseScrollLabel by remember { mutableStateOf("") }
+
+    var dragOffsetX by remember { mutableStateOf(0) }
 
     MenuColumn(
         onBackNavigation, listOf {
@@ -71,6 +75,12 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
                 text = if (mouseScrollLabel.isEmpty()) "" else "MouseScroll: $mouseScrollLabel",
                 style = MaterialTheme.typography.h5
             )
+
+            Spacer(Modifier.height(32.dp))
+
+            DraggableTextBox(dragOffsetX, rememberDraggableState { delta ->
+                dragOffsetX += delta.toInt()
+            })
         }
     )
 }
@@ -141,6 +151,28 @@ private fun MouseClickArea(
             )
     ) {
         Text(text = "Click me")
+    }
+}
+
+@Composable
+private fun DraggableTextBox(offsetX: Int = 0, state: DraggableState) {
+    Box(modifier = Modifier
+        .padding(8.dp)
+        .width(200.dp)
+        .height(50.dp)
+        .offset { IntOffset(offsetX, 0) }
+        .border(4.dp, MaterialTheme.colors.primary)
+        .draggable(
+            orientation = Orientation.Horizontal,
+            state = state
+        ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Drag me away!",
+            textAlign = TextAlign.Center,
+
+            )
     }
 }
 
