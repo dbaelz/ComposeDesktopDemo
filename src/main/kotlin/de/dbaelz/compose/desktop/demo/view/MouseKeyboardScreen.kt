@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.mouse.MouseScrollUnit
 import androidx.compose.ui.input.mouse.mouseScrollFilter
+import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.style.TextAlign
@@ -35,7 +36,10 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
     var mouseEventLabel by remember { mutableStateOf("") }
     var mouseScrollLabel by remember { mutableStateOf("") }
 
+    var horizontalDragOffsetX by remember { mutableStateOf(0) }
+
     var dragOffsetX by remember { mutableStateOf(0) }
+    var dragOffsetY by remember { mutableStateOf(0) }
 
     MenuColumn(
         onBackNavigation, listOf {
@@ -82,9 +86,23 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
             Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
 
             HorizontalDraggable(
-                DragData(dragOffsetX, rememberDraggableState { delta ->
-                    dragOffsetX += delta.toInt()
+                DragData(horizontalDragOffsetX, rememberDraggableState { delta ->
+                    horizontalDragOffsetX += delta.toInt()
                 })
+            )
+
+            Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
+
+            Draggable(dragOffsetX, dragOffsetY) { x, y ->
+                dragOffsetX += x
+                dragOffsetY += y
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            Text(
+                text = "Drag Offset: ($dragOffsetX, $dragOffsetY)",
+                style = MaterialTheme.typography.h5
             )
         }
     )
@@ -176,8 +194,30 @@ private fun HorizontalDraggable(dragData: DragData) {
         Text(
             text = "Drag me horizontal!",
             textAlign = TextAlign.Center,
+        )
+    }
+}
 
-            )
+@Composable
+private fun Draggable(offsetX: Int = 0, offsetY: Int = 0, onDragged: (Int, Int) -> Unit) {
+    Box(modifier = Modifier
+        .padding(8.dp)
+        .width(200.dp)
+        .height(50.dp)
+        .offset { IntOffset(offsetX, offsetY) }
+        .border(4.dp, MaterialTheme.colors.primary)
+        .pointerInput(Unit) {
+            detectDragGestures { change, dragAmount ->
+                change.consumeAllChanges()
+                onDragged(dragAmount.x.toInt(), dragAmount.y.toInt())
+            }
+        },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Drag me anywhere!",
+            textAlign = TextAlign.Center
+        )
     }
 }
 
