@@ -7,6 +7,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -76,11 +77,15 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
                 style = MaterialTheme.typography.h5
             )
 
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(4.dp))
 
-            DraggableTextBox(dragOffsetX, rememberDraggableState { delta ->
-                dragOffsetX += delta.toInt()
-            })
+            Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
+
+            HorizontalDraggable(
+                DragData(dragOffsetX, rememberDraggableState { delta ->
+                    dragOffsetX += delta.toInt()
+                })
+            )
         }
     )
 }
@@ -155,25 +160,27 @@ private fun MouseClickArea(
 }
 
 @Composable
-private fun DraggableTextBox(offsetX: Int = 0, state: DraggableState) {
+private fun HorizontalDraggable(dragData: DragData) {
     Box(modifier = Modifier
         .padding(8.dp)
         .width(200.dp)
         .height(50.dp)
-        .offset { IntOffset(offsetX, 0) }
+        .offset { IntOffset(dragData.offset, 0) }
         .border(4.dp, MaterialTheme.colors.primary)
         .draggable(
             orientation = Orientation.Horizontal,
-            state = state
+            state = dragData.state
         ),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Drag me away!",
+            text = "Drag me horizontal!",
             textAlign = TextAlign.Center,
 
             )
     }
 }
+
+private data class DragData(val offset: Int, val state: DraggableState)
 
 private enum class ScrollDirection { UP, DOWN }
