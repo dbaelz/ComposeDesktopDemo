@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.mouse.MouseScrollUnit
 import androidx.compose.ui.input.mouse.mouseScrollFilter
 import androidx.compose.ui.input.pointer.consumeAllChanges
@@ -40,6 +41,7 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
 
     var dragOffsetX by remember { mutableStateOf(0) }
     var dragOffsetY by remember { mutableStateOf(0) }
+    var isDragged by remember { mutableStateOf(false) }
 
     MenuColumn(
         onBackNavigation, listOf {
@@ -93,16 +95,25 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
 
             Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
 
-            Draggable(dragOffsetX, dragOffsetY) { x, y ->
-                dragOffsetX += x
-                dragOffsetY += y
-            }
-
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(8.dp))
 
             Text(
                 text = "Drag Offset: ($dragOffsetX, $dragOffsetY)",
                 style = MaterialTheme.typography.h5
+            )
+
+            Spacer(Modifier.height(4.dp))
+
+            Draggable(
+                offsetX = dragOffsetX,
+                offsetY = dragOffsetY,
+                borderColor = if (isDragged) MaterialTheme.colors.secondary else MaterialTheme.colors.primary,
+                onDragStart = { isDragged = true },
+                onDragEnd = { isDragged = false },
+                onDrag = { x, y ->
+                    dragOffsetX += x
+                    dragOffsetY += y
+                }
             )
         }
     )
@@ -199,25 +210,32 @@ private fun HorizontalDraggable(dragData: DragData) {
 }
 
 @Composable
-private fun Draggable(offsetX: Int = 0, offsetY: Int = 0, onDragged: (Int, Int) -> Unit) {
+private fun Draggable(
+    offsetX: Int = 0,
+    offsetY: Int = 0,
+    borderColor: Color = MaterialTheme.colors.primary,
+    onDragStart: () -> Unit = {},
+    onDragEnd: () -> Unit = {},
+    onDrag: (Int, Int) -> Unit
+) {
     Box(modifier = Modifier
         .padding(8.dp)
         .width(200.dp)
         .height(50.dp)
         .offset { IntOffset(offsetX, offsetY) }
-        .border(4.dp, MaterialTheme.colors.primary)
+        .border(4.dp, borderColor)
         .pointerInput(Unit) {
-            detectDragGestures { change, dragAmount ->
-                change.consumeAllChanges()
-                onDragged(dragAmount.x.toInt(), dragAmount.y.toInt())
-            }
+            detectDragGestures(
+                onDragStart = { onDragStart() },
+                onDragEnd = onDragEnd,
+                onDrag = { change, dragAmount ->
+                    change.consumeAllChanges()
+                    onDrag(dragAmount.x.toInt(), dragAmount.y.toInt())
+                })
         },
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "Drag me anywhere!",
-            textAlign = TextAlign.Center
-        )
+        Text(text = "Drag me anywhere!")
     }
 }
 
