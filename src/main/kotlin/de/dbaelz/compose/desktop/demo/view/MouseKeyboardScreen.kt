@@ -7,6 +7,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -16,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.mouse.MouseScrollUnit
 import androidx.compose.ui.input.mouse.mouseScrollFilter
 import androidx.compose.ui.input.pointer.consumeAllChanges
@@ -108,6 +111,7 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
                 offsetX = dragOffsetX,
                 offsetY = dragOffsetY,
                 borderColor = if (isDragged) MaterialTheme.colors.secondary else MaterialTheme.colors.primary,
+                borderShape = if (isDragged) RoundedCornerShape(16.dp) else RectangleShape,
                 onDragStart = { isDragged = true },
                 onDragEnd = { isDragged = false },
                 onDrag = { x, y ->
@@ -214,6 +218,7 @@ private fun Draggable(
     offsetX: Int = 0,
     offsetY: Int = 0,
     borderColor: Color = MaterialTheme.colors.primary,
+    borderShape: Shape = RectangleShape,
     onDragStart: () -> Unit = {},
     onDragEnd: () -> Unit = {},
     onDrag: (Int, Int) -> Unit
@@ -223,7 +228,7 @@ private fun Draggable(
         .width(200.dp)
         .height(50.dp)
         .offset { IntOffset(offsetX, offsetY) }
-        .border(4.dp, borderColor)
+        .border(4.dp, borderColor, borderShape)
         .pointerInput(Unit) {
             detectDragGestures(
                 onDragStart = { onDragStart() },
