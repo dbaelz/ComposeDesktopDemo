@@ -41,6 +41,7 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
     var mouseScrollLabel by remember { mutableStateOf("") }
 
     var horizontalDragOffsetX by remember { mutableStateOf(0) }
+    var horizontalIsDragged by remember { mutableStateOf(false) }
 
     var dragOffsetX by remember { mutableStateOf(0) }
     var dragOffsetY by remember { mutableStateOf(0) }
@@ -91,9 +92,13 @@ fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
             Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
 
             HorizontalDraggable(
-                DragData(horizontalDragOffsetX, rememberDraggableState { delta ->
+                dragData = DragData(horizontalDragOffsetX, rememberDraggableState { delta ->
                     horizontalDragOffsetX += delta.toInt()
-                })
+                }),
+                borderColor = if (horizontalIsDragged) MaterialTheme.colors.secondary else MaterialTheme.colors.primary,
+                borderShape = if (horizontalIsDragged) RoundedCornerShape(16.dp) else RectangleShape,
+                onDragStart = { horizontalIsDragged = true },
+                onDragEnd = { horizontalIsDragged = false },
             )
 
             Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
@@ -188,21 +193,29 @@ private fun MouseClickArea(
                 }
             )
     ) {
-        Text(text = "Click me")
+        Text(text = "Click and Scroll")
     }
 }
 
 @Composable
-private fun HorizontalDraggable(dragData: DragData) {
+private fun HorizontalDraggable(
+    dragData: DragData,
+    borderColor: Color = MaterialTheme.colors.primary,
+    borderShape: Shape = RectangleShape,
+    onDragStart: () -> Unit = {},
+    onDragEnd: () -> Unit = {}
+) {
     Box(modifier = Modifier
         .padding(8.dp)
         .width(200.dp)
         .height(50.dp)
         .offset { IntOffset(dragData.offset, 0) }
-        .border(4.dp, MaterialTheme.colors.primary)
+        .border(4.dp, borderColor, borderShape)
         .draggable(
             orientation = Orientation.Horizontal,
-            state = dragData.state
+            state = dragData.state,
+            onDragStarted = { onDragStart() },
+            onDragStopped = { onDragEnd() },
         ),
         contentAlignment = Alignment.Center
     ) {
