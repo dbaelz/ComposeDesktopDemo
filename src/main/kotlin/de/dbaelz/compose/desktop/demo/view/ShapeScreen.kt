@@ -1,22 +1,27 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -170,10 +175,23 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
         finishedListener = { kotlinShapeClickable = true }
     )
 
+    var isClicked by remember { mutableStateOf(false) }
+
     MenuColumn(
         onBackNavigation, listOf(
             {
                 TearDrop(text = tearDropText.toString(), onClicked = { tearDropText++ })
+            },
+            {
+                AnimatedIcon(
+                    icon = Icons.Outlined.FavoriteBorder,
+                    modifier = Modifier.size(54.dp),
+                    state = AnimatedIconState(
+                        if (isClicked) 1.5f else 1f,
+                        if (isClicked) MaterialTheme.colors.primary else Color.LightGray
+                    ),
+                    onClick = { isClicked = !isClicked }
+                )
             },
             { Heart() },
             {
@@ -512,6 +530,32 @@ private fun ShapeShiftingButton(
         }
     }
 }
+
+@Composable
+private fun AnimatedIcon(
+    icon: ImageVector = Icons.Outlined.Home,
+    modifier: Modifier = Modifier,
+    state: AnimatedIconState,
+    onClick: () -> Unit = {}
+) {
+    val animatedScale: Float by animateFloatAsState(targetValue = state.scale)
+    val animatedColor by animateColorAsState(targetValue = state.color)
+
+    Icon(
+        imageVector = icon,
+        contentDescription = "animated ${icon.name} icon that changes its size and color on click",
+        tint = animatedColor,
+        modifier = modifier
+            .scale(animatedScale)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { onClick() }
+            )
+    )
+}
+
+private data class AnimatedIconState(val scale: Float, val color: Color)
 
 private data class ShapeState(val text: String, val itemColor: Color, val textColor: Color)
 
