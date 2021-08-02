@@ -10,8 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.imageFromResource
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.loadImageBitmap
+import androidx.compose.ui.res.useResource
 import androidx.compose.ui.unit.dp
 import de.dbaelz.compose.desktop.demo.Screen
 
@@ -32,7 +33,7 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Scre
 
     Box {
         Image(
-            bitmap = imageFromResource("images/compose-logo.png"),
+            bitmap = useResource("images/compose-logo.png") { loadImageBitmap(it) },
             contentDescription = "Compose for Desktop logo",
             modifier = Modifier
                 .align(Alignment.Center)
