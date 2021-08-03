@@ -34,6 +34,8 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
     )
 
     Column {
+        ScreenTopBar("Shape", onBackNavigation)
+
         TabRowComponent(tabs, selectedTabIndex, tabStyle) { index, type ->
             selectedTabIndex = index
             selectedTabType = type
@@ -57,7 +59,7 @@ fun TabsScreen(onBackNavigation: () -> Unit) {
             )
             Type.SCROLLABLE_TABS -> {
                 val scrollableTabs = mutableListOf<String>()
-                (0..10).forEach {
+                (0..15).forEach {
                     scrollableTabs.add("Tab $it")
                 }
 

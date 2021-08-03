@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun KeyboardScreen(onBackNavigation: () -> Unit) {
-    MenuColumn(
-        onBackNavigation, listOf {
+    Screen(
+        { ScreenTopBar("Keyboard Input and Focus", onBackNavigation) },
+        listOf {
 
         }
     )

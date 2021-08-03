@@ -27,88 +27,90 @@ import kotlin.math.sin
 
 @Composable
 fun TimerScreen(onBackNavigation: () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        BackButton(
-            onBackNavigation,
-            backgroundColor = MaterialTheme.colors.secondary
-        )
+    val timerState = remember { TimerState(10_000) }
+    val timer2State = remember { TimerState(7500) }
 
-        Spacer(Modifier.height(64.dp))
+    Screen(
+        { ScreenTopBar("Timer", onBackNavigation) },
 
-        val timerState = remember { TimerState(10_000) }
-        Timer(
-            modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally),
-            style = TimerStyle(
-                colorActive = MaterialTheme.colors.secondary,
-                colorInactive = MaterialTheme.colors.onSecondary,
-                arcWithKnob = false
-            ),
-            state = timerState,
-            button = {
-                TimerButton(
-                    timeLeftText = timerState.periodLeft.toString(),
-                    buttonText = when {
-                        timerState.periodLeft <= 0 -> "Restart"
-                        timerState.timerActive -> "Pause"
-                        timerState.periodLeft != timerState.timerDuration -> "Resume"
-                        else -> "Start"
-                    },
-                    onButtonClicked = {
-                        if (timerState.periodLeft <= 0) {
-                            timerState.periodLeft = timerState.timerDuration
-                            timerState.timerActive = true
-                        } else {
-                            timerState.timerActive = !timerState.timerActive
-                        }
+        listOf(
+            {
+                Timer(
+                    modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally),
+                    style = TimerStyle(
+                        colorActive = MaterialTheme.colors.secondary,
+                        colorInactive = MaterialTheme.colors.onSecondary,
+                        arcWithKnob = false
+                    ),
+                    state = timerState,
+                    button = {
+                        TimerButton(
+                            timeLeftText = timerState.periodLeft.toString(),
+                            buttonText = when {
+                                timerState.periodLeft <= 0 -> "Restart"
+                                timerState.timerActive -> "Pause"
+                                timerState.periodLeft != timerState.timerDuration -> "Resume"
+                                else -> "Start"
+                            },
+                            onButtonClicked = {
+                                if (timerState.periodLeft <= 0) {
+                                    timerState.periodLeft = timerState.timerDuration
+                                    timerState.timerActive = true
+                                } else {
+                                    timerState.timerActive = !timerState.timerActive
+                                }
+                            }
+                        )
                     }
+                )
+            },
+            {
+                val timerModifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally)
+                Timer(
+                    modifier = timerModifier,
+                    style = TimerStyle(
+                        colorActive = MaterialTheme.colors.primary,
+                        colorInactive = MaterialTheme.colors.onPrimary,
+                        arcWithKnob = true,
+                        arcWithBorder = false
+                    ),
+                    state = timer2State,
+                    button = {
+                        TimerButton(
+                            textColor = MaterialTheme.colors.primary,
+                            backgroundColor = MaterialTheme.colors.onPrimary,
+                            timeLeftText = timer2State.periodLeft.toString(),
+                            buttonText = when {
+                                timer2State.periodLeft <= 0 -> "Reset"
+                                timer2State.timerActive -> "Pause"
+                                timer2State.periodLeft != timer2State.timerDuration -> "Resume"
+                                else -> "Go..."
+                            },
+                            onButtonClicked = {
+                                if (timer2State.periodLeft <= 0) {
+                                    timer2State.periodLeft = timer2State.timerDuration
+                                    timer2State.timerActive = true
+                                } else {
+                                    timer2State.timerActive = !timer2State.timerActive
+                                }
+                            }
+                        )
+                    },
+                    bar = {
+                        BarTimer(
+                            modifier = Modifier,
+                            colorActive = MaterialTheme.colors.primary,
+                            colorInactive = MaterialTheme.colors.onPrimary,
+                            fillPercentage = max(
+                                timer2State.periodLeft / timer2State.timerDuration.toFloat(),
+                                0f
+                            )
+                        )
+                    },
                 )
             }
         )
-
-        Spacer(Modifier.height(64.dp))
-
-        val timer2State = remember { TimerState(7500) }
-        val timerModifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally)
-        Timer(
-            modifier = timerModifier,
-            style = TimerStyle(
-                colorActive = MaterialTheme.colors.primary,
-                colorInactive = MaterialTheme.colors.onPrimary,
-                arcWithKnob = true,
-                arcWithBorder = false
-            ),
-            state = timer2State,
-            button = {
-                TimerButton(
-                    textColor = MaterialTheme.colors.primary,
-                    backgroundColor = MaterialTheme.colors.onPrimary,
-                    timeLeftText = timer2State.periodLeft.toString(),
-                    buttonText = when {
-                        timer2State.periodLeft <= 0 -> "Reset"
-                        timer2State.timerActive -> "Pause"
-                        timer2State.periodLeft != timer2State.timerDuration -> "Resume"
-                        else -> "Go..."
-                    },
-                    onButtonClicked = {
-                        if (timer2State.periodLeft <= 0) {
-                            timer2State.periodLeft = timer2State.timerDuration
-                            timer2State.timerActive = true
-                        } else {
-                            timer2State.timerActive = !timer2State.timerActive
-                        }
-                    }
-                )
-            },
-            bar = {
-                BarTimer(
-                    modifier = Modifier,
-                    colorActive = MaterialTheme.colors.primary,
-                    colorInactive = MaterialTheme.colors.onPrimary,
-                    fillPercentage = max(timer2State.periodLeft / timer2State.timerDuration.toFloat(), 0f)
-                )
-            },
-        )
-    }
+    )
 }
 
 @Composable

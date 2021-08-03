@@ -46,6 +46,8 @@ fun ShapeScreen(onBackNavigation: () -> Unit) {
     )
 
     Column {
+        ScreenTopBar("Shapes", onBackNavigation)
+
         TabRowComponent(
             tabs = tabs,
             selectedTabIndex = selectedTabIndex,
@@ -57,20 +59,20 @@ fun ShapeScreen(onBackNavigation: () -> Unit) {
         )
 
         when (selectedTabType) {
-            ShapeTabType.ABSOLUTE_CUT -> AbsoluteCutTab(onBackNavigation)
-            ShapeTabType.CUT_CORNER -> CutCornerTab(onBackNavigation)
-            ShapeTabType.ROUNDED -> RoundedCornerTab(onBackNavigation)
-            ShapeTabType.COMBINATION -> CombinationTab(onBackNavigation)
-            ShapeTabType.DIAMOND -> DiamondTab(onBackNavigation)
-            ShapeTabType.SPECIAL -> SpecialTab(onBackNavigation)
+            ShapeTabType.ABSOLUTE_CUT -> AbsoluteCutTab()
+            ShapeTabType.CUT_CORNER -> CutCornerTab()
+            ShapeTabType.ROUNDED -> RoundedCornerTab()
+            ShapeTabType.COMBINATION -> CombinationTab()
+            ShapeTabType.DIAMOND -> DiamondTab()
+            ShapeTabType.SPECIAL -> SpecialTab()
         }
     }
 }
 
 @Composable
-private fun AbsoluteCutTab(onBackNavigation: () -> Unit) {
-    MenuColumn(
-        onBackNavigation, listOf(
+private fun AbsoluteCutTab() {
+    ScreenItemsColumn(
+        listOf(
             { TextComponent(shape = AbsoluteCutCornerShape(8.dp)) },
             {
                 TextComponent(
@@ -87,9 +89,9 @@ private fun AbsoluteCutTab(onBackNavigation: () -> Unit) {
 }
 
 @Composable
-private fun CutCornerTab(onBackNavigation: () -> Unit) {
-    MenuColumn(
-        onBackNavigation, listOf(
+private fun CutCornerTab() {
+    ScreenItemsColumn(
+        listOf(
             { TextComponent(shape = CutCornerShape(8.dp)) },
             { TextComponent(shape = CutCornerShape(topStart = 20.dp, topEnd = 20.dp)) },
             { TextComponent(shape = CutCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)) },
@@ -109,9 +111,9 @@ private fun CutCornerTab(onBackNavigation: () -> Unit) {
 }
 
 @Composable
-private fun RoundedCornerTab(onBackNavigation: () -> Unit) {
-    MenuColumn(
-        onBackNavigation, listOf(
+private fun RoundedCornerTab() {
+    ScreenItemsColumn(
+        listOf(
             { TextComponent(shape = AbsoluteRoundedCornerShape(8.dp)) },
             { TextComponent(shape = RoundedCornerShape(8.dp)) },
             { TextComponent(shape = RoundedCornerShape(percent = 50)) },
@@ -120,9 +122,9 @@ private fun RoundedCornerTab(onBackNavigation: () -> Unit) {
 }
 
 @Composable
-private fun CombinationTab(onBackNavigation: () -> Unit) {
-    MenuColumn(
-        onBackNavigation, listOf(
+private fun CombinationTab() {
+    ScreenItemsColumn(
+        listOf(
             { TextComponent(shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)) },
 
             {
@@ -146,9 +148,9 @@ private fun CombinationTab(onBackNavigation: () -> Unit) {
 }
 
 @Composable
-private fun DiamondTab(onBackNavigation: () -> Unit) {
-    MenuColumn(
-        onBackNavigation, listOf(
+private fun DiamondTab() {
+    ScreenItemsColumn(
+        listOf(
             { Diamond() },
             { Diamond(20f) },
             { Diamond(-20f) },
@@ -158,7 +160,7 @@ private fun DiamondTab(onBackNavigation: () -> Unit) {
 }
 
 @Composable
-private fun SpecialTab(onBackNavigation: () -> Unit) {
+private fun SpecialTab() {
     val heartUnselectedState =
         ShapeState("", MaterialTheme.colors.primary, MaterialTheme.colors.onPrimary)
     val heartSelectedState = ShapeState("+1", Color.Red, Color.White)
@@ -177,8 +179,8 @@ private fun SpecialTab(onBackNavigation: () -> Unit) {
 
     var isClicked by remember { mutableStateOf(false) }
 
-    MenuColumn(
-        onBackNavigation, listOf(
+    ScreenItemsColumn(
+        listOf(
             {
                 TearDrop(text = tearDropText.toString(), onClicked = { tearDropText++ })
             },

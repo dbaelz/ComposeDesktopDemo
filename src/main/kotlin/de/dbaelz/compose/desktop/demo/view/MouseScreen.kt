@@ -47,8 +47,9 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
     var dragOffsetY by remember { mutableStateOf(0) }
     var isDragged by remember { mutableStateOf(false) }
 
-    MenuColumn(
-        onBackNavigation, listOf {
+    Screen(
+        { ScreenTopBar("Mouse Input", onBackNavigation) },
+        listOf {
             MouseClickArea(
                 withBorder = hasAreaEntered,
                 onClick = { lastClickLabel = "Click" },

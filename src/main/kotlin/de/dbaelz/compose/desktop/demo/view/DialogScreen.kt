@@ -39,7 +39,10 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
         },
     )
 
-    MenuColumn(onBackNavigation, buttons)
+    Screen(
+        { ScreenTopBar("Dialogs", onBackNavigation) },
+        buttons
+    )
 
     val dismissDialog = { dialog = DialogType.NONE }
     val windowDialogState = rememberDialogState(size = WindowSize(640.dp, 480.dp))

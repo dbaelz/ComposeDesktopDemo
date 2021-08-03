@@ -43,8 +43,8 @@ fun CanvasScreen(onBackNavigation: () -> Unit) {
         )
     )
 
-    MenuColumn(
-        onBackNavigation,
+    Screen(
+        { ScreenTopBar("Canvas Examples with Animation", onBackNavigation) },
         listOf {
             PulsingCircle(
                 modifier = Modifier.size(600.dp),

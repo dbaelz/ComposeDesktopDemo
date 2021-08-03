@@ -17,7 +17,9 @@ import kotlin.random.Random
 
 @Composable
 fun CustomLayoutScreen(onBackNavigation: () -> Unit) {
-    MenuColumn(onBackNavigation, listOf(
+    Screen(
+        { ScreenTopBar("Custom Layouts", onBackNavigation) },
+        listOf(
         { RowWithChildsWidthIsWidestTextWidth() },
         { TextWithCustomModifier() },
         { TextCustomLayoutExample("Hello there!") }

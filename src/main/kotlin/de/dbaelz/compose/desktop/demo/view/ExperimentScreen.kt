@@ -13,10 +13,13 @@ import de.dbaelz.compose.desktop.demo.experiment.ExperimentNotification
  */
 @Composable
 fun ExperimentScreen(onBackNavigation: () -> Unit) {
-    MenuColumn(onBackNavigation, listOf {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Notifications", style = MaterialTheme.typography.h4)
-            ExperimentNotification() }
+    Screen(
+        { ScreenTopBar("Experiments", onBackNavigation) },
+        listOf {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("Notifications", style = MaterialTheme.typography.h4)
+                ExperimentNotification()
+            }
         }
     )
 }

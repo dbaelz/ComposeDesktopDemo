@@ -49,30 +49,34 @@ fun AnimationScreen(onBackNavigation: () -> Unit) {
         onBackNavigation()
     }
 
-    AnimationContent(
-        backgroundColor = backgroundColor,
-        backButtonOffset = backButtonOffset,
-        animationBoxColor = boxColor,
-        animationBoxHeight = boxHeight,
-        isAnimationBoxVisible = boxVisible,
-        isAnimationBoxExpanded = boxState != BoxState.NORMAL,
-        isEnabled = !backButtonClicked,
-        onBackgroundToggleClicked = {
-            backgroundColorToggle = !backgroundColorToggle
-        },
-        onAnimateBoxClicked = {
-            boxState = when (boxState) {
-                BoxState.NORMAL -> BoxState.LARGE
-                BoxState.LARGE -> BoxState.NORMAL
+    Column(modifier = Modifier.fillMaxSize()) {
+        ScreenTopBar("Animation", onBackNavigation)
+
+        AnimationContent(
+            backgroundColor = backgroundColor,
+            backButtonOffset = backButtonOffset,
+            animationBoxColor = boxColor,
+            animationBoxHeight = boxHeight,
+            isAnimationBoxVisible = boxVisible,
+            isAnimationBoxExpanded = boxState != BoxState.NORMAL,
+            isEnabled = !backButtonClicked,
+            onBackgroundToggleClicked = {
+                backgroundColorToggle = !backgroundColorToggle
+            },
+            onAnimateBoxClicked = {
+                boxState = when (boxState) {
+                    BoxState.NORMAL -> BoxState.LARGE
+                    BoxState.LARGE -> BoxState.NORMAL
+                }
+            },
+            onBoxVisibilityClicked = {
+                boxVisible = !boxVisible
+            },
+            onBackButtonClicked = {
+                backButtonClicked = true
             }
-        },
-        onBoxVisibilityClicked = {
-            boxVisible = !boxVisible
-        },
-        onBackButtonClicked = {
-            backButtonClicked = true
-        }
-    )
+        )
+    }
 }
 
 @ExperimentalAnimationApi
@@ -105,7 +109,7 @@ private fun AnimationContent(
                 .align(Alignment.CenterHorizontally)
                 .offset(y = backButtonOffset)
         ) {
-            Text("Back to menu")
+            Text("Animated Back to Menu")
         }
 
         Spacer(modifier = Modifier.height(32.dp))

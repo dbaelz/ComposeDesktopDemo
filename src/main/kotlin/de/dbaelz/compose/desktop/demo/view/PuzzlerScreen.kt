@@ -16,8 +16,9 @@ import androidx.compose.ui.unit.sp
 @ExperimentalFoundationApi
 @Composable
 fun PuzzlerScreen(onBackNavigation: () -> Unit) {
-    MenuColumn(
-        onBackNavigation, listOf(
+    Screen(
+        { ScreenTopBar("Puzzler", onBackNavigation) },
+        listOf(
             { Puzzler("ModifierBorderPuzzler") { ModifierBorderPuzzler() } },
             { Puzzler("ModifierBorderSimplified") { ModifierBorderSimplified() } },
             { Puzzler("ModifierClickPuzzler") { ModifierClickPuzzler() } },

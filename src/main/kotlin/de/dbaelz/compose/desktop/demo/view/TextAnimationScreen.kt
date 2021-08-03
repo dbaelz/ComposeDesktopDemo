@@ -61,7 +61,10 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
         { CustomTypographyExample("Typography Demo", TourneyTypography) }
     )
 
-    MenuColumn(onBackNavigation, animations)
+    Screen(
+        { ScreenTopBar("Text Animation", onBackNavigation) },
+        animations
+    )
 }
 
 @Composable

@@ -6,8 +6,9 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun PlaygroundScreen(onBackNavigation: () -> Unit) {
-    MenuColumn(
-        onBackNavigation, listOf(
+    Screen(
+        { ScreenTopBar("Playground", onBackNavigation) },
+        listOf(
             {
                 Text("Playground", style = MaterialTheme.typography.h1)
             },
