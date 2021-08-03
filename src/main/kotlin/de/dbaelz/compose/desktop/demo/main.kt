@@ -67,6 +67,7 @@ fun main() = application {
                     Screen.EXPERIMENTS -> ExperimentScreen(navigateToMain)
                     Screen.PUZZLER -> PuzzlerScreen(navigateToMain)
                     Screen.MOUSE -> MouseScreen(navigateToMain)
+                    Screen.KEYBOARD -> KeyboardScreen(navigateToMain)
                 }
             }
         }
@@ -87,6 +88,10 @@ private fun createMenu(): MainMenuModel {
             MainMenuModel.Item.Entry(
                 name = "Mouse",
                 targetScreen = Screen.MOUSE
+            ),
+            MainMenuModel.Item.Entry(
+                name = "Keyboard",
+                targetScreen = Screen.KEYBOARD
             ),
             MainMenuModel.Item.Separator,
 
@@ -133,4 +138,5 @@ enum class Screen {
     EXPERIMENTS,
     PUZZLER,
     MOUSE,
+    KEYBOARD,
 }
