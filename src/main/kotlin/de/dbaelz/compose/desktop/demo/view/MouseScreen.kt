@@ -33,7 +33,7 @@ import java.awt.event.MouseEvent
 
 @ExperimentalFoundationApi
 @Composable
-fun MouseKeyboardScreen(onBackNavigation: () -> Unit) {
+fun MouseScreen(onBackNavigation: () -> Unit) {
     var lastClickLabel by remember { mutableStateOf("") }
     var pointerOffset by remember { mutableStateOf("") }
     var hasAreaEntered by remember { mutableStateOf(false) }

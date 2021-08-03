@@ -8,7 +8,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.getValue
@@ -67,7 +66,7 @@ fun main() = application {
                     }
                     Screen.EXPERIMENTS -> ExperimentScreen(navigateToMain)
                     Screen.PUZZLER -> PuzzlerScreen(navigateToMain)
-                    Screen.MOUSE_KEYBOARD -> MouseKeyboardScreen(navigateToMain)
+                    Screen.MOUSE -> MouseScreen(navigateToMain)
                 }
             }
         }
@@ -86,8 +85,8 @@ private fun createMenu(): MainMenuModel {
             MainMenuModel.Item.Entry(name = "Tabs", targetScreen = Screen.TABS),
             MainMenuModel.Item.Entry(name = "Scaffold", targetScreen = Screen.SCAFFOLD),
             MainMenuModel.Item.Entry(
-                name = "Mouse & Keyboard",
-                targetScreen = Screen.MOUSE_KEYBOARD
+                name = "Mouse",
+                targetScreen = Screen.MOUSE
             ),
             MainMenuModel.Item.Separator,
 
@@ -133,5 +132,5 @@ enum class Screen {
     SCAFFOLD,
     EXPERIMENTS,
     PUZZLER,
-    MOUSE_KEYBOARD,
+    MOUSE,
 }
