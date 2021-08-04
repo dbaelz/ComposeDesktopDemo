@@ -6,7 +6,6 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Refresh
@@ -40,12 +39,17 @@ fun main() = application {
         title = "Compose for Desktop Demo",
         resizable = true,
         onKeyEvent = {
-            // Theme change on "CTRL + ALT + D". Only on KeyUp (== key released), not when pressed.
-            if (it.type == KeyEventType.KeyUp && it.isCtrlPressed && it.isAltPressed && it.key == Key.D) {
-                useDarkMode = !useDarkMode
-                true
-            } else {
-                false
+            when {
+                it.isCtrlPressed && it.isAltPressed && it.key == Key.D -> {
+                    // Theme change on "CTRL + ALT + D". Only on KeyUp (== key released), not when pressed.
+                    if (it.type == KeyEventType.KeyUp) {
+                        useDarkMode = !useDarkMode
+                    }
+                    true
+                }
+                else -> {
+                    false
+                }
             }
         }
     ) {
