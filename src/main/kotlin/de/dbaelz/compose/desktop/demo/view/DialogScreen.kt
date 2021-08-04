@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
@@ -16,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 
 @ExperimentalMaterialApi
-@ExperimentalComposeUiApi
 @Composable
 fun DialogScreen(onBackNavigation: () -> Unit) {
     var dialog by remember { mutableStateOf(DialogType.NONE) }
@@ -111,7 +109,6 @@ private fun AlertDialog(onClickAndDismiss: () -> Unit) {
     )
 }
 
-@ExperimentalComposeUiApi
 @Composable
 private fun DialogWindow(dialogState: DialogState, onClickAndDismiss: () -> Unit) {
     Dialog(
