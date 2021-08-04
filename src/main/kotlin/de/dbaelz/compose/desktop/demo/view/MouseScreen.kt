@@ -63,21 +63,23 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
 
             Spacer(Modifier.height(8.dp))
 
-            Text(text = pointerOffset, style = MaterialTheme.typography.h5)
+            Text(text = pointerOffset, style = MaterialTheme.typography.h5, color = MaterialTheme.colors.onBackground)
 
             Spacer(Modifier.height(8.dp))
 
             Row {
                 Text(
                     text = lastClickLabel,
-                    style = MaterialTheme.typography.h5
+                    style = MaterialTheme.typography.h5,
+                    color = MaterialTheme.colors.onBackground
                 )
 
                 Spacer(Modifier.width(8.dp))
 
                 Text(
                     text = if (mouseEventLabel.isEmpty()) "" else "with button $mouseEventLabel",
-                    style = MaterialTheme.typography.h5
+                    style = MaterialTheme.typography.h5,
+                    color = MaterialTheme.colors.onBackground
                 )
             }
 
@@ -85,7 +87,8 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
 
             Text(
                 text = if (mouseScrollLabel.isEmpty()) "" else "MouseScroll: $mouseScrollLabel",
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h5,
+                color = MaterialTheme.colors.onBackground
             )
 
             Spacer(Modifier.height(4.dp))
@@ -108,7 +111,8 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
 
             Text(
                 text = "Drag Offset: ($dragOffsetX, $dragOffsetY)",
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h5,
+                color = MaterialTheme.colors.onBackground
             )
 
             Spacer(Modifier.height(4.dp))
@@ -194,7 +198,10 @@ private fun MouseClickArea(
                 }
             )
     ) {
-        Text(text = "Click and Scroll")
+        Text(
+            text = "Click and Scroll",
+            color = MaterialTheme.colors.onPrimary
+        )
     }
 }
 
@@ -223,6 +230,7 @@ private fun HorizontalDraggable(
         Text(
             text = "Drag me horizontal!",
             textAlign = TextAlign.Center,
+            color = MaterialTheme.colors.onPrimary
         )
     }
 }
@@ -254,7 +262,10 @@ private fun Draggable(
         },
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Drag me anywhere!")
+        Text(
+            text = "Drag me anywhere!",
+            color = MaterialTheme.colors.onPrimary
+        )
     }
 }
 

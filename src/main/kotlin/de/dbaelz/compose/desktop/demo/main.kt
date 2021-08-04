@@ -6,6 +6,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Refresh
@@ -15,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowSize
@@ -23,6 +25,7 @@ import androidx.compose.ui.window.rememberWindowState
 import de.dbaelz.compose.desktop.demo.theme.DesktopDemoTheme
 import de.dbaelz.compose.desktop.demo.view.*
 
+private var useDarkMode by mutableStateOf(false)
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
@@ -35,13 +38,21 @@ fun main() = application {
             size = WindowSize(1280.dp, 840.dp)
         ),
         title = "Compose for Desktop Demo",
-        resizable = true
+        resizable = true,
+        onKeyEvent = {
+            // Theme change on "CTRL + ALT + D". Only on KeyUp (== key released), not when pressed.
+            if (it.type == KeyEventType.KeyUp && it.isCtrlPressed && it.isAltPressed && it.key == Key.D) {
+                useDarkMode = !useDarkMode
+                true
+            } else {
+                false
+            }
+        }
     ) {
         var screenState by remember { mutableStateOf(Screen.MAIN) }
-        var useDarkTheme by remember { mutableStateOf(false) }
         val navigateToMain = { screenState = Screen.MAIN }
 
-        DesktopDemoTheme(withDarkTheme = useDarkTheme) {
+        DesktopDemoTheme(withDarkTheme = useDarkMode) {
             Crossfade(
                 targetState = screenState,
                 animationSpec = tween(
@@ -62,7 +73,7 @@ fun main() = application {
                     Screen.CUSTOM_LAYOUT -> CustomLayoutScreen(navigateToMain)
                     Screen.TABS -> TabsScreen(navigateToMain)
                     Screen.SCAFFOLD -> ScaffoldScreen(navigateToMain) {
-                        useDarkTheme = !useDarkTheme
+                        useDarkMode = !useDarkMode
                     }
                     Screen.EXPERIMENTS -> ExperimentScreen(navigateToMain)
                     Screen.PUZZLER -> PuzzlerScreen(navigateToMain)
