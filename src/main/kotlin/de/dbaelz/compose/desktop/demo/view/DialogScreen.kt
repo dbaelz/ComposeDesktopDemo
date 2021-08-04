@@ -8,12 +8,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @Composable
 fun DialogScreen(onBackNavigation: () -> Unit) {
@@ -109,11 +115,20 @@ private fun AlertDialog(onClickAndDismiss: () -> Unit) {
     )
 }
 
+@ExperimentalComposeUiApi
 @Composable
 private fun DialogWindow(dialogState: DialogState, onClickAndDismiss: () -> Unit) {
     Dialog(
         title = "Dialog Window",
         state = dialogState,
+        onPreviewKeyEvent = {
+            if (it.type == KeyEventType.KeyUp && it.key == Key.Escape) {
+                onClickAndDismiss()
+                true
+            } else {
+                false
+            }
+        },
         onCloseRequest = {
             onClickAndDismiss()
         }
