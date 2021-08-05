@@ -8,9 +8,7 @@ import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,90 +45,79 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
     var dragOffsetY by remember { mutableStateOf(0) }
     var isDragged by remember { mutableStateOf(false) }
 
-    Screen(
-        { ScreenTopBar("Mouse Input", onBackNavigation) },
-        listOf {
-            MouseClickArea(
-                withBorder = hasAreaEntered,
-                onClick = { lastClickLabel = "Click" },
-                onLongClick = { lastClickLabel = "Long Click" },
-                onDoubleClick = { lastClickLabel = "Double Click" },
-                onPointerChanged = { pointerOffset = it.toString() },
-                onPointerEnterExit = { hasAreaEntered = it },
-                onMouseEvent = { mouseEventLabel = it.button.toString() },
-                onMouseScrollEvent = { mouseScrollLabel = it.name }
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            Text(text = pointerOffset, style = MaterialTheme.typography.h5, color = MaterialTheme.colors.onBackground)
-
-            Spacer(Modifier.height(8.dp))
-
-            Row {
-                Text(
-                    text = lastClickLabel,
-                    style = MaterialTheme.typography.h5,
-                    color = MaterialTheme.colors.onBackground
+    CompositionLocalProvider(
+        LocalTextStyle provides MaterialTheme.typography.h5,
+        LocalContentColor provides MaterialTheme.colors.onBackground
+    ) {
+        Screen(
+            { ScreenTopBar("Mouse Input", onBackNavigation) },
+            listOf {
+                MouseClickArea(
+                    withBorder = hasAreaEntered,
+                    onClick = { lastClickLabel = "Click" },
+                    onLongClick = { lastClickLabel = "Long Click" },
+                    onDoubleClick = { lastClickLabel = "Double Click" },
+                    onPointerChanged = { pointerOffset = it.toString() },
+                    onPointerEnterExit = { hasAreaEntered = it },
+                    onMouseEvent = { mouseEventLabel = it.button.toString() },
+                    onMouseScrollEvent = { mouseScrollLabel = it.name }
                 )
 
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-                Text(
-                    text = if (mouseEventLabel.isEmpty()) "" else "with button $mouseEventLabel",
-                    style = MaterialTheme.typography.h5,
-                    color = MaterialTheme.colors.onBackground
+                Text(text = pointerOffset)
+
+                Spacer(Modifier.height(8.dp))
+
+                Row {
+                    Text(lastClickLabel)
+
+                    Spacer(Modifier.width(8.dp))
+
+                    Text(if (mouseEventLabel.isEmpty()) "" else "with button $mouseEventLabel")
+                }
+
+                Spacer(Modifier.height(8.dp))
+
+                Text(if (mouseScrollLabel.isEmpty()) "" else "MouseScroll: $mouseScrollLabel")
+
+                Spacer(Modifier.height(4.dp))
+
+                Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
+
+                HorizontalDraggable(
+                    dragData = DragData(horizontalDragOffsetX, rememberDraggableState { delta ->
+                        horizontalDragOffsetX += delta.toInt()
+                    }),
+                    borderColor = if (horizontalIsDragged) MaterialTheme.colors.secondary else MaterialTheme.colors.primary,
+                    borderShape = if (horizontalIsDragged) RoundedCornerShape(16.dp) else RectangleShape,
+                    onDragStart = { horizontalIsDragged = true },
+                    onDragEnd = { horizontalIsDragged = false },
+                )
+
+                Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
+
+                Spacer(Modifier.height(8.dp))
+
+                Text("Drag Offset: ($dragOffsetX, $dragOffsetY)")
+
+                Spacer(Modifier.height(4.dp))
+
+                Draggable(
+                    offsetX = dragOffsetX,
+                    offsetY = dragOffsetY,
+                    borderColor = if (isDragged) MaterialTheme.colors.secondary else MaterialTheme.colors.primary,
+                    borderShape = if (isDragged) RoundedCornerShape(16.dp) else RectangleShape,
+                    onDragStart = { isDragged = true },
+                    onDragEnd = { isDragged = false },
+                    onDrag = { x, y ->
+                        dragOffsetX += x
+                        dragOffsetY += y
+                    }
                 )
             }
-
-            Spacer(Modifier.height(8.dp))
-
-            Text(
-                text = if (mouseScrollLabel.isEmpty()) "" else "MouseScroll: $mouseScrollLabel",
-                style = MaterialTheme.typography.h5,
-                color = MaterialTheme.colors.onBackground
-            )
-
-            Spacer(Modifier.height(4.dp))
-
-            Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
-
-            HorizontalDraggable(
-                dragData = DragData(horizontalDragOffsetX, rememberDraggableState { delta ->
-                    horizontalDragOffsetX += delta.toInt()
-                }),
-                borderColor = if (horizontalIsDragged) MaterialTheme.colors.secondary else MaterialTheme.colors.primary,
-                borderShape = if (horizontalIsDragged) RoundedCornerShape(16.dp) else RectangleShape,
-                onDragStart = { horizontalIsDragged = true },
-                onDragEnd = { horizontalIsDragged = false },
-            )
-
-            Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
-
-            Spacer(Modifier.height(8.dp))
-
-            Text(
-                text = "Drag Offset: ($dragOffsetX, $dragOffsetY)",
-                style = MaterialTheme.typography.h5,
-                color = MaterialTheme.colors.onBackground
-            )
-
-            Spacer(Modifier.height(4.dp))
-
-            Draggable(
-                offsetX = dragOffsetX,
-                offsetY = dragOffsetY,
-                borderColor = if (isDragged) MaterialTheme.colors.secondary else MaterialTheme.colors.primary,
-                borderShape = if (isDragged) RoundedCornerShape(16.dp) else RectangleShape,
-                onDragStart = { isDragged = true },
-                onDragEnd = { isDragged = false },
-                onDrag = { x, y ->
-                    dragOffsetX += x
-                    dragOffsetY += y
-                }
-            )
-        }
-    )
+        )
+    }
 }
 
 @ExperimentalFoundationApi
@@ -200,7 +187,7 @@ private fun MouseClickArea(
     ) {
         Text(
             text = "Click and Scroll",
-            color = MaterialTheme.colors.onPrimary
+            style = MaterialTheme.typography.body1
         )
     }
 }
@@ -230,7 +217,7 @@ private fun HorizontalDraggable(
         Text(
             text = "Drag me horizontal!",
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colors.onPrimary
+            style = MaterialTheme.typography.body1
         )
     }
 }
@@ -264,7 +251,7 @@ private fun Draggable(
     ) {
         Text(
             text = "Drag me anywhere!",
-            color = MaterialTheme.colors.onPrimary
+            style = MaterialTheme.typography.body1
         )
     }
 }
