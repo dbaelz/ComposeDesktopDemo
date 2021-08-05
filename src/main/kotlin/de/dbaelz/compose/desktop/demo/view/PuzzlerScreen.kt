@@ -2,12 +2,12 @@ package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -23,13 +23,14 @@ fun PuzzlerScreen(onBackNavigation: () -> Unit) {
             { Puzzler("ModifierBorderSimplified") { ModifierBorderSimplified() } },
             { Puzzler("ModifierClickPuzzler") { ModifierClickPuzzler() } },
             { Puzzler("ModifierButtonClickPuzzler") { ModifierButtonClickPuzzler() } },
+            { Puzzler("TextAndLocalProviderPuzzler") { TextAndLocalProviderPuzzler() } },
         )
     )
 }
 
 @Composable
 private fun Puzzler(text: String, puzzler: @Composable () -> Unit) {
-    Text(text, style = MaterialTheme.typography.h3)
+    Text(text, style = MaterialTheme.typography.h5)
     Spacer(Modifier.height(8.dp))
     puzzler()
 }
@@ -105,5 +106,20 @@ private fun ModifierButtonClickPuzzler() {
             .background(Color.Cyan)
             .clickable { println("Two") }) {
         Text("Click me!")
+    }
+}
+
+@Composable
+private fun TextAndLocalProviderPuzzler() {
+    CompositionLocalProvider(
+        LocalTextStyle provides TextStyle(color = Color.Magenta),
+        LocalContentColor provides Color.Cyan
+    ) {
+        CompositionLocalProvider(
+            LocalTextStyle provides TextStyle(color = Color.Red),
+            LocalContentColor provides Color.Blue
+        ) {
+            Text(text = "Hello Puzzlers!", fontSize = 24.sp)
+        }
     }
 }
