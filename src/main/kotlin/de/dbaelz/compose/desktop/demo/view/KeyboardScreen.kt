@@ -1,5 +1,7 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.foundation.ContextMenuDataProvider
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,10 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.platform.ContextMenuItem
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
 fun KeyboardScreen(onBackNavigation: () -> Unit) {
@@ -28,8 +32,10 @@ fun KeyboardScreen(onBackNavigation: () -> Unit) {
                 var state by remember { mutableStateOf(TextFieldValue()) }
                 FocusAwareTextField(
                     textFieldModel = TextFieldModel(
-                        "Press \"CTRL + D\" for a sample greeting",
-                        "Hello there!", "Greetings", "Leave us a greeting"
+                        sampleDescription = "greeting",
+                        sampleText = "Hello there!",
+                        label = "Greetings",
+                        placeholder = "Leave us a greeting"
                     ),
                     textFieldValue = state,
                 ) { state = it }
@@ -38,9 +44,9 @@ fun KeyboardScreen(onBackNavigation: () -> Unit) {
                 var state by remember { mutableStateOf(TextFieldValue()) }
                 FocusAwareTextField(
                     textFieldModel = TextFieldModel(
-                        "Press \"CTRL + D\" for a sample message",
-                        "This is a very important message.",
-                        "Message", "Your message"
+                        sampleDescription = "message",
+                        sampleText = "This is a very important message.",
+                        label = "Message", placeholder = "Your message"
                     ),
                     textFieldValue = state
                 ) { state = it }
@@ -49,6 +55,7 @@ fun KeyboardScreen(onBackNavigation: () -> Unit) {
     )
 }
 
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
 private fun FocusAwareTextField(
@@ -65,43 +72,55 @@ private fun FocusAwareTextField(
     )
     var border by remember { mutableStateOf(notFocused) }
 
-    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {
-        Text(text = textFieldModel.shortCutText)
+    CompositionLocalProvider(
+        LocalContentColor provides MaterialTheme.colors.onBackground
+    ) {
+        Text(text = "Press \"CTRL + D\" for a sample ${textFieldModel.sampleDescription}")
 
-        TextField(
-            modifier = Modifier
-                .width(400.dp)
-                .border(2.dp, border.first, border.second)
-                .onPreviewKeyEvent {
-                    if (it.type == KeyEventType.KeyUp) return@onPreviewKeyEvent false
+        ContextMenuDataProvider(
+            items = {
+                listOf(
+                    ContextMenuItem(textFieldModel.sampleDescription.capitalize()) {
+                        onTextChanged(TextFieldValue(textFieldModel.sampleText))
+                    }
+                )
+            }
+        ) {
+            TextField(
+                modifier = Modifier
+                    .width(400.dp)
+                    .border(2.dp, border.first, border.second)
+                    .onPreviewKeyEvent {
+                        if (it.type == KeyEventType.KeyUp) return@onPreviewKeyEvent false
 
-                    when {
-                        it.isCtrlPressed && it.key == Key.D -> {
-                            onTextChanged(TextFieldValue(textFieldModel.sampleText))
-                            true
-                        }
-                        it.key == Key.Tab -> {
-                            focusManager.moveFocus(FocusDirection.Next)
-                        }
-                        else -> {
-                            false
+                        when {
+                            it.isCtrlPressed && it.key == Key.D -> {
+                                onTextChanged(TextFieldValue(textFieldModel.sampleText))
+                                true
+                            }
+                            it.key == Key.Tab -> {
+                                focusManager.moveFocus(FocusDirection.Next)
+                            }
+                            else -> {
+                                false
+                            }
                         }
                     }
-                }
-                .onFocusChanged {
-                    border = if (it.isFocused) focused else notFocused
-                },
-            shape = border.second,
-            value = textFieldValue,
-            onValueChange = onTextChanged,
-            label = { Text(textFieldModel.label) },
-            placeholder = { Text(textFieldModel.placeholder) }
-        )
+                    .onFocusChanged {
+                        border = if (it.isFocused) focused else notFocused
+                    },
+                shape = border.second,
+                value = textFieldValue,
+                onValueChange = onTextChanged,
+                label = { Text(textFieldModel.label) },
+                placeholder = { Text(textFieldModel.placeholder) }
+            )
+        }
     }
 }
 
 private data class TextFieldModel(
-    val shortCutText: String,
+    val sampleDescription: String,
     val sampleText: String,
     val label: String,
     val placeholder: String
