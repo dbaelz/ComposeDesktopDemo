@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -19,9 +20,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.mouse.MouseScrollUnit
 import androidx.compose.ui.input.mouse.mouseScrollFilter
-import androidx.compose.ui.input.pointer.consumeAllChanges
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -29,6 +28,7 @@ import de.dbaelz.compose.desktop.demo.view.ScrollDirection.DOWN
 import de.dbaelz.compose.desktop.demo.view.ScrollDirection.UP
 import java.awt.event.MouseEvent
 
+@ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
 fun MouseScreen(onBackNavigation: () -> Unit) {
@@ -114,6 +114,15 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
                         dragOffsetX += x
                         dragOffsetY += y
                     }
+                )
+
+                Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
+
+                Spacer(Modifier.height(8.dp))
+
+                Text(
+                    text = "Pointer Icon example. Hover over the text",
+                    modifier = Modifier.pointerIcon(PointerIcon.Hand)
                 )
             }
         )
