@@ -14,7 +14,7 @@ import androidx.compose.ui.window.TrayState
 
 
 /**
- * Status: Doesn't work (0.4 and 0.5 beta) with Notifier and TrayState right now.
+ * Status: Doesn't work (alpha3) with Notifier and TrayState right now.
  * See https://kotlinlang.slack.com/archives/C01D6HTPATV/p1625824543436700
  */
 @Composable
