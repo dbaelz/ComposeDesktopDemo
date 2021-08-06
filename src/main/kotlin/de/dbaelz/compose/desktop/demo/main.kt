@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalDesktopApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -16,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowSize
@@ -26,6 +28,7 @@ import de.dbaelz.compose.desktop.demo.view.*
 
 private var useDarkMode by mutableStateOf(false)
 
+@ExperimentalDesktopApi
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
@@ -37,6 +40,7 @@ fun main() = application {
             size = WindowSize(1280.dp, 840.dp)
         ),
         title = "Compose for Desktop Demo",
+        icon = painterResource("images/compose-logo.png"),
         resizable = true,
         onKeyEvent = {
             when {
