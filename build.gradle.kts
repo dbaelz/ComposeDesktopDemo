@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.21"
-    id("org.jetbrains.compose") version "1.0.0-alpha2"
+    id("org.jetbrains.compose") version "1.0.0-alpha3"
 }
 
 group = "de.dbaelz.compose.desktop.demo"
