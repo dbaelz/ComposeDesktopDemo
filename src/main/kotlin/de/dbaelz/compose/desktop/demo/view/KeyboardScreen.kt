@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -64,37 +65,39 @@ private fun FocusAwareTextField(
     )
     var border by remember { mutableStateOf(notFocused) }
 
-    Text(text = textFieldModel.shortCutText)
+    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {
+        Text(text = textFieldModel.shortCutText)
 
-    TextField(
-        modifier = Modifier
-            .width(400.dp)
-            .border(2.dp, border.first, border.second)
-            .onPreviewKeyEvent {
-                if (it.type == KeyEventType.KeyUp) return@onPreviewKeyEvent false
+        TextField(
+            modifier = Modifier
+                .width(400.dp)
+                .border(2.dp, border.first, border.second)
+                .onPreviewKeyEvent {
+                    if (it.type == KeyEventType.KeyUp) return@onPreviewKeyEvent false
 
-                when {
-                    it.isCtrlPressed && it.key == Key.D -> {
-                        onTextChanged(TextFieldValue(textFieldModel.sampleText))
-                        true
-                    }
-                    it.key == Key.Tab -> {
-                        focusManager.moveFocus(FocusDirection.Next)
-                    }
-                    else -> {
-                        false
+                    when {
+                        it.isCtrlPressed && it.key == Key.D -> {
+                            onTextChanged(TextFieldValue(textFieldModel.sampleText))
+                            true
+                        }
+                        it.key == Key.Tab -> {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        }
+                        else -> {
+                            false
+                        }
                     }
                 }
-            }
-            .onFocusChanged {
-                border = if (it.isFocused) focused else notFocused
-            },
-        shape = border.second,
-        value = textFieldValue,
-        onValueChange = onTextChanged,
-        label = { Text(textFieldModel.label) },
-        placeholder = { Text(textFieldModel.placeholder) }
-    )
+                .onFocusChanged {
+                    border = if (it.isFocused) focused else notFocused
+                },
+            shape = border.second,
+            value = textFieldValue,
+            onValueChange = onTextChanged,
+            label = { Text(textFieldModel.label) },
+            placeholder = { Text(textFieldModel.placeholder) }
+        )
+    }
 }
 
 private data class TextFieldModel(
