@@ -1,9 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -28,6 +25,7 @@ import de.dbaelz.compose.desktop.demo.view.ScrollDirection.DOWN
 import de.dbaelz.compose.desktop.demo.view.ScrollDirection.UP
 import java.awt.event.MouseEvent
 
+@ExperimentalDesktopApi
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
@@ -95,9 +93,7 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
                     onDragEnd = { horizontalIsDragged = false },
                 )
 
-                Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
-
-                Spacer(Modifier.height(8.dp))
+                RowDivider()
 
                 Text("Drag Offset: ($dragOffsetX, $dragOffsetY)")
 
@@ -116,17 +112,26 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
                     }
                 )
 
-                Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
-
-                Spacer(Modifier.height(8.dp))
+                RowDivider()
 
                 Text(
                     text = "Pointer Icon example. Hover over the text",
                     modifier = Modifier.pointerIcon(PointerIcon.Hand)
                 )
+
+                RowDivider()
+
+                MouseClickable()
             }
         )
     }
+}
+
+@Composable
+private fun RowDivider() {
+    Divider(modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
+
+    Spacer(Modifier.height(8.dp))
 }
 
 @ExperimentalFoundationApi
@@ -263,6 +268,34 @@ private fun Draggable(
             style = MaterialTheme.typography.body1
         )
     }
+}
+
+@ExperimentalDesktopApi
+@Composable
+private fun MouseClickable() {
+    val baseText = "Mouse Clickable: "
+    var mouseButtonText by remember { mutableStateOf("No button clicked") }
+    var keyboardModifierText by remember { mutableStateOf("") }
+
+    Text(
+        text = "$baseText $mouseButtonText ${
+            if (keyboardModifierText.isEmpty()) "without modifier" else "with modifier $keyboardModifierText"
+        }",
+        modifier = Modifier.mouseClickable {
+            mouseButtonText = when {
+                buttons.isPrimaryPressed -> "Button 1"
+                buttons.isSecondaryPressed -> "Button 2"
+                buttons.isTertiaryPressed -> "Button 3"
+                else -> ""
+            }
+            keyboardModifierText = when {
+                keyboardModifiers.isShiftPressed -> "SHIFT"
+                keyboardModifiers.isAltPressed -> "ALT"
+                keyboardModifiers.isCtrlPressed -> "CTRL"
+                else -> ""
+            }
+        }
+    )
 }
 
 private data class DragData(val offset: Int, val state: DraggableState)
