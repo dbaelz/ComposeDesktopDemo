@@ -1,5 +1,6 @@
 package de.dbaelz.compose.desktop.demo.theme
 
+import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
@@ -50,7 +51,7 @@ fun DesktopDemoTheme(
     withDarkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    MaterialTheme(
+    DesktopMaterialTheme(
         colors = if (withDarkTheme) DarkPalette else LightPalette,
         // We could add the typography here for the theme. But the current is alright ;)
         // typography = TourneyTypography
