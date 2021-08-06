@@ -1,5 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -27,6 +28,32 @@ fun PuzzlerScreen(onBackNavigation: () -> Unit) {
         )
     )
 }
+
+@Preview
+@ExperimentalFoundationApi
+@Composable
+private fun puzzlerPreview() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        ModifierBorderPuzzler()
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ModifierBorderSimplified()
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ModifierClickPuzzler()
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ModifierButtonClickPuzzler()
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextAndLocalProviderPuzzler()
+    }
+}
+
 
 @Composable
 private fun Puzzler(text: String, puzzler: @Composable () -> Unit) {
