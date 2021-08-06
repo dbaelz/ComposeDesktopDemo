@@ -119,6 +119,7 @@ private fun FocusAwareTextField(
     }
 }
 
+@Immutable
 private data class TextFieldModel(
     val sampleDescription: String,
     val sampleText: String,

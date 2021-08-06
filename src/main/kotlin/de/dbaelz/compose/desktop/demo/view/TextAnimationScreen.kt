@@ -406,6 +406,7 @@ private const val CLICKABLE_LABEL = "CLICKABLE"
 
 private val defaultFontSize = 32.sp
 
+@Immutable
 data class AnimatedText(val text: String, val currentIndex: Int, val reversed: Boolean = false)
 
 data class Words(val words: List<String>, var currentIndex: Int) {

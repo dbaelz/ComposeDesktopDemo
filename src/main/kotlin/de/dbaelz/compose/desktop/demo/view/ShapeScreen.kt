@@ -557,8 +557,10 @@ private fun AnimatedIcon(
     )
 }
 
+@Immutable
 private data class AnimatedIconState(val scale: Float, val color: Color)
 
+@Immutable
 private data class ShapeState(val text: String, val itemColor: Color, val textColor: Color)
 
 private data class RadialGradient(
