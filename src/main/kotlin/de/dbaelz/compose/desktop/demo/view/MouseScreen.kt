@@ -26,6 +26,9 @@ import de.dbaelz.compose.desktop.demo.view.ScrollDirection.UP
 import java.awt.event.MouseEvent
 
 @ExperimentalDesktopApi
+private val clickManager = ClickManager()
+
+@ExperimentalDesktopApi
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
@@ -122,6 +125,10 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
                 RowDivider()
 
                 MouseClickable()
+
+                RowDivider()
+
+                MultipleOnClickSubscriberExample(clickManager)
             }
         )
     }
@@ -301,3 +308,114 @@ private fun MouseClickable() {
 private data class DragData(val offset: Int, val state: DraggableState)
 
 private enum class ScrollDirection { UP, DOWN }
+
+
+@ExperimentalDesktopApi
+@Composable
+fun MultipleOnClickSubscriberExample(clickManager: ClickManager) {
+    var text by remember { mutableStateOf("") }
+    var count by remember { mutableStateOf(0) }
+
+    clickManager.register("1", ClickEvent(onClick = { text += "#" }))
+    clickManager.register("2", ClickEvent(onClick = { count++ }))
+    clickManager.register("removed", ClickEvent(onClick = { text = "REMOVED" }))
+    clickManager.register("3", ClickEvent(onClick = { count++ }))
+
+    clickManager.unregister("removed")
+
+    // Reset text when SECONDARY button + SHIFT
+    clickManager.register(
+        "4",
+        ClickEvent(
+            ClickEvent.Button.SECONDARY,
+            ClickEvent.KeyboardModifier.SHIFT,
+            onClick = { text = "" })
+    )
+
+    // Reset count when SECONDARY button + CTRL
+    clickManager.register(
+        "5",
+        ClickEvent(
+            ClickEvent.Button.SECONDARY,
+            ClickEvent.KeyboardModifier.CTRL,
+            onClick = { count = 0 })
+    )
+
+    Column(
+        Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Click me!",
+            modifier = Modifier
+                .width(200.dp)
+                .height(50.dp)
+                .border(4.dp, MaterialTheme.colors.primary, RectangleShape)
+                .padding(8.dp)
+                .mouseClickable(onClick = clickManager.clickHandler()),
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            text = "No, click me!",
+            modifier = Modifier
+                .width(200.dp)
+                .height(50.dp)
+                .border(4.dp, MaterialTheme.colors.primary, RectangleShape)
+                .padding(8.dp)
+                .mouseClickable(onClick = clickManager.clickHandler()),
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        Text("Text (Button2 + SHIFT to clear): $text")
+        Text("Counter (Button2 + CTRL to clear): $count")
+    }
+}
+
+/**
+ * Quick and dirty implementation just to showcase it
+ */
+@ExperimentalDesktopApi
+class ClickManager {
+    private val clickSubscriber = mutableMapOf<String, ClickEvent>()
+
+    fun register(id: String, clickEvent: ClickEvent) {
+        clickSubscriber[id] = clickEvent
+    }
+
+    fun unregister(id: String) {
+        clickSubscriber.remove(id)
+    }
+
+    fun clickHandler(): MouseClickScope.() -> Unit = {
+        clickSubscriber.forEach { (_, event) ->
+            if ((buttons.isPrimaryPressed && event.button == ClickEvent.Button.PRIMARY)
+                || (buttons.isSecondaryPressed && event.button == ClickEvent.Button.SECONDARY)
+                || (buttons.isTertiaryPressed && event.button == ClickEvent.Button.TERTIARY)
+            ) {
+                if (event.keyModifier == ClickEvent.KeyboardModifier.NONE
+                    || (keyboardModifiers.isAltPressed && event.keyModifier == ClickEvent.KeyboardModifier.ALT)
+                    || (keyboardModifiers.isCtrlPressed && event.keyModifier == ClickEvent.KeyboardModifier.CTRL)
+                    || (keyboardModifiers.isShiftPressed && event.keyModifier == ClickEvent.KeyboardModifier.SHIFT)
+                    || (keyboardModifiers.isMetaPressed && event.keyModifier == ClickEvent.KeyboardModifier.META)
+                ) {
+                    event.onClick()
+                }
+            }
+        }
+    }
+}
+
+data class ClickEvent(
+    val button: Button = Button.PRIMARY,
+    val keyModifier: KeyboardModifier? = KeyboardModifier.NONE,
+    val onClick: () -> Unit
+) {
+    enum class Button { PRIMARY, SECONDARY, TERTIARY }
+
+    enum class KeyboardModifier { NONE, ALT, CTRL, SHIFT, META }
+}
