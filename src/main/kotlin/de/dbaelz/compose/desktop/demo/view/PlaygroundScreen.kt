@@ -20,5 +20,5 @@ fun PlaygroundScreen(onBackNavigation: () -> Unit) {
 @Preview
 @Composable
 private fun Playground() {
-    Text("Playground", style = MaterialTheme.typography.h1)
+    Text("Welcome to the playground", style = MaterialTheme.typography.h1)
 }

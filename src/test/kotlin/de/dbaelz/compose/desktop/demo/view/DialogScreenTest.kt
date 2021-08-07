@@ -4,6 +4,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,18 @@ class DialogScreenTest {
     val rule = createComposeRule()
 
     @Test
+    fun `Back navigation works`() {
+        runBlocking(Dispatchers.Main) {
+            rule.setContent {
+                DialogScreen { }
+            }
+
+            rule.onNodeWithContentDescription("navigate back").assertExists()
+            rule.onNodeWithContentDescription("navigate back").assertHasClickAction()
+        }
+    }
+
+    @Test
     fun `AlertDialog shown on click`() {
         val dialogText = "Alert Dialog"
 
@@ -29,17 +42,15 @@ class DialogScreenTest {
             rule.onNodeWithText(dialogText).assertExists()
             rule.onNodeWithText(dialogText).assertHasClickAction()
 
-            // TODO: DesktopComposeTestRule#mainClock isn't implemented
-            //  But required for the click. So the test fails
-            /*
             rule.awaitIdle()
 
             rule.onNodeWithText(dialogText).performClick()
-             */
 
-            // TODO: Doesn't work: CompositionLocal LocalAppWindow not provided
-            //rule.awaitIdle()
-            //rule.onNodeWithText("Another useful dialog").assertExists()
+            // TODO: Doesn't work because the text in the dialog isn't found
+            /*
+            rule.awaitIdle()
+            rule.onNodeWithText("Another useful dialog").assertExists()
+            */
         }
     }
 
@@ -55,17 +66,12 @@ class DialogScreenTest {
             rule.onNodeWithText(dialogText).assertExists()
             rule.onNodeWithText(dialogText).assertHasClickAction()
 
-
-            // TODO: DesktopComposeTestRule#mainClock isn't implemented
-            //  But required for the click. So the test fails
-            /*
             rule.awaitIdle()
 
             rule.onNodeWithText(dialogText).performClick()
-            */
 
-            // TODO: Doesn't work. Node not found
-            // rule.onNodeWithText("This is dialog window").assertExists()
+            // TODO: Doesn't work because the text in the dialog isn't found
+            //rule.onNodeWithText("This is dialog window").assertExists()
         }
     }
 
@@ -86,15 +92,11 @@ class DialogScreenTest {
             rule.awaitIdle()
 
 
-            // TODO: DesktopComposeTestRule#mainClock isn't implemented
-            //  But required for the click. So the test fails
-            /*
             rule.onNodeWithText(dialogText).performClick()
 
             rule.awaitIdle()
 
             rule.onNodeWithText(popupText).assertExists()
-            */
         }
     }
 }

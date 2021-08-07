@@ -52,7 +52,7 @@ fun ScreenTopBar(
         navigationIcon = {
             Spacer(Modifier.width(8.dp))
             Icon(
-                Icons.Default.ArrowBack, null,
+                Icons.Default.ArrowBack, "navigate back",
                 modifier = Modifier.clickable {
                     onBackNavigation()
                 })
