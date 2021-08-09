@@ -87,6 +87,7 @@ fun main() = application {
                     Screen.PUZZLER -> PuzzlerScreen(navigateToMain)
                     Screen.MOUSE -> MouseScreen(navigateToMain)
                     Screen.KEYBOARD -> KeyboardScreen(navigateToMain)
+                    Screen.INTEROP -> InteropScreen(navigateToMain)
                 }
             }
         }
@@ -104,6 +105,9 @@ private fun createMenu(): MainMenuModel {
             MainMenuModel.Item.Entry(name = "Dialog", targetScreen = Screen.DIALOG),
             MainMenuModel.Item.Entry(name = "Tabs", targetScreen = Screen.TABS),
             MainMenuModel.Item.Entry(name = "Scaffold", targetScreen = Screen.SCAFFOLD),
+
+            MainMenuModel.Item.Separator,
+
             MainMenuModel.Item.Entry(
                 name = "Mouse",
                 targetScreen = Screen.MOUSE
@@ -112,6 +116,7 @@ private fun createMenu(): MainMenuModel {
                 name = "Keyboard",
                 targetScreen = Screen.KEYBOARD
             ),
+            MainMenuModel.Item.Entry(name = "Interop", targetScreen = Screen.INTEROP),
             MainMenuModel.Item.Separator,
 
             MainMenuModel.Item.Entry(name = "Animation", targetScreen = Screen.ANIMATION),
@@ -158,4 +163,5 @@ enum class Screen {
     PUZZLER,
     MOUSE,
     KEYBOARD,
+    INTEROP,
 }
