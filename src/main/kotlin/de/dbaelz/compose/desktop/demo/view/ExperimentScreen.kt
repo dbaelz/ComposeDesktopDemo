@@ -7,7 +7,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
-import de.dbaelz.compose.desktop.demo.experiment.ExperimentContextMenu
 import de.dbaelz.compose.desktop.demo.experiment.ExperimentNotification
 
 /**
@@ -27,8 +26,6 @@ fun ExperimentScreen(onBackNavigation: () -> Unit) {
                     ExperimentNotification()
                 }
             },
-            {
-                ExperimentContextMenu()
-            })
+        )
     )
 }

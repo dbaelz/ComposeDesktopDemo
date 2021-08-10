@@ -1,5 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
+import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuDataProvider
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
@@ -50,6 +51,10 @@ fun KeyboardScreen(onBackNavigation: () -> Unit) {
                     ),
                     textFieldValue = state
                 ) { state = it }
+            },
+            {
+                var text by remember { mutableStateOf("") }
+                ContextMenuText(text) { text = it }
             },
         )
     )
@@ -116,6 +121,23 @@ private fun FocusAwareTextField(
                 placeholder = { Text(textFieldModel.placeholder) }
             )
         }
+    }
+}
+
+@ExperimentalComposeUiApi
+@ExperimentalFoundationApi
+@Composable
+private fun ContextMenuText(
+    text: String,
+    onContextMenuItemSelected: (String) -> Unit
+) {
+    ContextMenuArea(items = {
+        listOf(
+            ContextMenuItem("Item 1") { onContextMenuItemSelected("Item 1") },
+            ContextMenuItem("Item 2") { onContextMenuItemSelected("Item 2") }
+        )
+    }) {
+        Text("Click right for ContextMenu: $text")
     }
 }
 
