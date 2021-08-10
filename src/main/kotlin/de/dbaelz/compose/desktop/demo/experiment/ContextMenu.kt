@@ -1,8 +1,9 @@
 package de.dbaelz.compose.desktop.demo.experiment
 
-import androidx.compose.foundation.ContextMenuDataProvider
+import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -17,7 +18,7 @@ import androidx.compose.ui.platform.ContextMenuItem
 @ExperimentalFoundationApi
 @Composable
 fun ExperimentContextMenu() {
-    ContextMenuDataProvider(
+    ContextMenuArea(
         items = {
             listOf(
                 ContextMenuItem("Item 1") {},
@@ -25,12 +26,11 @@ fun ExperimentContextMenu() {
             )
         }
     ) {
-        Box {
-            Text("No menu on right click")
+        Column {
+            Text("Menu on right click")
+
+
+            TextField("Menu with default entries shown", {})
         }
-
-        Text("No menu on right click")
-
-        TextField("Menu with default entries shown", {})
     }
 }
