@@ -73,7 +73,6 @@ fun main() = application {
                     Screen.PLAYGROUND -> PlaygroundScreen(navigateToMain)
                     Screen.DIALOG -> DialogScreen(navigateToMain)
                     Screen.CLOSE_APP -> this@application.exitApplication()
-                    Screen.ANIMATION -> AnimationScreen(navigateToMain)
                     Screen.CANVAS -> CanvasScreen(navigateToMain)
                     Screen.TIMER -> TimerScreen(navigateToMain)
                     Screen.TEXT_ANIMATION -> TextAnimationScreen(navigateToMain)
@@ -119,15 +118,12 @@ private fun createMenu(): MainMenuModel {
             MainMenuModel.Item.Entry(name = "Interop", targetScreen = Screen.INTEROP),
             MainMenuModel.Item.Separator,
 
-            MainMenuModel.Item.Entry(name = "Animation", targetScreen = Screen.ANIMATION),
             MainMenuModel.Item.Entry(name = "Text Animation", targetScreen = Screen.TEXT_ANIMATION),
             MainMenuModel.Item.Entry(
                 name = "Shapes",
                 icon = Icons.Default.Star,
                 targetScreen = Screen.SHAPE
             ),
-            MainMenuModel.Item.Separator,
-
             MainMenuModel.Item.Entry(name = "Canvas", targetScreen = Screen.CANVAS),
             MainMenuModel.Item.Entry(name = "(Custom) Layout", targetScreen = Screen.CUSTOM_LAYOUT),
             MainMenuModel.Item.Entry(
@@ -150,7 +146,6 @@ enum class Screen {
     MAIN,
     PLAYGROUND,
     DIALOG,
-    ANIMATION,
     CANVAS,
     CLOSE_APP,
     TIMER,
