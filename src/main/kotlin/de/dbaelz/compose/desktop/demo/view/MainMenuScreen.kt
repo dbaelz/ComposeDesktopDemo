@@ -1,9 +1,7 @@
 package de.dbaelz.compose.desktop.demo.view
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -41,35 +39,45 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Scre
                 .alpha(0.4f),
         )
 
-        Column(
-            modifier = Modifier.align(Alignment.Center)
-                .fillMaxWidth()
-                .verticalScroll(scrollState),
-        ) {
-            Spacer(Modifier.height(8.dp))
+        Row {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(scrollState)
+            ) {
+                Spacer(Modifier.height(8.dp))
 
-            Text(
-                text = "Press CTRL + ALT + D to toggle theme",
-                color = MaterialTheme.colors.onBackground,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
+                Text(
+                    text = "Press CTRL + ALT + D to toggle theme",
+                    color = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
 
-            Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(12.dp))
 
-            model.items.forEach {
-                when (it) {
-                    is MainMenuModel.Item.Separator -> {
-                        Spacer(Modifier.height(16.dp))
-                    }
-                    is MainMenuModel.Item.Entry -> {
-                        MenuButton(Modifier.align(Alignment.CenterHorizontally), it, onItemSelected)
+                model.items.forEach {
+                    when (it) {
+                        is MainMenuModel.Item.Separator -> {
+                            Spacer(Modifier.height(16.dp))
+                        }
+                        is MainMenuModel.Item.Entry -> {
+                            MenuButton(
+                                Modifier.align(Alignment.CenterHorizontally),
+                                it,
+                                onItemSelected
+                            )
 
-                        Spacer(Modifier.height(8.dp))
+                            Spacer(Modifier.height(8.dp))
+                        }
                     }
                 }
             }
-        }
 
+            VerticalScrollbar(
+                adapter = rememberScrollbarAdapter(scrollState),
+                modifier = Modifier.width(16.dp)
+            )
+        }
     }
 }
 
