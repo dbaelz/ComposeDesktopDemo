@@ -91,7 +91,7 @@ private fun AlertDialog(onClickAndDismiss: () -> Unit) {
             .width(300.dp)
             .height(100.dp)
             .border(width = 2.dp, MaterialTheme.colors.primary),
-        dialogProvider = UndecoratedWindowAlertDialogProvider,
+        dialogProvider = PopupAlertDialogProvider,
         text = {
             Box(modifier = Modifier.fillMaxSize()) {
                 Text(

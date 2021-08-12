@@ -1,6 +1,7 @@
 package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.UndecoratedWindowAlertDialogProvider
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -46,11 +47,10 @@ class DialogScreenTest {
 
             rule.onNodeWithText(dialogText).performClick()
 
-            // TODO: Doesn't work because the text in the dialog isn't found
-            /*
+            // Only works with PopupAlertDialogProvider
+            // See: https://kotlinlang.slack.com/archives/C01D6HTPATV/p1628686951262700
             rule.awaitIdle()
             rule.onNodeWithText("Another useful dialog").assertExists()
-            */
         }
     }
 
@@ -70,7 +70,8 @@ class DialogScreenTest {
 
             rule.onNodeWithText(dialogText).performClick()
 
-            // TODO: Doesn't work because the text in the dialog isn't found
+            // Doesn't work because the text in the dialog is a separate window.
+            // See https://kotlinlang.slack.com/archives/C01D6HTPATV/p1628686951262700
             //rule.onNodeWithText("This is dialog window").assertExists()
         }
     }
