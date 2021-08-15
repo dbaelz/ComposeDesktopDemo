@@ -32,8 +32,16 @@ compose.desktop {
         mainClass = "de.dbaelz.compose.desktop.demo.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "desktopdemo"
+            packageName = "Compose for Desktop Demo"
             packageVersion = "1.0.0"
+
+            linux {
+                iconFile.set(project.file("icons/compose-logo.png"))
+            }
+
+            windows {
+                iconFile.set(project.file("icons/compose-logo.ico"))
+            }
         }
     }
 }
