@@ -44,6 +44,9 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
 
     var dragOffsetX by remember { mutableStateOf(0) }
     var dragOffsetY by remember { mutableStateOf(0) }
+    val dragOffsetText by derivedStateOf {
+        "Drag Offset: ($dragOffsetX, $dragOffsetY)"
+    }
     var isDragged by remember { mutableStateOf(false) }
 
     CompositionLocalProvider(
@@ -98,7 +101,7 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
 
                 RowDivider()
 
-                Text("Drag Offset: ($dragOffsetX, $dragOffsetY)")
+                Text(dragOffsetText)
 
                 Spacer(Modifier.height(4.dp))
 
@@ -283,11 +286,14 @@ private fun MouseClickable() {
     val baseText = "Mouse Clickable: "
     var mouseButtonText by remember { mutableStateOf("No button clicked") }
     var keyboardModifierText by remember { mutableStateOf("") }
+    val mouseClickableText by derivedStateOf {
+        "$baseText $mouseButtonText ${
+            if (keyboardModifierText.isEmpty()) "without modifier" else "with modifier $keyboardModifierText"
+        }"
+    }
 
     Text(
-        text = "$baseText $mouseButtonText ${
-            if (keyboardModifierText.isEmpty()) "without modifier" else "with modifier $keyboardModifierText"
-        }",
+        text = mouseClickableText,
         modifier = Modifier.mouseClickable {
             mouseButtonText = when {
                 buttons.isPrimaryPressed -> "Button 1"
