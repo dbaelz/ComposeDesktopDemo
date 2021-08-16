@@ -209,7 +209,7 @@ private fun MouseClickArea(
                             is MouseScrollUnit.Page -> if (delta.value < 0) UP else DOWN
                         }
                     )
-                    false
+                    true
                 }
             )
     ) {
