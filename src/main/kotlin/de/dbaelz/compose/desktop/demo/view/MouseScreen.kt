@@ -132,6 +132,10 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
                 RowDivider()
 
                 MultipleOnClickSubscriberExample(clickManager)
+
+                RowDivider()
+
+                TextWithMouseButtonFilter()
             }
         )
     }
@@ -281,6 +285,33 @@ private fun Draggable(
 }
 
 @ExperimentalDesktopApi
+fun MouseClickScope.onPrimaryClicked(onClick: () -> Unit) {
+    if (buttons.isPrimaryPressed) onClick()
+}
+
+@ExperimentalDesktopApi
+@Composable
+fun TextWithMouseButtonFilter() {
+    var counter by remember { mutableStateOf(0) }
+    val text by derivedStateOf { "Click me (Primary Only): $counter" }
+
+    TextWithPrimary(text) {
+        onPrimaryClicked {
+            counter++
+        }
+    }
+}
+
+@ExperimentalDesktopApi
+@Composable
+fun TextWithPrimary(text: String, mouseClickScope: MouseClickScope.() -> Unit) {
+    Text(
+        text = text,
+        modifier = Modifier.mouseClickable(onClick = mouseClickScope)
+    )
+}
+
+@ExperimentalDesktopApi
 @Composable
 private fun MouseClickable() {
     val baseText = "Mouse Clickable: "
@@ -418,7 +449,7 @@ class ClickManager {
 
 data class ClickEvent(
     val button: Button = Button.PRIMARY,
-    val keyModifier: KeyboardModifier? = KeyboardModifier.NONE,
+    val keyModifier: KeyboardModifier = KeyboardModifier.NONE,
     val onClick: () -> Unit
 ) {
     enum class Button { PRIMARY, SECONDARY, TERTIARY }
