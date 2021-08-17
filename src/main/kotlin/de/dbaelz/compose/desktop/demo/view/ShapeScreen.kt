@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.runtime.*
@@ -29,6 +30,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+@ExperimentalMaterialApi
 @Composable
 fun ShapeScreen(onBackNavigation: () -> Unit) {
     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -157,6 +159,7 @@ private fun DiamondTab() {
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun SpecialTab() {
     val heartUnselectedState =
@@ -181,6 +184,9 @@ private fun SpecialTab() {
         listOf(
             {
                 TearDrop(text = tearDropText.toString(), onClicked = { tearDropText++ })
+            },
+            {
+                IconWithBadge(Icons.Default.Email, "99")
             },
             {
                 AnimatedIcon(
@@ -464,6 +470,28 @@ private val KotlinShape = GenericShape { size, _ ->
     lineTo(size.width, size.height)
     lineTo(0f, size.height)
     close()
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun IconWithBadge(icon: ImageVector, badgeText: String) {
+    BadgedBox(
+        modifier = Modifier.size(64.dp),
+        badge = {
+            Badge(
+                modifier = Modifier.size(24.dp),
+                backgroundColor = MaterialTheme.colors.secondary,
+                contentColor = MaterialTheme.colors.onSecondary
+            ) { Text(badgeText) }
+        },
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = icon.name,
+            tint = MaterialTheme.colors.primary,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 }
 
 @Composable
