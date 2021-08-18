@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.ContextMenuItem
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import java.util.*
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
@@ -85,7 +86,11 @@ private fun FocusAwareTextField(
         ContextMenuDataProvider(
             items = {
                 listOf(
-                    ContextMenuItem(textFieldModel.sampleDescription.capitalize()) {
+                    ContextMenuItem(textFieldModel.sampleDescription.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    }) {
                         onTextChanged(TextFieldValue(textFieldModel.sampleText))
                     }
                 )

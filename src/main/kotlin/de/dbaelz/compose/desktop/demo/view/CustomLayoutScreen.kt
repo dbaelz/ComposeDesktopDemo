@@ -51,7 +51,7 @@ private fun Modifier.offsetX(offset: Dp) = layout { measurable, constraints ->
 @Composable
 private fun TextCustomLayoutExample(text: String) {
     CustomLayout {
-        (0..9).forEach {
+        repeat((0..9).count()) {
             Text(
                 text,
                 modifier = Modifier
