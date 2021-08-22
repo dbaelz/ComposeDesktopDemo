@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalDesktopApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Refresh
@@ -24,9 +25,8 @@ import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import de.dbaelz.compose.desktop.demo.theme.DesktopDemoTheme
+import de.dbaelz.compose.desktop.demo.theme.TourneyTypography
 import de.dbaelz.compose.desktop.demo.view.*
-
-private var useDarkMode by mutableStateOf(false)
 
 @ExperimentalDesktopApi
 @ExperimentalFoundationApi
@@ -34,6 +34,9 @@ private var useDarkMode by mutableStateOf(false)
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 fun main() = application {
+    var useDarkMode by mutableStateOf(false)
+    var useDefaultTypography by mutableStateOf(true)
+
     Window(
         onCloseRequest = ::exitApplication,
         state = rememberWindowState(
@@ -44,10 +47,17 @@ fun main() = application {
         resizable = true,
         onKeyEvent = {
             when {
-                it.isCtrlPressed && it.isAltPressed && it.key == Key.D -> {
-                    // Theme change on "CTRL + ALT + D". Only on KeyUp (== key released), not when pressed.
+                it.isCtrlPressed && it.key == Key.T -> {
+                    // Theme change on "CTRL + T". Only on KeyUp (== key released), not when pressed.
                     if (it.type == KeyEventType.KeyUp) {
                         useDarkMode = !useDarkMode
+                    }
+                    true
+                }
+                it.isCtrlPressed && it.key == Key.F -> {
+                    // Font change on "CTRL + F". Only on KeyUp (== key released), not when pressed.
+                    if (it.type == KeyEventType.KeyUp) {
+                        useDefaultTypography = !useDefaultTypography
                     }
                     true
                 }
@@ -60,7 +70,10 @@ fun main() = application {
         var screenState by remember { mutableStateOf(Screen.MAIN) }
         val navigateToMain = { screenState = Screen.MAIN }
 
-        DesktopDemoTheme(withDarkTheme = useDarkMode) {
+        DesktopDemoTheme(
+            withDarkTheme = useDarkMode,
+            typography = if (useDefaultTypography) MaterialTheme.typography else TourneyTypography
+        ) {
             Crossfade(
                 targetState = screenState,
                 animationSpec = tween(

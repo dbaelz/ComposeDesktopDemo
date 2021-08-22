@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
@@ -49,12 +50,12 @@ private val DarkPalette = darkColors(
 @Composable
 fun DesktopDemoTheme(
     withDarkTheme: Boolean = false,
+    typography: Typography = MaterialTheme.typography,
     content: @Composable () -> Unit
 ) {
     DesktopMaterialTheme(
         colors = if (withDarkTheme) DarkPalette else LightPalette,
-        // We could add the typography here for the theme. But the current is alright ;)
-        // typography = TourneyTypography
+        typography = typography
     ) {
         Row(
             Modifier

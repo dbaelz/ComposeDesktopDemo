@@ -47,11 +47,20 @@ fun MainMenuScreen(model: MainMenuModel = MainMenuModel(), onItemSelected: (Scre
             ) {
                 Spacer(Modifier.height(8.dp))
 
-                Text(
-                    text = "Press CTRL + ALT + D to toggle theme",
-                    color = MaterialTheme.colors.onBackground,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    Text(
+                        text = "Press CTRL + T to toggle theme",
+                        color = MaterialTheme.colors.onBackground,
+                    )
+
+                    Text("|", modifier = Modifier.padding(horizontal = 16.dp))
+
+                    Text(
+                        text = "Press CTRL + F to toggle font",
+                        color = MaterialTheme.colors.onBackground,
+                    )
+                }
+
 
                 Spacer(Modifier.height(12.dp))
 
