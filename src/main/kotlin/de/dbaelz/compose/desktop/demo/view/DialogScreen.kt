@@ -24,28 +24,26 @@ import androidx.compose.ui.window.*
 @Composable
 fun DialogScreen(onBackNavigation: () -> Unit) {
     var dialog by remember { mutableStateOf(DialogType.NONE) }
-
-    val buttons = listOf<@Composable ColumnScope.() -> Unit>(
-        {
-            DialogButton("Alert Dialog") {
-                dialog = DialogType.ALERT
-            }
-        },
-        {
-            DialogButton("Dialog Window") {
-                dialog = DialogType.WINDOW
-            }
-        },
-        {
-            DialogButton("Popup") {
-                dialog = DialogType.POPUP
-            }
-        },
-    )
-
+    
     Screen(
-        { ScreenTopBar("Dialogs", onBackNavigation) },
-        buttons
+        navigation = { ScreenTopBar("Dialogs", onBackNavigation) },
+        items = listOf<@Composable ColumnScope.() -> Unit>(
+            {
+                DialogButton("Alert Dialog") {
+                    dialog = DialogType.ALERT
+                }
+            },
+            {
+                DialogButton("Dialog Window") {
+                    dialog = DialogType.WINDOW
+                }
+            },
+            {
+                DialogButton("Popup") {
+                    dialog = DialogType.POPUP
+                }
+            },
+        )
     )
 
     val dismissDialog = { dialog = DialogType.NONE }

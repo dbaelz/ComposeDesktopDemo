@@ -20,10 +20,10 @@ fun CustomLayoutScreen(onBackNavigation: () -> Unit) {
     Screen(
         { ScreenTopBar("Custom Layouts", onBackNavigation) },
         listOf(
-        { RowWithChildsWidthIsWidestTextWidth() },
-        { TextWithCustomModifier() },
-        { TextCustomLayoutExample("Hello there!") }
-    ))
+            { RowWithChildsWidthIsWidestTextWidth() },
+            { TextWithCustomModifier() },
+            { TextCustomLayoutExample("Hello there!") }
+        ))
 
 }
 
