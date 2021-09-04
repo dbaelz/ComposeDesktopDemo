@@ -20,10 +20,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowSize
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.window.*
 import de.dbaelz.compose.desktop.demo.theme.DesktopDemoTheme
 import de.dbaelz.compose.desktop.demo.theme.TourneyTypography
 import de.dbaelz.compose.desktop.demo.view.*
@@ -37,16 +34,31 @@ fun main() = application {
     var useDarkMode by mutableStateOf(false)
     var useDefaultTypography by mutableStateOf(true)
 
+    val defaultWindowSize = WindowSize(1280.dp, 840.dp)
+    val windowState = rememberWindowState(
+        placement = WindowPlacement.Floating,
+        size = defaultWindowSize
+    )
+
     Window(
         onCloseRequest = ::exitApplication,
-        state = rememberWindowState(
-            size = WindowSize(1280.dp, 840.dp)
-        ),
+        state = windowState,
         title = "Compose for Desktop Demo",
         icon = painterResource("images/compose-logo.png"),
         resizable = true,
         onKeyEvent = {
             when {
+                it.key == Key.F11 -> {
+                    if (it.type == KeyEventType.KeyUp) return@Window false
+
+                    if (windowState.placement == WindowPlacement.Fullscreen) {
+                        windowState.placement = WindowPlacement.Floating
+                        windowState.size = defaultWindowSize
+                    } else {
+                        windowState.placement = WindowPlacement.Fullscreen
+                    }
+                    true
+                }
                 it.isCtrlPressed && it.key == Key.T -> {
                     // Theme change on "CTRL + T". Only on KeyUp (== key released), not when pressed.
                     if (it.type == KeyEventType.KeyUp) {
