@@ -13,7 +13,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import de.dbaelz.compose.desktop.demo.Screen
 
 data class MainMenuModel(val items: List<Item> = emptyList()) {
     sealed class Item {
