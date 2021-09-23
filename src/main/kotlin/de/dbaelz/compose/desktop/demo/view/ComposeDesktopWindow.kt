@@ -9,7 +9,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
@@ -105,7 +104,6 @@ fun ComposeDesktopWindow(
                         navigateToMain
                     )
                     Screen.DIALOG -> DialogScreen(navigateToMain)
-                    Screen.CLOSE_APP -> onCloseRequest()
                     Screen.CANVAS -> CanvasScreen(navigateToMain)
                     Screen.TIMER -> TimerScreen(navigateToMain)
                     Screen.TEXT_ANIMATION -> TextAnimationScreen(
@@ -132,52 +130,24 @@ fun ComposeDesktopWindow(
     }
 }
 
-private fun createMenu(): MainMenuModel {
-    return MainMenuModel(
-        listOf(
-            MainMenuModel.Item.Entry(name = "Playground", targetScreen = Screen.PLAYGROUND),
-            MainMenuModel.Item.Entry(name = "Puzzler", targetScreen = Screen.PUZZLER),
-            MainMenuModel.Item.Entry(name = "Experiments", targetScreen = Screen.EXPERIMENTS),
-            MainMenuModel.Item.Separator,
+private fun createMenu(): List<MenuItem> {
+    return listOf(
+        MenuItem(name = "Playground", targetScreen = Screen.PLAYGROUND),
+        MenuItem(name = "Puzzler", targetScreen = Screen.PUZZLER),
+        MenuItem(name = "Experiments", targetScreen = Screen.EXPERIMENTS),
+        MenuItem(name = "Dialog", targetScreen = Screen.DIALOG),
+        MenuItem(name = "Tabs", targetScreen = Screen.TABS),
+        MenuItem(name = "Scaffold", targetScreen = Screen.SCAFFOLD),
 
-            MainMenuModel.Item.Entry(name = "Dialog", targetScreen = Screen.DIALOG),
-            MainMenuModel.Item.Entry(name = "Tabs", targetScreen = Screen.TABS),
-            MainMenuModel.Item.Entry(name = "Scaffold", targetScreen = Screen.SCAFFOLD),
+        MenuItem(name = "Mouse", targetScreen = Screen.MOUSE),
+        MenuItem(name = "Keyboard", targetScreen = Screen.KEYBOARD),
+        MenuItem(name = "Interop", targetScreen = Screen.INTEROP),
 
-            MainMenuModel.Item.Separator,
-
-            MainMenuModel.Item.Entry(
-                name = "Mouse",
-                targetScreen = Screen.MOUSE
-            ),
-            MainMenuModel.Item.Entry(
-                name = "Keyboard",
-                targetScreen = Screen.KEYBOARD
-            ),
-            MainMenuModel.Item.Entry(name = "Interop", targetScreen = Screen.INTEROP),
-            MainMenuModel.Item.Separator,
-
-            MainMenuModel.Item.Entry(name = "Text Animation", targetScreen = Screen.TEXT_ANIMATION),
-            MainMenuModel.Item.Entry(
-                name = "Shapes",
-                icon = Icons.Default.Star,
-                targetScreen = Screen.SHAPE
-            ),
-            MainMenuModel.Item.Entry(name = "Canvas", targetScreen = Screen.CANVAS),
-            MainMenuModel.Item.Entry(name = "(Custom) Layout", targetScreen = Screen.CUSTOM_LAYOUT),
-            MainMenuModel.Item.Entry(
-                name = "Timer",
-                icon = Icons.Default.Refresh,
-                targetScreen = Screen.TIMER
-            ),
-            MainMenuModel.Item.Separator,
-
-            MainMenuModel.Item.Entry(
-                name = "Close App",
-                icon = Icons.Default.ExitToApp,
-                targetScreen = Screen.CLOSE_APP
-            )
-        )
+        MenuItem(name = "Text Animation", targetScreen = Screen.TEXT_ANIMATION),
+        MenuItem(name = "Shapes", icon = Icons.Default.Star, targetScreen = Screen.SHAPE),
+        MenuItem(name = "Canvas", targetScreen = Screen.CANVAS),
+        MenuItem(name = "(Custom) Layout", targetScreen = Screen.CUSTOM_LAYOUT),
+        MenuItem(name = "Timer", icon = Icons.Default.Refresh, targetScreen = Screen.TIMER)
     )
 }
 
@@ -186,7 +156,6 @@ enum class Screen {
     PLAYGROUND,
     DIALOG,
     CANVAS,
-    CLOSE_APP,
     TIMER,
     TEXT_ANIMATION,
     SHAPE,
