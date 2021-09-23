@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -105,8 +106,9 @@ private fun Drawer(drawerItems: List<DrawerItem>, onItemSelected: (DrawerItem) -
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource("images/compose-logo.png"),
-                contentDescription = "Compose for Desktop logo"
+                painter = painterResource("images/compose-desktop-logo.png"),
+                contentDescription = "Compose for Desktop logo",
+                modifier = Modifier.size(64.dp).alpha(0.8f)
             )
 
             Text(
