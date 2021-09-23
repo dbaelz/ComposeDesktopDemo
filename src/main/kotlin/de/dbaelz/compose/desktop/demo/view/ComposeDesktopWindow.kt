@@ -97,9 +97,12 @@ fun ComposeDesktopWindow(
                 )
             ) { newState ->
                 when (newState) {
-                    Screen.MAIN -> MainMenuScreen(createMenu()) {
-                        screenState = it
-                    }
+                    Screen.MAIN -> MainMenuScreen(
+                        menuItems = createMenu(),
+                        onToggleTheme = { useDarkMode = !useDarkMode },
+                        onToggleFont = { useDefaultTypography = !useDefaultTypography },
+                        onMenuItemSelected = { screenState = it }
+                    )
                     Screen.PLAYGROUND -> PlaygroundScreen(
                         navigateToMain
                     )

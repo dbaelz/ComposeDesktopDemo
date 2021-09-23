@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -24,7 +25,12 @@ data class MenuItem(val name: String, val icon: ImageVector? = null, val targetS
 
 @ExperimentalFoundationApi
 @Composable
-fun MainMenuScreen(menuItems: List<MenuItem> = emptyList(), onItemSelected: (Screen) -> Unit) {
+fun MainMenuScreen(
+    menuItems: List<MenuItem> = emptyList(),
+    onToggleTheme: () -> Unit = {},
+    onToggleFont: () -> Unit = {},
+    onMenuItemSelected: (Screen) -> Unit = {}
+) {
     Box {
         Image(
             painter = painterResource("images/compose-desktop-logo.png"),
@@ -34,34 +40,45 @@ fun MainMenuScreen(menuItems: List<MenuItem> = emptyList(), onItemSelected: (Scr
                 .alpha(0.4f),
         )
 
-        Row {
-            Column(
-                modifier = Modifier.weight(1f)
+        Column(
+
+        ) {
+            Spacer(Modifier.height(8.dp))
+
+            LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 400.dp)) {
+                items(menuItems) { menuItem ->
+                    MenuItemCard(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(0.2f)
+                            .height(96.dp),
+                        text = menuItem.name,
+                        icon = menuItem.icon
+                    ) { onMenuItemSelected(menuItem.targetScreen) }
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Spacer(Modifier.height(8.dp))
+                MenuItemCard(
+                    modifier = Modifier.height(64.dp),
+                    text = "CTRL + T to toggle theme",
+                    backgroundColor = MaterialTheme.colors.secondary,
+                    onItemSelected = onToggleTheme
+                )
 
-                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    Text(
-                        text = "Press CTRL + T to toggle theme",
-                        color = MaterialTheme.colors.onBackground,
-                    )
-
-                    Text("|", modifier = Modifier.padding(horizontal = 16.dp))
-
-                    Text(
-                        text = "Press CTRL + F to toggle font",
-                        color = MaterialTheme.colors.onBackground,
-                    )
-                }
-
-
-                Spacer(Modifier.height(12.dp))
-
-                LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 400.dp)) {
-                    items(menuItems) { menuItem ->
-                        MenuItemCard(menuItem) { onItemSelected(menuItem.targetScreen) }
-                    }
-                }
+                MenuItemCard(
+                    modifier = Modifier.height(64.dp),
+                    text = "CTRL + F to toggle font",
+                    backgroundColor = MaterialTheme.colors.secondary,
+                    onItemSelected = onToggleFont
+                )
             }
         }
     }
@@ -69,23 +86,22 @@ fun MainMenuScreen(menuItems: List<MenuItem> = emptyList(), onItemSelected: (Scr
 
 @Composable
 private fun MenuItemCard(
-    menuItem: MenuItem,
+    modifier: Modifier = Modifier,
+    text: String,
+    icon: ImageVector? = null,
+    backgroundColor: Color = MaterialTheme.colors.primary.copy(alpha = 0.6f),
     onItemSelected: () -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(0.2f)
-            .height(96.dp)
-            .clickable { onItemSelected() },
-        backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.6f),
+        modifier = modifier.clickable { onItemSelected() },
+        backgroundColor = backgroundColor,
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.padding(8.dp)
         ) {
-            menuItem.icon?.let {
+            icon?.let {
                 Icon(
                     it, null,
                     modifier = Modifier.size(64.dp).padding(end = 16.dp)
@@ -93,7 +109,7 @@ private fun MenuItemCard(
             }
 
             Text(
-                text = menuItem.name,
+                text = text,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.h4,
             )
