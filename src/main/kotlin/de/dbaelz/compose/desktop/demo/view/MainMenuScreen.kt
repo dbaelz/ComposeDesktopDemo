@@ -2,11 +2,13 @@ package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -67,14 +70,14 @@ fun MainMenuScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 MenuItemCard(
-                    modifier = Modifier.height(64.dp),
+                    modifier = Modifier.height(64.dp).clip(RoundedCornerShape(16.dp)),
                     text = "CTRL + T to toggle theme",
                     backgroundColor = MaterialTheme.colors.secondary,
                     onItemSelected = onToggleTheme
                 )
 
                 MenuItemCard(
-                    modifier = Modifier.height(64.dp),
+                    modifier = Modifier.height(64.dp).clip(RoundedCornerShape(16.dp)),
                     text = "CTRL + F to toggle font",
                     backgroundColor = MaterialTheme.colors.secondary,
                     onItemSelected = onToggleFont

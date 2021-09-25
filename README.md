@@ -35,6 +35,6 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# License Tourney Font
-The [Tourney font](src/main/resources/fonts/tourney) is licensed under
-the [SIL Open Font License, Version 1.1](license/tourney/OFL.txt) 
+# Font License
+- [IndieFlower font](src/main/resources/fonts/indieflower) is licensed under
+the [SIL Open Font License, Version 1.1](license/IndieFlower/OFL.txt)

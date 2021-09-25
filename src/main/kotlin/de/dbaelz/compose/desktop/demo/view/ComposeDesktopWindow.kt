@@ -21,7 +21,7 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.window.rememberWindowState
 import de.dbaelz.compose.desktop.demo.theme.DesktopDemoTheme
-import de.dbaelz.compose.desktop.demo.theme.TourneyTypography
+import de.dbaelz.compose.desktop.demo.theme.IndieFlowerTypography
 
 @ExperimentalDesktopApi
 @ExperimentalFoundationApi
@@ -87,7 +87,7 @@ fun ComposeDesktopWindow(
 
         DesktopDemoTheme(
             withDarkTheme = useDarkMode,
-            typography = if (useDefaultTypography) MaterialTheme.typography else TourneyTypography
+            typography = if (useDefaultTypography) MaterialTheme.typography else IndieFlowerTypography
         ) {
             Crossfade(
                 targetState = screenState,

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.Typography
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -18,7 +17,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.dbaelz.compose.desktop.demo.theme.TourneyTypography
 import kotlinx.coroutines.delay
 import kotlin.math.floor
 import kotlin.math.max
@@ -57,8 +55,7 @@ fun TextAnimationScreen(onBackNavigation: () -> Unit) {
         { HighlightWords(DEMO_TEXT) },
         { SwapCharactersInText(DEMO_TEXT) },
         { SwapCharactersInText(DEMO_TEXT, infiniteRepeatMode = true) },
-        { ClickableText(onBackNavigation) },
-        { CustomTypographyExample("Typography Demo", TourneyTypography) }
+        { ClickableText(onBackNavigation) }
     )
 
     Screen(
@@ -355,25 +352,11 @@ fun ClickableText(onBackNavigation: () -> Unit) {
                 tag = CLICKABLE_LABEL,
                 start = offset,
                 end = offset
-            )
-                .firstOrNull()?.let { annotation ->
-                    onBackNavigation()
-                }
+            ).firstOrNull()?.let { onBackNavigation() }
         },
         modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
     )
 }
-
-@Composable
-fun CustomTypographyExample(text: String, typography: Typography = MaterialTheme.typography) {
-    Text(
-        text,
-        color = MaterialTheme.colors.primary,
-        style = typography.body1,
-        // could use font* parameter instead
-    )
-}
-
 
 @Composable
 private fun defaultStyle() = SpanStyle(
