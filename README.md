@@ -8,6 +8,7 @@ Also be aware that the implementation might not be optimal or state of the
 art. Occasionally I'll update it to the latest Compose version.
 
 
+![screenshot of the main screen](screenshot-main-screen.png)
 
 # License
 Copyright (c) Daniel Bälz
