@@ -85,11 +85,11 @@ private fun AlertDialog(onClickAndDismiss: () -> Unit) {
     AlertDialog(
         modifier = Modifier
             .width(300.dp)
-            .height(100.dp)
+            .wrapContentHeight()
             .border(width = 2.dp, MaterialTheme.colors.primary),
         dialogProvider = PopupAlertDialogProvider,
         text = {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
                     text = "Another useful dialog",
