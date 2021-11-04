@@ -25,10 +25,8 @@ import de.dbaelz.compose.desktop.demo.view.ScrollDirection.DOWN
 import de.dbaelz.compose.desktop.demo.view.ScrollDirection.UP
 import java.awt.event.MouseEvent
 
-@ExperimentalDesktopApi
 private val clickManager = ClickManager()
 
-@ExperimentalDesktopApi
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
@@ -122,7 +120,7 @@ fun MouseScreen(onBackNavigation: () -> Unit) {
 
                 Text(
                     text = "Pointer Icon example. Hover over the text",
-                    modifier = Modifier.pointerIcon(PointerIcon.Hand)
+                    modifier = Modifier.pointerHoverIcon(PointerIconDefaults.Hand)
                 )
 
                 RowDivider()
@@ -148,6 +146,7 @@ private fun RowDivider() {
     Spacer(Modifier.height(8.dp))
 }
 
+@ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
 private fun MouseClickArea(
@@ -284,12 +283,12 @@ private fun Draggable(
     }
 }
 
-@ExperimentalDesktopApi
+@ExperimentalFoundationApi
 fun MouseClickScope.onPrimaryClicked(onClick: () -> Unit) {
     if (buttons.isPrimaryPressed) onClick()
 }
 
-@ExperimentalDesktopApi
+@ExperimentalFoundationApi
 @Composable
 fun TextWithMouseButtonFilter() {
     var counter by remember { mutableStateOf(0) }
@@ -302,7 +301,7 @@ fun TextWithMouseButtonFilter() {
     }
 }
 
-@ExperimentalDesktopApi
+@ExperimentalFoundationApi
 @Composable
 fun TextWithPrimary(text: String, mouseClickScope: MouseClickScope.() -> Unit) {
     Text(
@@ -311,7 +310,7 @@ fun TextWithPrimary(text: String, mouseClickScope: MouseClickScope.() -> Unit) {
     )
 }
 
-@ExperimentalDesktopApi
+@ExperimentalFoundationApi
 @Composable
 private fun MouseClickable() {
     val baseText = "Mouse Clickable: "
@@ -347,7 +346,8 @@ private data class DragData(val offset: Int, val state: DraggableState)
 private enum class ScrollDirection { UP, DOWN }
 
 
-@ExperimentalDesktopApi
+
+@ExperimentalFoundationApi
 @Composable
 fun MultipleOnClickSubscriberExample(clickManager: ClickManager) {
     var text by remember { mutableStateOf("") }
@@ -416,7 +416,7 @@ fun MultipleOnClickSubscriberExample(clickManager: ClickManager) {
 /**
  * Quick and dirty implementation just to showcase it
  */
-@ExperimentalDesktopApi
+
 class ClickManager {
     private val clickSubscriber = mutableMapOf<String, ClickEvent>()
 
@@ -428,6 +428,7 @@ class ClickManager {
         clickSubscriber.remove(id)
     }
 
+    @ExperimentalFoundationApi
     fun clickHandler(): MouseClickScope.() -> Unit = {
         clickSubscriber.forEach { (_, event) ->
             if ((buttons.isPrimaryPressed && event.button == ClickEvent.Button.PRIMARY)

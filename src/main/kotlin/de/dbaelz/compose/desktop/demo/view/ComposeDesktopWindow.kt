@@ -4,7 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalDesktopApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -16,6 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowSize
@@ -23,7 +23,6 @@ import androidx.compose.ui.window.rememberWindowState
 import de.dbaelz.compose.desktop.demo.theme.DesktopDemoTheme
 import de.dbaelz.compose.desktop.demo.theme.IndieFlowerTypography
 
-@ExperimentalDesktopApi
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
@@ -37,7 +36,7 @@ fun ComposeDesktopWindow(
     var useDarkMode by mutableStateOf(false)
     var useDefaultTypography by mutableStateOf(true)
 
-    val defaultWindowSize = WindowSize(width, height)
+    val defaultWindowSize = DpSize(width, height)
     val windowState = rememberWindowState(
         placement = WindowPlacement.Floating,
         size = defaultWindowSize

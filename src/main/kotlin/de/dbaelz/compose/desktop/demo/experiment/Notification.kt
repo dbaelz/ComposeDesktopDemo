@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Notification
-import androidx.compose.ui.window.Notifier
 import androidx.compose.ui.window.TrayState
 
 
@@ -19,19 +18,11 @@ import androidx.compose.ui.window.TrayState
  */
 @Composable
 fun ExperimentNotification() {
-    val notifier = Notifier()
     val trayState = TrayState()
 
     Column {
         Button(onClick = {
-            // Uses SystemTray which is not supported on the platform
-            notifier.notify("Notification Notifier", "Hello there!")
-        }) { Text("Send via Notifier") }
-
-        Spacer(Modifier.height(8.dp))
-
-        Button(onClick = {
-            trayState.sendNotification(Notification("Notification TrayState", "Hello there!"))
+            trayState.sendNotification(Notification("Notification Notifier", "Hello there!"))
         }) {
             Text("Send via TrayState")
         }
