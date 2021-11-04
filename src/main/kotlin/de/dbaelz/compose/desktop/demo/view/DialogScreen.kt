@@ -19,12 +19,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
 @Composable
 fun DialogScreen(onBackNavigation: () -> Unit) {
     var dialog by remember { mutableStateOf(DialogType.NONE) }
-    
+
     Screen(
         navigation = { ScreenTopBar("Dialogs", onBackNavigation) },
         items = listOf<@Composable ColumnScope.() -> Unit>(
@@ -81,7 +79,7 @@ private fun DialogButton(text: String, onClick: () -> Unit) {
     }
 }
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun AlertDialog(onClickAndDismiss: () -> Unit) {
     AlertDialog(
@@ -113,7 +111,7 @@ private fun AlertDialog(onClickAndDismiss: () -> Unit) {
     )
 }
 
-@ExperimentalComposeUiApi
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun DialogWindow(dialogState: DialogState, onClickAndDismiss: () -> Unit) {
     Dialog(

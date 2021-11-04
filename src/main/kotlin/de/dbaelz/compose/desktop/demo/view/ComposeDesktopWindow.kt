@@ -1,10 +1,8 @@
 package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
@@ -18,15 +16,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPlacement
-import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.window.rememberWindowState
 import de.dbaelz.compose.desktop.demo.theme.DesktopDemoTheme
 import de.dbaelz.compose.desktop.demo.theme.IndieFlowerTypography
 
-@ExperimentalFoundationApi
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ComposeDesktopWindow(
     width: Dp,

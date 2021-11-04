@@ -36,6 +36,7 @@ fun <T> TabRowComponent(
         }
     }
 }
+
 data class Tab<T>(
     val type: T,
     val text: String,

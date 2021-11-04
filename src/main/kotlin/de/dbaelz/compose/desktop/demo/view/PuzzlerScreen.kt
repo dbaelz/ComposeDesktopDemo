@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@ExperimentalFoundationApi
 @Composable
 fun PuzzlerScreen(onBackNavigation: () -> Unit) {
     Screen(
@@ -30,7 +29,6 @@ fun PuzzlerScreen(onBackNavigation: () -> Unit) {
 }
 
 @Preview
-@ExperimentalFoundationApi
 @Composable
 private fun puzzlerPreview() {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -73,7 +71,6 @@ private fun ModifierBorderSimplified(borderWidth: Dp = 12.dp) {
     )
 }
 
-@ExperimentalFoundationApi
 @Composable
 private fun ModifierBorderPuzzler(borderWidth: Dp = 12.dp) {
     Box(
@@ -96,7 +93,7 @@ private fun ModifierBorderPuzzler(borderWidth: Dp = 12.dp) {
     )
 }
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ModifierClickPuzzler() {
     ClickableText(Modifier
@@ -105,7 +102,7 @@ private fun ModifierClickPuzzler() {
     )
 }
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ClickableText(modifier: Modifier = Modifier) {
     Box(modifier = modifier

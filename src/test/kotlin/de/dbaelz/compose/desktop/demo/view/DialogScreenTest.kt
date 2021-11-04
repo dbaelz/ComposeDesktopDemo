@@ -1,8 +1,5 @@
 package de.dbaelz.compose.desktop.demo.view
 
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.UndecoratedWindowAlertDialogProvider
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -13,8 +10,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 
-@ExperimentalMaterialApi
-@ExperimentalComposeUiApi
 class DialogScreenTest {
     @get:Rule
     val rule = createComposeRule()

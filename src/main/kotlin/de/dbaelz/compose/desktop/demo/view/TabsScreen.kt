@@ -17,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
-@ExperimentalMaterialApi
 @Composable
 fun TabsScreen(onBackNavigation: () -> Unit) {
     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -212,7 +211,6 @@ private fun NestedCustomTabs(tabs: List<String>) {
     StyledContentText(selectedTabText)
 }
 
-@ExperimentalMaterialApi
 @Composable
 private fun NestedLeadingIconTab(tabs: List<Pair<String, ImageVector>>) {
     var selectedTabIndex by remember { mutableStateOf(0) }

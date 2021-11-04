@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-@ExperimentalMaterialApi
 @Composable
 fun ShapeScreen(onBackNavigation: () -> Unit) {
     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -159,7 +158,6 @@ private fun DiamondTab() {
     )
 }
 
-@ExperimentalMaterialApi
 @Composable
 private fun SpecialTab() {
     val heartUnselectedState =
@@ -472,7 +470,6 @@ private val KotlinShape = GenericShape { size, _ ->
     close()
 }
 
-@ExperimentalMaterialApi
 @Composable
 private fun IconWithBadge(icon: ImageVector, badgeText: String) {
     BadgedBox(

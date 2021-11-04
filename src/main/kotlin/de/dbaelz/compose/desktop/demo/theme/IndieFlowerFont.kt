@@ -13,6 +13,6 @@ val IndieFlower = FontFamily(
         style = FontStyle.Normal
     ),
 
-)
+    )
 
 val IndieFlowerTypography = Typography(defaultFontFamily = IndieFlower)

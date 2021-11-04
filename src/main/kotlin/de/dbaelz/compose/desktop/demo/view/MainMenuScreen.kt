@@ -2,7 +2,6 @@ package de.dbaelz.compose.desktop.demo.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -26,7 +25,7 @@ import androidx.compose.ui.unit.dp
 
 data class MenuItem(val name: String, val icon: ImageVector? = null, val targetScreen: Screen)
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainMenuScreen(
     menuItems: List<MenuItem> = emptyList(),

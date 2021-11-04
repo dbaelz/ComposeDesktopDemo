@@ -27,8 +27,7 @@ import java.awt.event.MouseEvent
 
 private val clickManager = ClickManager()
 
-@ExperimentalComposeUiApi
-@ExperimentalFoundationApi
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MouseScreen(onBackNavigation: () -> Unit) {
     var lastClickLabel by remember { mutableStateOf("") }
@@ -146,8 +145,7 @@ private fun RowDivider() {
     Spacer(Modifier.height(8.dp))
 }
 
-@ExperimentalComposeUiApi
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 private fun MouseClickArea(
     modifier: Modifier = Modifier,
@@ -283,12 +281,12 @@ private fun Draggable(
     }
 }
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 fun MouseClickScope.onPrimaryClicked(onClick: () -> Unit) {
     if (buttons.isPrimaryPressed) onClick()
 }
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TextWithMouseButtonFilter() {
     var counter by remember { mutableStateOf(0) }
@@ -301,7 +299,7 @@ fun TextWithMouseButtonFilter() {
     }
 }
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TextWithPrimary(text: String, mouseClickScope: MouseClickScope.() -> Unit) {
     Text(
@@ -310,7 +308,7 @@ fun TextWithPrimary(text: String, mouseClickScope: MouseClickScope.() -> Unit) {
     )
 }
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MouseClickable() {
     val baseText = "Mouse Clickable: "
@@ -346,8 +344,7 @@ private data class DragData(val offset: Int, val state: DraggableState)
 private enum class ScrollDirection { UP, DOWN }
 
 
-
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MultipleOnClickSubscriberExample(clickManager: ClickManager) {
     var text by remember { mutableStateOf("") }
@@ -428,7 +425,7 @@ class ClickManager {
         clickSubscriber.remove(id)
     }
 
-    @ExperimentalFoundationApi
+    @OptIn(ExperimentalFoundationApi::class)
     fun clickHandler(): MouseClickScope.() -> Unit = {
         clickSubscriber.forEach { (_, event) ->
             if ((buttons.isPrimaryPressed && event.button == ClickEvent.Button.PRIMARY)
