@@ -1,8 +1,6 @@
 package de.dbaelz.compose.desktop.demo.view
 
-import androidx.compose.foundation.BoxWithTooltip
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -16,6 +14,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 
@@ -55,9 +54,10 @@ fun DialogScreen(onBackNavigation: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DialogButton(text: String, onClick: () -> Unit) {
-    BoxWithTooltip(
+    TooltipArea(
         tooltip = {
             Surface(
                 modifier = Modifier.shadow(4.dp),
@@ -68,7 +68,10 @@ private fun DialogButton(text: String, onClick: () -> Unit) {
                     modifier = Modifier.padding(8.dp)
                 )
             }
-        }
+        },
+        tooltipPlacement = TooltipPlacement.CursorPoint(
+            offset = DpOffset(0.dp, 16.dp)
+        )
     ) {
         Button(
             onClick = onClick,
